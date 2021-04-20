@@ -11,7 +11,10 @@ export default class SynthwaveSkybox {
             depthWrite: false,
             uniforms: uniforms,
             vertexShader: SynthwaveSkyboxShader.vertexShader,
-            fragmentShader: SynthwaveSkyboxShader.fragmentShader
+            fragmentShader: SynthwaveSkyboxShader.fragmentShader,
+            extensions: {
+                derivatives: true
+            }
         });
         this._mesh = new THREE.Mesh(this._geometry, this._material);
         this._mesh.scale.setScalar(10000);

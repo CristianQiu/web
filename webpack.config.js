@@ -2,6 +2,7 @@ require('path');
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
+    watch: false,
     mode: "production",
     entry: "./src/js/app.js",
     output: {
@@ -14,11 +15,10 @@ module.exports = {
                 terserOptions: {
                     format: {
                         comments: false
-                    },
+                    }
                 },
                 extractComments: false
-            }),
-        ],
-    },
-    watch: false
+            })
+        ]
+    }
 };

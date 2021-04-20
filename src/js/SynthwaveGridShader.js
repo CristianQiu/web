@@ -22,12 +22,10 @@ const SynthwaveGridShader = {
 
         "void main(){",
         "objectPosition = position;",
-        "gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);}",
+        "gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);}"
     ].join("\n"),
 
     fragmentShader: [
-        "#extension GL_OES_standard_derivatives : enable",
-
         "uniform float time;",
         "uniform float invGridSize;",
         "uniform float lineWidth;",
@@ -73,7 +71,7 @@ const SynthwaveGridShader = {
         "vec3 mountainOrFloorColor = mix(floorColor, mountainColor, tMountain);",
         "vec3 color = mix(mountainOrFloorColor, finalGridColor, gridIntensity);",
 
-        "gl_FragColor = vec4(color, 1.0);}",
+        "gl_FragColor = vec4(color, 1.0);}"
     ].join("\n")
 };
 

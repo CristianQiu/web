@@ -21,7 +21,10 @@ export default class SynthwaveGrid {
         this._material = new THREE.ShaderMaterial({
             uniforms: uniforms,
             vertexShader: SynthwaveGridShader.vertexShader,
-            fragmentShader: SynthwaveGridShader.fragmentShader
+            fragmentShader: SynthwaveGridShader.fragmentShader,
+            extensions: {
+                derivatives: true
+            }
         });
         this._mesh = new THREE.Mesh(this._geometry, this._material);
     }

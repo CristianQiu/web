@@ -29,12 +29,10 @@ const SynthwaveSkyboxShader = {
         "void main(){",
         "objectPosition = position;",
         "gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
-        "gl_Position.z = gl_Position.w;}", // < sets Z to camera.far
+        "gl_Position.z = gl_Position.w;}" // < sets Z to camera.far
     ].join("\n"),
 
     fragmentShader: [
-        "#extension GL_OES_standard_derivatives : enable",
-
         "uniform vec3 sunPosition;",
         "uniform float sunDiscSize;",
         "uniform float sunAntialiasing;",
@@ -108,7 +106,7 @@ const SynthwaveSkyboxShader = {
 
         // make the sun be tinted by the sky behind
         "sunColor = mix(sunColor, sunColor * skyColor, smoothstep(0.0, 1.0, skyTintsSun));",
-        "gl_FragColor = vec4(sunColor * vec3(sun) + skyColor * vec3(sky) + flareColor * vec3(flare), 1.0);}",
+        "gl_FragColor = vec4(sunColor * vec3(sun) + skyColor * vec3(sky) + flareColor * vec3(flare), 1.0);}"
     ].join("\n")
 };
 
