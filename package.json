@@ -1,0 +1,36 @@
+{
+    "name": "web",
+    "version": "1.0.0",
+    "description": "My personal web.",
+    "main": "dist\\app.js",
+    "scripts": {
+        "eslint": "eslint src\\js",
+        "webServer": "http-server -c-1",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "webpack --config webpack.config.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CristianQiu/web.git"
+    },
+    "keywords": [
+        "Three.js",
+        "Portfolio",
+        "Web"
+    ],
+    "author": "Cristian Qiu Félez",
+    "license": "UNLICENSED",
+    "bugs": {
+        "url": "https://github.com/CristianQiu/web/issues"
+    },
+    "homepage": "https://github.com/CristianQiu/web#readme",
+    "dependencies": {
+        "three": "^0.127.0"
+    },
+    "devDependencies": {
+        "eslint": "^7.24.0",
+        "http-server": "^0.12.3",
+        "webpack": "^5.31.2",
+        "webpack-cli": "^4.6.0"
+    }
+}
