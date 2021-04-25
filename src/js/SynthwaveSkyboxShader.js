@@ -1,10 +1,10 @@
-import { Vector3, Vector4, Color } from '../../node_modules/three/build/three.module.js';
+import { Vector3, Vector4, Color } from 'three';
 
 const SynthwaveSkyboxShader = {
 
     uniforms: {
-        "sunPosition": { value: new Vector3(0.0, 0.05, 1.0) },
-        "sunDiscSize": { value: 0.265 },
+        "sunPosition": { value: new Vector3(0.0, 0.06, 1.0) },
+        "sunDiscSize": { value: 0.225 },
         "sunAntialiasing": { value: 3.0 },
         "sunStripeHeights": { value: new Vector4(-0.26, -0.44, -0.63, -0.82) },
         "sunStripeWidths": { value: new Vector4(0.03, 0.04, 0.05, 0.06) },
@@ -17,10 +17,10 @@ const SynthwaveSkyboxShader = {
         "nadirColor": { value: new Color(0.0, 0.0, 0.0) },
         "horizonColor": { value: new Color(0.5, 0.1, 0.5) },
         "zenithColor": { value: new Color(0.0, 0.1, 1.0) },
-        "flareColor": { value: new Color(0.5511, 0.5511, 10.0) },
-        "flarePosition": { value: -0.0265 },
-        "flareWidth": { value: 0.0075 },
-        "flareFalloff": { value: 0.002 }
+        "flareColor": { value: new Color(0.555, 0.555, 10.0) },
+        "flarePosition": { value: -0.01 },
+        "flareWidth": { value: 0.0105 },
+        "flareFalloff": { value: 0.001 }
     },
 
     vertexShader: [

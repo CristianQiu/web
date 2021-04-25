@@ -1,12 +1,12 @@
-import * as THREE from '../../node_modules/three/build/three.module.js';
-import Stats from '../../node_modules/three/examples/jsm/libs/stats.module.js';
-import { OrbitControls } from '../../node_modules/three/examples/jsm/controls/OrbitControls.js';
-import SynthwaveCamera from './SynthwaveCamera.js';
-import SynthwaveRenderer from './SynthwaveRenderer.js';
-import SynthwaveSkybox from './SynthwaveSkybox.js'
-import SynthwaveGrid from './SynthwaveGrid.js';
-import AudioManager from './AudioManager.js';
-import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer.js';
+import * as THREE from 'three';
+import Stats from 'three/examples/jsm/libs/stats.module';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import SynthwaveCamera from './SynthwaveCamera';
+import SynthwaveRenderer from './SynthwaveRenderer';
+import SynthwaveSkybox from './SynthwaveSkybox';
+import SynthwaveGrid from './SynthwaveGrid';
+import AudioManager from './AudioManager';
+import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
 
 let stats, clock;
 let camera, renderer, grid, audioManager, audioSpectrumAnalyzer;
@@ -16,7 +16,7 @@ const start = function () {
     stats = new Stats();
     clock = new THREE.Clock();
 
-    document.getElementById('container').appendChild(stats.dom);
+    document.body.appendChild(stats.dom);
 
     const scene = new THREE.Scene();
 
@@ -27,7 +27,7 @@ const start = function () {
     // scene.add(camera.getCamera());
 
     const pixelRatio = Math.min(window.devicePixelRatio, 0.875);
-    document.getElementById('musicButton').innerHTML = pixelRatio;
+    // document.getElementById('musicButton').innerHTML = pixelRatio;
 
     renderer = new SynthwaveRenderer(scene, camera.getCamera(), w, h, pixelRatio);
     document.body.appendChild(renderer.getDomElement());
@@ -39,10 +39,10 @@ const start = function () {
     grid.generate();
     scene.add(grid.getMesh());
 
-    // controls = new OrbitControls(camera.getCamera(), renderer.getDomElement());
-    // controls.minDistance = 1;
-    // controls.maxDistance = 30;
-    // controls.update();
+    controls = new OrbitControls(camera.getCamera(), renderer.getDomElement());
+    controls.minDistance = 1;
+    controls.maxDistance = 30;
+    controls.update();
 
     audioManager = new AudioManager(camera.getCamera());
     document.getElementById('musicButton').addEventListener('click', onClickPlayMusicButton);
@@ -55,7 +55,7 @@ const update = function () {
     const dt = clock.getDelta();
     const time = clock.getElapsedTime();
 
-    // controls.update();
+    controls.update();
 
     const validSpectrumAnalyzer = audioSpectrumAnalyzer !== undefined && audioSpectrumAnalyzer !== null;
 
@@ -92,8 +92,7 @@ const onWindowResize = function () {
 
     renderer.setSize(w, h);
 
-    document.getElementById('musicButton').innerHTML = window.devicePixelRatio;
-
+    // document.getElementById('musicButton').innerHTML = window.devicePixelRatio;
 };
 
 start();

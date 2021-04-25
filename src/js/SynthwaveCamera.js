@@ -1,5 +1,5 @@
-import * as THREE from '../../node_modules/three/build/three.module.js';
-import { SimplexNoise } from '../../node_modules/three/examples/jsm/math/SimplexNoise.js';
+import * as THREE from 'three';
+import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 
 const simplex = new SimplexNoise();
 

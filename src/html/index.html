@@ -10,27 +10,61 @@
         }
 
         canvas {
-            display: block;
+            position: fixed;
+            top: 0;
+            z-index: -1;
+        }
+
+        #triangle {
+            /* right: 0; */
+            /* margin: 50vh auto auto auto; */
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+            background-color: rgb(255, 56, 56);
         }
 
         #musicButton {
-            margin: 0;
             position: absolute;
-            top: 50%;
-            -ms-transform: translateY(-50%);
-            transform: translateY(-50%);
-            width: 200px;
-            height: 200px;
-            font-size: 20px;
+            padding: 2em 2em;
+            left: 0;
+            right: 0;
+            text-align: center;
+            text-transform: initial;
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 0 5px rgba(192, 177, 177, 0.849);
+            margin: 5em auto;
+            display: table-cell;
+            vertical-align: middle;
+            background-color: darkslateblue;
+            border-radius: 0.5em;
+            border: none;
+            background-image: linear-gradient(to right, #3494E6 0%, #EC6EAD 51%, #3494E6 100%);
+            background-position: right center;
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+        }
+
+        #dummy {
+            position: absolute;
+            right: 0;
+            width: 100px;
+            height: 1000px;
+            background-color: white;
         }
     </style>
 </head>
 
 <body>
-    <button id="musicButton" type="button">Click Me!</button>
-    <div id="container"></div>
-    <!-- <script type="module" src="../../dist/app.js"></script> -->
-    <script type="module" src="../js/app.js"></script>
+    <button id="musicButton" type="button">Play music!</button>
+    <div id="triangle"></div>
+    <!-- <div id="dummy"></div>div> -->
+    <script type="module" src="../../dist/app.js"></script>
 </body>
 
 </html>

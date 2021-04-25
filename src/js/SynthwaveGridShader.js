@@ -1,4 +1,4 @@
-import { Color } from '../../node_modules/three/build/three.module.js';
+import { Color } from 'three';
 
 const SynthwaveGridShader = {
 

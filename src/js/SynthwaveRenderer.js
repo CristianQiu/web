@@ -1,8 +1,8 @@
-import * as THREE from '../../node_modules/three/build/three.module.js';
-import { EffectComposer } from '../../node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from '../../node_modules/three/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from '../../node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { FilmPass } from '../../node_modules/three/examples/jsm/postprocessing/FilmPass.js';
+import * as THREE from 'three';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass';
 
 export default class SynthwaveRenderer {
 
@@ -14,7 +14,7 @@ export default class SynthwaveRenderer {
 
         const res = new THREE.Vector2(w, h);
         this._scenePass = new RenderPass(scene, camera);
-        this._bloomPass = new UnrealBloomPass(res, 1.0, 0.8, 0.59825);
+        this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
         this._filmPass = new FilmPass(0.65, 0.25, h, 0.0);
 
         this._composer = new EffectComposer(this._renderer);

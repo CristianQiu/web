@@ -1,6 +1,6 @@
-import * as THREE from '../../node_modules/three/build/three.module.js';
-import { SimplexNoise } from '../../node_modules/three/examples/jsm/math/SimplexNoise.js';
-import SynthwaveGridShader from './SynthwaveGridShader.js';
+import * as THREE from 'three';
+import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
+import SynthwaveGridShader from './SynthwaveGridShader';
 
 const simplex = new SimplexNoise();
 const remap = function (a, b, c, d, x) {

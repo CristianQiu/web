@@ -1,5 +1,5 @@
-import * as THREE from '../../node_modules/three/build/three.module.js';
-import SynthwaveSkyboxShader from './SynthwaveSkyboxShader.js';
+import * as THREE from 'three';
+import SynthwaveSkyboxShader from './SynthwaveSkyboxShader';
 
 export default class SynthwaveSkybox {
 
