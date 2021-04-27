@@ -7,6 +7,8 @@
     <style>
         body {
             margin: 0;
+            --neonGrayscale: 0.2;
+            --neonAnimationDuration: 10s;
         }
 
         canvas {
@@ -15,17 +17,17 @@
             z-index: -1;
         }
 
-        #triangle {
+        #triangleContainer {
             /* right: 0; */
             /* margin: 50vh auto auto auto; */
             position: absolute;
-            width: 300px;
-            height: 300px;
+            width: 600px;
+            height: 600px;
+            max-height: 60vh;
             top: 50%;
             left: 50%;
-
             transform: translate(-50%, -50%);
-            background-color: rgb(255, 56, 56);
+            /* background-color: black; */
         }
 
         #musicButton {
@@ -57,14 +59,106 @@
             height: 1000px;
             background-color: white;
         }
+
+        svg {
+            border: 4px solid black;
+            /* transform: translate(-4px, -4px); */
+        }
+
+        .neon {
+            fill: none;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 0;
+        }
+
+        .neon-blur-smallest {
+            stroke: rgb(255, 255, 255);
+            /* opacity: 1.0; */
+            stroke-width: 0.375px;
+            animation: dash var(--neonAnimationDuration) ease-in-out normal infinite;
+            animation: glow 4s linear normal infinite;
+            /* filter: blur(0.5px); */
+        }
+
+        .neon-no-blur {
+            stroke: rgb(255, 255, 255);
+            /* opacity: 0.85; */
+            stroke-width: 0.75px;
+            animation: dash var(--neonAnimationDuration) ease-in-out normal infinite;
+            animation: glow 4s linear normal infinite;
+        }
+
+        .neon-blur-small {
+            stroke: rgb(255, 127, 255);
+            /* opacity: 0.7; */
+            stroke-width: 1.5px;
+            animation: dash var(--neonAnimationDuration) ease-in-out normal infinite;
+            /* filter: blur(1px) grayscale(var(--neonGrayscale)); */
+            animation: glow 4s linear normal infinite;
+        }
+
+        .neon-blur-medium {
+            stroke: rgb(255, 163, 255);
+            /* opacity: 0.55; */
+            stroke-width: 3px;
+            animation: dash var(--neonAnimationDuration) ease-in-out normal infinite;
+            /* filter: blur(2px) grayscale(var(--neonGrayscale)); */
+            animation: glow 4s linear normal infinite;
+        }
+
+        .neon-blur-large {
+            stroke: rgb(255, 0, 255);
+            /* opacity: 0.40; */
+            stroke-width: 6px;
+            animation: dash var(--neonAnimationDuration) ease-in-out normal infinite;
+            /* filter: blur(4px) grayscale(var(--neonGrayscale)); */
+            animation: glow 4s linear normal infinite;
+        }
+
+        /* @keyframes dash {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            20% {
+                stroke-dashoffset: 600;
+            }
+
+            100% {
+                stroke-dashoffset: 600;
+            }
+        } */
+        @keyframes glow {
+            0% {
+                opacity: 0.25;
+            }
+
+            50% {
+                opacity: 0.9;
+            }
+
+            100% {
+                opacity: 0.25;
+            }
+        }
     </style>
 </head>
 
 <body>
     <button id="musicButton" type="button">Play music!</button>
-    <div id="triangle"></div>
+    <div id="triangleContainer">
+        <svg preserveAspectRatio="xMidYMid" viewBox="0 0 100 100" width="100%" height="100%">
+            <polygon points="15,85 50,15 85,85" class="neon neon-blur-smallest" />
+            <polygon points="15,85 50,15 85,85" class="neon neon-no-blur" />
+            <!-- <polygon points="15,85 50,15 85,85" class="neon neon-blur-small" />
+            <polygon points="15,85 50,15 85,85" class="neon neon-blur-medium" />
+            <polygon points="15,85 50,15 85,85" class="neon neon-blur-large" /> -->
+        </svg>
+    </div>
     <!-- <div id="dummy"></div>div> -->
-    <script type="module" src="../../dist/app.js"></script>
+    <script src="../../dist/app.js"></script>
 </body>
 
 </html>

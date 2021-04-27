@@ -67,7 +67,7 @@ const update = function () {
         grid.animate(time);
     }
 
-    camera.breathe(time);
+    // camera.breathe(time);
 
     renderer.render();
 
