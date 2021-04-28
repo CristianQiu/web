@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import TWEEN from '@tweenjs/tween.js';
 import SynthwaveCamera from './SynthwaveCamera';
 import SynthwaveRenderer from './SynthwaveRenderer';
 import SynthwaveSkybox from './SynthwaveSkybox';
@@ -20,14 +21,13 @@ const start = function () {
 
     const scene = new THREE.Scene();
 
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    const w = innerWidth;
+    const h = innerHeight;
 
     camera = new SynthwaveCamera(50.0, w / h, 0.3, 250);
-    // scene.add(camera.getCamera());
+    scene.add(camera.getCameraParent());
 
-    const pixelRatio = Math.min(window.devicePixelRatio, 0.875);
-    // document.getElementById('musicButton').innerHTML = pixelRatio;
+    const pixelRatio = Math.min(devicePixelRatio, 0.875);
 
     renderer = new SynthwaveRenderer(scene, camera.getCamera(), w, h, pixelRatio);
     document.body.appendChild(renderer.getDomElement());
@@ -39,23 +39,28 @@ const start = function () {
     grid.generate();
     scene.add(grid.getMesh());
 
-    controls = new OrbitControls(camera.getCamera(), renderer.getDomElement());
-    controls.minDistance = 1;
-    controls.maxDistance = 30;
-    controls.update();
+    // controls = new OrbitControls(camera.getCamera(), renderer.getDomElement());
+    // controls.minDistance = 1;
+    // controls.maxDistance = 30;
+    // controls.update();
 
     audioManager = new AudioManager(camera.getCamera());
+
     document.getElementById('musicButton').addEventListener('click', onClickPlayMusicButton);
-    window.addEventListener('resize', onWindowResize, false);
+    addEventListener('resize', onWindowResize, false);
 };
 
 const update = function () {
-    stats.update();
+    requestAnimationFrame(update);
 
     const dt = clock.getDelta();
     const time = clock.getElapsedTime();
 
-    controls.update();
+    stats.update();
+    // TWEEN.update(time);
+
+    // controls.update();
+    camera.breathe(time);
 
     const validSpectrumAnalyzer = audioSpectrumAnalyzer !== undefined && audioSpectrumAnalyzer !== null;
 
@@ -67,11 +72,7 @@ const update = function () {
         grid.animate(time);
     }
 
-    // camera.breathe(time);
-
     renderer.render();
-
-    requestAnimationFrame(update);
 };
 
 const onClickPlayMusicButton = function () {
@@ -83,16 +84,20 @@ const onClickPlayMusicButton = function () {
     audioManager.loadAndPlayMusic();
 };
 
+const onClickJoin = function () {
+    // tween the camera
+
+    // trigger the animation of the "button"
+};
+
 const onWindowResize = function () {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    const w = innerWidth;
+    const h = innerHeight;
 
     camera.setAspect(w / h);
     camera.updateProjectionMatrix();
 
     renderer.setSize(w, h);
-
-    // document.getElementById('musicButton').innerHTML = window.devicePixelRatio;
 };
 
 start();

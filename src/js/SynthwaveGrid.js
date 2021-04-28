@@ -100,7 +100,6 @@ export default class SynthwaveGrid {
         }
         avgMean /= audioMeans.length;
 
-        // TODO: do the actual animation I want to do
         for (let i = 0; i < this._positionsBuffer.count; ++i) {
             const col = i % resX;
 
