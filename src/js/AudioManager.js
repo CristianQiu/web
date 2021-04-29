@@ -15,7 +15,7 @@ export default class AudioManager {
 
 		const fromVol = { x: 0.0 };
 		const toVol = { x: 0.5 };
-		const easing = TWEEN.Easing.Quadratic.In;
+		const easing = TWEEN.Easing.Quintic.InOut;
 
 		this._fadeInTween = new TWEEN.Tween(fromVol)
 			.to(toVol, 2000)

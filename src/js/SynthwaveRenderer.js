@@ -2,8 +2,7 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
-import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass';
-import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass';
+import UberPostFxPass from './UberPostFxPass';
 
 export default class SynthwaveRenderer {
 
@@ -16,12 +15,13 @@ export default class SynthwaveRenderer {
 		const res = new THREE.Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
-		this._filmPass = new FilmPass(0.65, 0.25, h, 0.0);
+		this._uberPass = new UberPostFxPass(0.65, 0.25, h, 0.0);
+		// this._uberPass.renderToScreen = true;
 
 		this._composer = new EffectComposer(this._renderer);
 		this._composer.addPass(this._scenePass);
 		this._composer.addPass(this._bloomPass);
-		// this._composer.addPass(this._filmPass);
+		this._composer.addPass(this._uberPass);
 
 		this.setSize(w, h);
 		this.setPixelRatio(pixelRatio);
