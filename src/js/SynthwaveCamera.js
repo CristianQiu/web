@@ -13,123 +13,123 @@ const simplex = new SimplexNoise();
 
 export default class SynthwaveCamera {
 
-    constructor(fov, aspect, near, far) {
-        this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+	constructor(fov, aspect, near, far) {
+		this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
-        let xEulers = THREE.Math.degToRad(0.0);
-        let yEulers = THREE.Math.degToRad(180.0);
-        let zEulers = THREE.Math.degToRad(0.0);
+		let xEulers = THREE.Math.degToRad(0.0);
+		let yEulers = THREE.Math.degToRad(180.0);
+		let zEulers = THREE.Math.degToRad(0.0);
 
-        this._anchoredRotation = new THREE.Euler(xEulers, yEulers, zEulers);
-        this._camera.setRotationFromEuler(this._anchoredRotation);
+		this._anchoredRotation = new THREE.Euler(xEulers, yEulers, zEulers);
+		this._camera.setRotationFromEuler(this._anchoredRotation);
 
-        xEulers = THREE.Math.degToRad(90.0);
-        yEulers = THREE.Math.degToRad(0.0);
-        zEulers = THREE.Math.degToRad(0.0);
+		xEulers = THREE.Math.degToRad(90.0);
+		yEulers = THREE.Math.degToRad(0.0);
+		zEulers = THREE.Math.degToRad(0.0);
 
-        this._parentLookingToGridPos = new THREE.Vector3(0.0, 2.0, 30.0);
-        this._parentLookingToGridRot = new THREE.Euler(xEulers, yEulers, zEulers);
+		this._parentLookingToGridPos = new THREE.Vector3(0.0, 2.0, 30.0);
+		this._parentLookingToGridRot = new THREE.Euler(xEulers, yEulers, zEulers);
 
-        xEulers = THREE.Math.degToRad(-5.0);
-        yEulers = THREE.Math.degToRad(0.0);
-        zEulers = THREE.Math.degToRad(0.0);
+		xEulers = THREE.Math.degToRad(-5.0);
+		yEulers = THREE.Math.degToRad(0.0);
+		zEulers = THREE.Math.degToRad(0.0);
 
-        this._parentLookingToSunRot = new THREE.Euler(xEulers, yEulers, zEulers);
+		this._parentLookingToSunRot = new THREE.Euler(xEulers, yEulers, zEulers);
 
-        this._cameraParent = new Object3D();
-        this._cameraParent.add(this._camera);
-        this._shouldBreathe = false;
-        this.setToLookingToGridInstant();
+		this._cameraParent = new Object3D();
+		this._cameraParent.add(this._camera);
+		this._shouldBreathe = false;
+		this.setToLookingToGridInstant();
 
-        // tweens
-        this._breathingTimer = 0.0;
-        this._transitionTimeMs = 2000;
-        const easing = TWEEN.Easing.Quintic.InOut;
+		// tweens
+		this._breathingTimer = 0.0;
+		this._transitionTimeMs = 2000;
+		const easing = TWEEN.Easing.Quintic.InOut;
 
-        const fromRot = { x: this._parentLookingToGridRot.x, y: this._parentLookingToGridRot.y, z: this._parentLookingToGridRot.z };
-        const toRot = { x: this._parentLookingToSunRot.x, y: this._parentLookingToSunRot.y, z: this._parentLookingToSunRot.z };
+		const fromRot = { x: this._parentLookingToGridRot.x, y: this._parentLookingToGridRot.y, z: this._parentLookingToGridRot.z };
+		const toRot = { x: this._parentLookingToSunRot.x, y: this._parentLookingToSunRot.y, z: this._parentLookingToSunRot.z };
 
-        const tempEulers = new THREE.Euler(0.0, 0.0, 0.0);
-        this._tweenToSeeSceneRot = new TWEEN.Tween(fromRot)
-            .to(toRot, this._transitionTimeMs)
-            .easing(easing)
-            .onUpdate(() => {
-                tempEulers.set(fromRot.x, fromRot.y, fromRot.z);
-                this._cameraParent.setRotationFromEuler(tempEulers);
-            });
+		const tempEulers = new THREE.Euler(0.0, 0.0, 0.0);
+		this._tweenToSeeSceneRot = new TWEEN.Tween(fromRot)
+			.to(toRot, this._transitionTimeMs)
+			.easing(easing)
+			.onUpdate(() => {
+				tempEulers.set(fromRot.x, fromRot.y, fromRot.z);
+				this._cameraParent.setRotationFromEuler(tempEulers);
+			});
 
-        const fromPos = { x: this._parentLookingToGridPos.x, y: this._parentLookingToGridPos.y, z: this._parentLookingToGridPos.z };
-        const toPos = { x: this._parentLookingToGridPos.x, y: 2.75, z: 0.0 };
+		const fromPos = { x: this._parentLookingToGridPos.x, y: this._parentLookingToGridPos.y, z: this._parentLookingToGridPos.z };
+		const toPos = { x: this._parentLookingToGridPos.x, y: 2.75, z: 0.0 };
 
-        this._tweenToSeeScenePos = new TWEEN.Tween(fromPos)
-            .to(toPos, this._transitionTimeMs)
-            .easing(easing)
-            .onUpdate(() => {
-                this._cameraParent.position.set(fromPos.x, fromPos.y, fromPos.z);
-            });
+		this._tweenToSeeScenePos = new TWEEN.Tween(fromPos)
+			.to(toPos, this._transitionTimeMs)
+			.easing(easing)
+			.onUpdate(() => {
+				this._cameraParent.position.set(fromPos.x, fromPos.y, fromPos.z);
+			});
 
-        const fromFov = { x: fov };
-        const toFov = { x: 50.0 };
-        this._tweenToSeeSceneFov = new TWEEN.Tween(fromFov)
-            .to(toFov, this._transitionTimeMs)
-            .easing(easing)
-            .onUpdate(() => {
-                this._camera.fov = fromFov.x;
-                this._camera.updateProjectionMatrix();
-            });
-    }
+		const fromFov = { x: fov };
+		const toFov = { x: 50.0 };
+		this._tweenToSeeSceneFov = new TWEEN.Tween(fromFov)
+			.to(toFov, this._transitionTimeMs)
+			.easing(easing)
+			.onUpdate(() => {
+				this._camera.fov = fromFov.x;
+				this._camera.updateProjectionMatrix();
+			});
+	}
 
-    getCamera() {
-        return this._camera;
-    }
+	getCamera() {
+		return this._camera;
+	}
 
-    getCameraParent() {
-        return this._cameraParent;
-    }
+	getCameraParent() {
+		return this._cameraParent;
+	}
 
-    setAspect(aspect) {
-        this._camera.aspect = aspect;
-    }
+	setAspect(aspect) {
+		this._camera.aspect = aspect;
+	}
 
-    updateProjectionMatrix() {
-        this._camera.updateProjectionMatrix();
-    }
+	updateProjectionMatrix() {
+		this._camera.updateProjectionMatrix();
+	}
 
-    setToLookingToGridInstant() {
-        this._cameraParent.position.copy(this._parentLookingToGridPos);
-        this._cameraParent.setRotationFromEuler(this._parentLookingToGridRot);
-    }
+	setToLookingToGridInstant() {
+		this._cameraParent.position.copy(this._parentLookingToGridPos);
+		this._cameraParent.setRotationFromEuler(this._parentLookingToGridRot);
+	}
 
-    setToLookingScene() {
-        this._shouldBreathe = true;
-        this._tweenToSeeSceneRot.start();
-        this._tweenToSeeScenePos.start();
-        this._tweenToSeeSceneFov.start();
-    }
+	setToLookingScene() {
+		this._shouldBreathe = true;
+		this._tweenToSeeSceneRot.start();
+		this._tweenToSeeScenePos.start();
+		this._tweenToSeeSceneFov.start();
+	}
 
-    breathe(dt, time) {
-        let intensity = 0.0;
+	breathe(dt, time) {
+		let intensity = 0.0;
 
-        if (this._shouldBreathe) {
-            this._breathingTimer += dt;
-            const transitionSec = this._transitionTimeMs / 1000.0;
-            this._breathingTimer = Math.min(this._breathingTimer, transitionSec);
-            intensity = this._breathingTimer / transitionSec;
-        }
-        else {
-            return;
-        }
+		if (this._shouldBreathe) {
+			this._breathingTimer += dt;
+			const transitionSec = this._transitionTimeMs / 1000.0;
+			this._breathingTimer = Math.min(this._breathingTimer, transitionSec);
+			intensity = this._breathingTimer / transitionSec;
+		}
+		else {
+			return;
+		}
 
-        const x = simplex.noise(time * posFreq, time * posFreq, 0.0) * posAmp * intensity;
-        const y = simplex.noise((time + 128.0) * posFreq, (time + 128.0) * posFreq, 0.0) * posAmp * intensity;
+		const x = simplex.noise(time * posFreq, time * posFreq, 0.0) * posAmp * intensity;
+		const y = simplex.noise((time + 128.0) * posFreq, (time + 128.0) * posFreq, 0.0) * posAmp * intensity;
 
-        let xEulers = simplex.noise((time + 64.0) * rotFreq, (time + 64.0) * rotFreq, 0.0) * rotAmp * intensity;
-        let yEulers = simplex.noise((time + 192.0) * rotFreq, (time + 192.0) * rotFreq, 0.0) * rotAmp * intensity;
+		let xEulers = simplex.noise((time + 64.0) * rotFreq, (time + 64.0) * rotFreq, 0.0) * rotAmp * intensity;
+		let yEulers = simplex.noise((time + 192.0) * rotFreq, (time + 192.0) * rotFreq, 0.0) * rotAmp * intensity;
 
-        xEulers = this._anchoredRotation.x + THREE.MathUtils.degToRad(xEulers);
-        yEulers = this._anchoredRotation.y + THREE.MathUtils.degToRad(yEulers);
+		xEulers = this._anchoredRotation.x + THREE.MathUtils.degToRad(xEulers);
+		yEulers = this._anchoredRotation.y + THREE.MathUtils.degToRad(yEulers);
 
-        this._camera.position.set(x, y, 0.0);
-        this._camera.rotation.set(xEulers, yEulers, this._anchoredRotation.z);
-    }
+		this._camera.position.set(x, y, 0.0);
+		this._camera.rotation.set(xEulers, yEulers, this._anchoredRotation.z);
+	}
 }

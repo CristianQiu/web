@@ -14,92 +14,92 @@ let camera, renderer, grid, audioManager, audioSpectrumAnalyzer;
 let controls;
 
 const start = function () {
-    stats = new Stats();
-    clock = new THREE.Clock();
+	stats = new Stats();
+	clock = new THREE.Clock();
 
-    document.body.appendChild(stats.dom);
+	document.body.appendChild(stats.dom);
 
-    const scene = new THREE.Scene();
+	const scene = new THREE.Scene();
 
-    const w = innerWidth;
-    const h = innerHeight;
+	const w = innerWidth;
+	const h = innerHeight;
 
-    camera = new SynthwaveCamera(150.0, w / h, 0.3, 250);
-    scene.add(camera.getCameraParent());
+	camera = new SynthwaveCamera(150.0, w / h, 0.3, 250);
+	scene.add(camera.getCameraParent());
 
-    const pixelRatio = Math.min(devicePixelRatio, 0.875);
+	const pixelRatio = Math.min(devicePixelRatio, 0.875);
 
-    renderer = new SynthwaveRenderer(scene, camera.getCamera(), w, h, pixelRatio);
-    document.body.appendChild(renderer.getDomElement());
+	renderer = new SynthwaveRenderer(scene, camera.getCamera(), w, h, pixelRatio);
+	document.body.appendChild(renderer.getDomElement());
 
-    const skybox = new SynthwaveSkybox();
-    scene.add(skybox.getMesh());
+	const skybox = new SynthwaveSkybox();
+	scene.add(skybox.getMesh());
 
-    grid = new SynthwaveGrid(128, 128, 1.0);
-    grid.generate();
-    scene.add(grid.getMesh());
+	grid = new SynthwaveGrid(128, 128, 1.0);
+	grid.generate();
+	scene.add(grid.getMesh());
 
-    // controls = new OrbitControls(camera.getCamera(), renderer.getDomElement());
-    // controls.minDistance = 1;
-    // controls.maxDistance = 30;
-    // controls.update();
+	// controls = new OrbitControls(camera.getCamera(), renderer.getDomElement());
+	// controls.minDistance = 1;
+	// controls.maxDistance = 30;
+	// controls.update();
 
-    audioManager = new AudioManager(camera.getCamera());
+	audioManager = new AudioManager(camera.getCamera());
 
-    document.getElementById('musicButton').addEventListener('click', onClickPlayMusic);
-    addEventListener('resize', onWindowResize, false);
+	document.getElementById('musicButton').addEventListener('click', onClickPlayMusic);
+	addEventListener('resize', onWindowResize, false);
 };
 
 const update = function () {
-    requestAnimationFrame(update);
+	requestAnimationFrame(update);
 
-    const dt = clock.getDelta();
-    const time = clock.getElapsedTime();
+	const dt = clock.getDelta();
+	const time = clock.getElapsedTime();
 
-    stats.update();
-    TWEEN.update();
+	stats.update();
+	TWEEN.update();
 
-    // controls.update();
-    camera.breathe(dt, time);
+	// controls.update();
+	camera.breathe(dt, time);
 
-    const validSpectrumAnalyzer = audioSpectrumAnalyzer !== undefined && audioSpectrumAnalyzer !== null;
+	const validSpectrumAnalyzer = audioSpectrumAnalyzer !== undefined && audioSpectrumAnalyzer !== null;
 
-    if (validSpectrumAnalyzer) {
-        audioSpectrumAnalyzer.analyzeFrameMeans(dt, audioManager.getAudioListenerSampleRate());
-        grid.animate(time, audioSpectrumAnalyzer.getMeans(true));
-    }
-    else {
-        grid.animate(time);
-    }
+	if (validSpectrumAnalyzer) {
+		audioSpectrumAnalyzer.analyzeFrameMeans(dt, audioManager.getAudioListenerSampleRate());
+		grid.animate(time, audioSpectrumAnalyzer.getMeans(true));
+	}
+	else {
+		grid.animate(time);
+	}
 
-    renderer.render();
+	renderer.render();
 };
 
 const onClickPlayMusic = function () {
-    if (audioManager.isInitialized())
-        return;
+	if (audioManager.isInitialized())
+		return;
 
-    audioManager.init();
-    audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 8192);
-    audioManager.loadAndPlayMusic();
+	audioManager.init();
+	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 8192);
+	audioManager.loadAndPlayMusic();
 
-    camera.setToLookingScene();
+	camera.setToLookingScene();
 };
 
 const onClickJoin = function () {
-    // tween the camera
+	// tween the camera
 
-    // trigger the animation of the "button"
+	// trigger the animation of the "button"
 };
 
 const onWindowResize = function () {
-    const w = innerWidth;
-    const h = innerHeight;
+	const w = innerWidth;
+	const h = innerHeight;
 
-    camera.setAspect(w / h);
-    camera.updateProjectionMatrix();
+	camera.setAspect(w / h);
+	camera.updateProjectionMatrix();
 
-    renderer.setSize(w, h);
+	renderer.setSize(w, h);
 };
 
 start();

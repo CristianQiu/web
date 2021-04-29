@@ -2,133 +2,129 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Cristian Qiu Félez</title>
-    <style>
-        body {
-            margin: 0;
-            --neonGrayscale: 0.2;
-            --neonAnimationDuration: 10s;
-        }
+	<meta charset="utf-8">
+	<title>Cristian Qiu Félez</title>
+	<style>
+		body {
+			margin: 0;
+			--neonGrayscale: 0.2;
+			--neonAnimationDuration: 10s;
+		}
 
-        canvas {
-            position: fixed;
-            top: 0;
-            z-index: -1;
-        }
+		canvas {
+			position: fixed;
+			top: 0;
+			z-index: -1;
+		}
 
-        #svgContainer {
-            /* right: 0; */
-            /* margin: 50vh auto auto auto; */
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            max-height: 50vh;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            /* background-color: black; */
-        }
+		#svgContainer {
+			/* right: 0; */
+			/* margin: 50vh auto auto auto; */
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			max-height: 50vh;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			/* background-color: black; */
+		}
 
-        #musicButton {
-            position: absolute;
-            padding: 2em 2em;
-            left: 0;
-            right: 0;
-            text-align: center;
-            text-transform: initial;
-            background-size: 200% auto;
-            color: white;
-            box-shadow: 0 0 5px rgba(192, 177, 177, 0.849);
-            margin: 1em auto;
-            display: table-cell;
-            vertical-align: middle;
-            background-color: darkslateblue;
-            border-radius: 0.5em;
-            border: none;
-            background-image: linear-gradient(to right, #3494E6 0%, #EC6EAD 51%, #3494E6 100%);
-            background-position: right center;
-            color: rgb(255, 255, 255);
-            text-decoration: none;
-        }
+		#musicButton {
+			position: absolute;
+			padding: 2em 2em;
+			left: 0;
+			right: 0;
+			text-align: center;
+			text-transform: initial;
+			background-size: 200% auto;
+			color: white;
+			box-shadow: 0 0 5px rgba(192, 177, 177, 0.849);
+			margin: 1em auto;
+			display: table-cell;
+			vertical-align: middle;
+			background-color: darkslateblue;
+			border-radius: 0.5em;
+			border: none;
+			background-image: linear-gradient(to right, #3494E6 0%, #EC6EAD 51%, #3494E6 100%);
+			background-position: right center;
+			color: rgb(255, 255, 255);
+			text-decoration: none;
+		}
 
-        #dummy {
-            position: absolute;
-            right: 0;
-            width: 100px;
-            height: 1000px;
-            background-color: white;
-        }
+		#dummy {
+			position: absolute;
+			right: 0;
+			width: 100px;
+			height: 1000px;
+			background-color: white;
+		}
 
-        svg {
-            /* border: 4px solid white; */
-            /* transition: all 2s linear 1; */
-            /* transform: translate(4px, -4px); */
-        }
+		svg {
+			/* border: 4px solid white; */
+			/* transition: all 2s linear 1; */
+			/* transform: translate(4px, -4px); */
+		}
 
-        /* svg:hover {
-            transform: scale(1.25);
-        } */
+		/* svg:hover {
+			transform: scale(1.25);
+		} */
 
-        .shape {
-            fill: none;
-            stroke-linejoin: round;
-            stroke-linecap: round;
-            stroke: rgb(255, 255, 255);
-            stroke-width: 1.0px;
-        }
+		.shape {
+			fill: none;
+			stroke-linejoin: round;
+			stroke-linecap: round;
+			stroke: rgb(255, 255, 255);
+			stroke-width: 1.0px;
+		}
 
-        /* .triangle {
-            stroke-dasharray: 300;
-            stroke-dashoffset: 0;
-        } */
+		/* .triangle {
+			stroke-dasharray: 300;
+			stroke-dashoffset: 0;
+		} */
 
-        /* .triangle {
-            animation: dash var(--neonAnimationDuration) ease-in-out normal infinite;
-            transform-origin: 50px 50px;
-        } */
+		/* .triangle {
+			animation: dash var(--neonAnimationDuration) ease-in-out normal infinite;
+			transform-origin: 50px 50px;
+		} */
 
-        /* @keyframes dash {
-            0% {
-                stroke-dashoffset: 0;
-            }
+		/* @keyframes dash {
+			0% {
+				stroke-dashoffset: 0;
+			}
 
-            20% {
-                stroke-dashoffset: 600;
-            }
+			20% {
+				stroke-dashoffset: 600;
+			}
 
-            100% {
-                stroke-dashoffset: 600;
-            }
-        } */
+			100% {
+				stroke-dashoffset: 600;
+			}
+		} */
 
-        /* @keyframes scale {
-            0% {
-                transform: scale(0.5);
-            }
+		/* @keyframes scale {
+			0% {
+				transform: scale(0.5);
+			}
 
-            100% {
-                transform: scale(1.0);
-            }
-        } */
-    </style>
+			100% {
+				transform: scale(1.0);
+			}
+		} */
+	</style>
 </head>
 
 <body>
-    <button id="musicButton" type="button">Play music</button>
-    <div id="svgContainer">
-        <svg preserveAspectRatio="xMidYMid" viewBox="0 0 100 100" width="100%" height="100%">
-            <polygon points="15,85 50,15 85,85" class="shape triangle" />
-            <polygon points="5,5 95,5 95,95 5,95" class="shape square" />
-            <circle cx="50" cy="50" r="40" class="shape circle" />
-
-            <!-- <polygon points="25,75 50,15 75,75" class="triangle" />
-            <polygon points="35,65 50,25 65,65" class="triangle" />
-            <polygon points="45,55 50,35 55,55" class="triangle" /> -->
-        </svg>
-    </div>
-    <!-- <div id="dummy"></div>div> -->
-    <script src="../../dist/app.js"></script>
+	<button id="musicButton" type="button">Play music</button>
+	<div id="svgContainer">
+		<svg preserveAspectRatio="xMidYMid" viewBox="0 0 100 100" width="100%" height="100%">
+			<polygon points="15,85 50,15 85,85" class="shape triangle" />
+			<polygon points="5,5 95,5 95,95 5,95" class="shape square" />
+			<circle cx="50" cy="50" r="40" class="shape circle" />
+		</svg>
+	</div>
+	<!-- <div id="dummy"></div>div> -->
+	<script src="../../dist/app.js"></script>
 </body>
 
 </html>
