@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import TWEEN from '@tweenjs/tween.js';
 
 export default class AudioManager {
 
@@ -11,6 +12,17 @@ export default class AudioManager {
         this._audioListener = null;
         this._mainCameraListener = mainCameraListener;
         this._audioSource = null;
+
+        const fromVol = { x: 0.0 };
+        const toVol = { x: 0.5 };
+        const easing = TWEEN.Easing.Quadratic.In;
+
+        this._fadeInTween = new TWEEN.Tween(fromVol)
+            .to(toVol, 2000)
+            .easing(easing)
+            .onUpdate(() => {
+                this.setVolume(fromVol.x);
+            });
     }
 
     getAudioSource() {
@@ -50,7 +62,7 @@ export default class AudioManager {
     _onMusicLoaded(buffer) {
         this._audioSource.setBuffer(buffer);
         this._loadingMusic = false;
-        this.setVolume(0.5);
+        this._fadeInTween.start();
         this._audioSource.setLoop(true);
         this._audioSource.play();
     }

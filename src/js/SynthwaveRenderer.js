@@ -15,12 +15,12 @@ export default class SynthwaveRenderer {
         const res = new THREE.Vector2(w, h);
         this._scenePass = new RenderPass(scene, camera);
         this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
-        this._filmPass = new FilmPass(0.65, 0.25, h, 1.0);
+        this._filmPass = new FilmPass(0.65, 0.25, h, 0.0);
 
         this._composer = new EffectComposer(this._renderer);
         this._composer.addPass(this._scenePass);
         this._composer.addPass(this._bloomPass);
-        this._composer.addPass(this._filmPass);
+        // this._composer.addPass(this._filmPass);
 
         this.setSize(w, h);
         this.setPixelRatio(pixelRatio);

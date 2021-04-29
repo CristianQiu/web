@@ -24,7 +24,7 @@ const start = function () {
     const w = innerWidth;
     const h = innerHeight;
 
-    camera = new SynthwaveCamera(50.0, w / h, 0.3, 250);
+    camera = new SynthwaveCamera(150.0, w / h, 0.3, 250);
     scene.add(camera.getCameraParent());
 
     const pixelRatio = Math.min(devicePixelRatio, 0.875);
@@ -46,7 +46,7 @@ const start = function () {
 
     audioManager = new AudioManager(camera.getCamera());
 
-    document.getElementById('musicButton').addEventListener('click', onClickPlayMusicButton);
+    document.getElementById('musicButton').addEventListener('click', onClickPlayMusic);
     addEventListener('resize', onWindowResize, false);
 };
 
@@ -57,10 +57,10 @@ const update = function () {
     const time = clock.getElapsedTime();
 
     stats.update();
-    // TWEEN.update(time);
+    TWEEN.update();
 
     // controls.update();
-    camera.breathe(time);
+    camera.breathe(dt, time);
 
     const validSpectrumAnalyzer = audioSpectrumAnalyzer !== undefined && audioSpectrumAnalyzer !== null;
 
@@ -75,13 +75,15 @@ const update = function () {
     renderer.render();
 };
 
-const onClickPlayMusicButton = function () {
+const onClickPlayMusic = function () {
     if (audioManager.isInitialized())
         return;
 
     audioManager.init();
     audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 8192);
     audioManager.loadAndPlayMusic();
+
+    camera.setToLookingScene();
 };
 
 const onClickJoin = function () {
