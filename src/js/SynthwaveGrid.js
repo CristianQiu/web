@@ -84,7 +84,7 @@ export default class SynthwaveGrid {
 		const halfResX = this._vertexResX * 0.5;
 		const resX = this._vertexResX;
 		const corridorWidth = 2.25 * 4;
-		const mountainEdgeSmoothness = 1.75; // 2.5
+		const mountainEdgeSmoothness = 1.75;
 
 		const repeat = 4;
 		const scale = 0.05;

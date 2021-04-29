@@ -83,7 +83,7 @@ const onClickPlayMusic = function () {
 	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 8192);
 	audioManager.loadAndPlayMusic();
 
-	camera.setToLookingScene();
+	camera.setToLookingSun();
 };
 
 const onClickJoin = function () {

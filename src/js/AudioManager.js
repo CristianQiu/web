@@ -17,7 +17,7 @@ export default class AudioManager {
 		const toVol = { x: 0.5 };
 		const easing = TWEEN.Easing.Quintic.InOut;
 
-		this._fadeInTween = new TWEEN.Tween(fromVol)
+		this._fadeInVolTween = new TWEEN.Tween(fromVol)
 			.to(toVol, 2000)
 			.easing(easing)
 			.onUpdate(() => {
@@ -62,7 +62,7 @@ export default class AudioManager {
 	_onMusicLoaded(buffer) {
 		this._audioSource.setBuffer(buffer);
 		this._loadingMusic = false;
-		this._fadeInTween.start();
+		this._fadeInVolTween.start();
 		this._audioSource.setLoop(true);
 		this._audioSource.play();
 	}
