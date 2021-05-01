@@ -3,10 +3,9 @@ const UberPostFxShader = {
 	uniforms: {
 		'tDiffuse': { value: null },
 		'time': { value: 0.0 },
-		'grayScale': { value: 1.0 },
-		'nIntensity': { value: 0.5 },
-		'sIntensity': { value: 0.05 },
-		'sCount': { value: 4096 }
+		'scanLineCount': { value: 2048 },
+		'scanLineIntensity': { value: 1.0 },
+		'grayScaleIntensity': { value: 1.0 }
 	},
 
 	vertexShader: /* glsl */`
@@ -22,36 +21,64 @@ const UberPostFxShader = {
 
 		uniform sampler2D tDiffuse;
 		uniform float time;
-		// noise effect intensity value (0 = no effect, 1 = full effect)
-		uniform float nIntensity;
-		// scanlines effect intensity value (0 = no effect, 1 = full effect)
-		uniform float sIntensity;
-		// scanlines effect count value (0 = no effect, 4096 = full effect)
-		uniform float sCount;
-		uniform float grayScale;
+		uniform float scanLineCount;
+		uniform float scanLineIntensity;
+		uniform float grayScaleIntensity;
 
 		varying vec2 vUv;
 
+		// From https://github.com/gkjohnson/threejs-sandbox/blob/beb92e4a84456304a800e27b26f6d521f8b8360e/lens-effects/src/LensDistortionShader.js
+		vec3 chromaticAberration(vec2 vUv, sampler2D tDiffuse)
+		{
+			// TODO: maybe expose this...
+			const float bandOffset = 0.001;
+			const float baseIor = 0.9;
+
+			const vec3 back = vec3(0.0, 0.0, -1.0);
+
+			vec3 normal = vec3((2.0 * vUv - vec2(1.0)), 1.0);
+			normal = normalize(normal);
+
+			float r_ior = 1.0 + bandOffset * 0.0;
+			float g_ior = 1.0 + bandOffset * 2.0;
+			float b_ior = 1.0 + bandOffset * 4.0;
+
+			vec3 r_refracted = refract(back, normal, baseIor / r_ior);
+			vec3 g_refracted = refract(back, normal, baseIor / g_ior);
+			vec3 b_refracted = refract(back, normal, baseIor / b_ior);
+
+			float r = texture2D(tDiffuse, vUv + r_refracted.xy).r;
+			float g = texture2D(tDiffuse, vUv + g_refracted.xy).g;
+			float b = texture2D(tDiffuse, vUv + b_refracted.xy).b;
+
+			return vec3(r, g, b);
+		}
+
+		vec3 noiseScanLines(vec2 vUv, vec3 mainTexColor)
+		{
+			float noise = rand(vUv + mod(time, 16.0)) + 1.0 * 0.5;
+			vec3 color = (mainTexColor + (mainTexColor * noise)) * 0.5; // < average it
+
+			vec2 scanLine = vec2(sin(vUv.y * scanLineCount), cos(vUv.y * scanLineCount));
+			color += mainTexColor * vec3(scanLine.x, scanLine.y, scanLine.x) * scanLineIntensity;
+			color = mainTexColor + 1.0 * (color - mainTexColor);
+
+			return color;
+		}
+
+		vec3 grayScaled(vec3 mainTexColor, float intensity)
+		{
+			vec3 gray = vec3(mainTexColor.r * 0.3 + mainTexColor.g * 0.59 + mainTexColor.b * 0.11);
+
+			return mix(mainTexColor, gray, intensity);
+		}
+
 		void main() {
-			vec4 cTextureScreen = texture2D(tDiffuse, vUv);
-		// make some noise
-			float dx = rand(vUv + time);
-		// add noise
-			vec3 cResult = cTextureScreen.rgb + cTextureScreen.rgb * clamp(0.1 + dx, 0.0, 1.0);
-		// get us a sine and cosine
-			vec2 sc = vec2(sin(vUv.y * sCount), cos(vUv.y * sCount));
-		// add scanlines
-			cResult += cTextureScreen.rgb * vec3(sc.x, sc.y, sc.x) * sIntensity;
-		// interpolate between source and result by intensity
-			cResult = cTextureScreen.rgb + clamp(nIntensity, 0.0, 1.0) * (cResult - cTextureScreen.rgb);
+			vec3 color = chromaticAberration(vUv, tDiffuse);
+			color = noiseScanLines(vUv, color);
+			color = grayScaled(color, grayScaleIntensity);
 
-			vec3 gray = vec3(cResult.r * 0.3 + cResult.g * 0.59 + cResult.b * 0.11);
-			cResult = mix(cResult, gray, grayScale);
-
-			gl_FragColor = LinearTosRGB(vec4(cResult, 0.5));
-			// gl_FragColor = LinearToGamma(vec4(cResult, GAMMA_FACTOR));
-
-			// gl_FragColor = vec4(cResult, cTextureScreen.a);
+			gl_FragColor = vec4(color, 1.0);
 		}`,
 };
 

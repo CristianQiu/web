@@ -15,13 +15,12 @@ export default class SynthwaveRenderer {
 		const res = new THREE.Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
-		this._uberPass = new UberPostFxPass(0.0, 0.0, h, 0.0);
-		// this._uberPass.renderToScreen = true;
+		this._uberPass = new UberPostFxPass(h, 0.08, 0.0);
 
 		this._composer = new EffectComposer(this._renderer);
 		this._composer.addPass(this._scenePass);
 		this._composer.addPass(this._bloomPass);
-		// this._composer.addPass(this._uberPass);
+		this._composer.addPass(this._uberPass);
 
 		this.setSize(w, h);
 		this.setPixelRatio(pixelRatio);
@@ -32,6 +31,7 @@ export default class SynthwaveRenderer {
 	}
 
 	setSize(w, h) {
+		this._uberPass.setScanLinesCount(h * 1.25);
 		this._renderer.setSize(w, h);
 		this._composer.setSize(w, h);
 	}

@@ -20,7 +20,7 @@ export default class SynthwaveCamera {
 		let yEulers = THREE.Math.degToRad(180.0);
 		let zEulers = THREE.Math.degToRad(0.0);
 
-		this._parentLookingToGridPos = new THREE.Vector3(0.0, 2.0, 30.0);
+		this._parentLookingToGridPos = new THREE.Vector3(0.0, 2.0, 50.0);
 		this._parentLookingToGridRot = new THREE.Euler(xEulers, yEulers, zEulers);
 
 		xEulers = THREE.Math.degToRad(-5.0);
@@ -37,7 +37,7 @@ export default class SynthwaveCamera {
 
 		// tweens
 		this._breathingTimer = 0.0;
-		this._transitionTimeMs = 8000;
+		this._transitionTimeMs = 4000;
 		const easing = TWEEN.Easing.Quintic.InOut;
 
 		const fromPos = { x: this._parentLookingToGridPos.x, y: this._parentLookingToGridPos.y, z: this._parentLookingToGridPos.z };
@@ -63,7 +63,7 @@ export default class SynthwaveCamera {
 			});
 
 		const fromFov = { x: fov };
-		const toFov = { x: 50.0 };
+		const toFov = { x: 60.0 };
 		this._tweenToLookSunFov = new TWEEN.Tween(fromFov)
 			.to(toFov, this._transitionTimeMs)
 			.easing(easing)

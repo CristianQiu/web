@@ -18,7 +18,7 @@ export default class AudioManager {
 		const easing = TWEEN.Easing.Quintic.InOut;
 
 		this._fadeInVolTween = new TWEEN.Tween(fromVol)
-			.to(toVol, 2000)
+			.to(toVol, 4000)
 			.easing(easing)
 			.onUpdate(() => {
 				this.setVolume(fromVol.x);
