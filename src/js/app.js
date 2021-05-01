@@ -8,10 +8,12 @@ import SynthwaveSkybox from './SynthwaveSkybox';
 import SynthwaveGrid from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
+import { PlaneBufferGeometry } from 'three';
 
 let stats, clock;
 let camera, renderer, grid, audioManager, audioSpectrumAnalyzer;
 let controls;
+// let textGeo;
 
 const start = function () {
 	stats = new Stats();
@@ -46,6 +48,48 @@ const start = function () {
 
 	audioManager = new AudioManager(camera.getCamera());
 
+	// const loader = new THREE.FontLoader();
+
+	// loader.load('../../resources/Monoton-Regular.json', function (font) {
+	// 	textGeo = new THREE.TextGeometry('HELLO', {
+	// 		font: font,
+	// 		size: 4,
+	// 		height: 0.1,
+	// 		curveSegments: 12,
+	// 		bevelEnabled: false,
+	// 		bevelThickness: 1,
+	// 		bevelSize: 1,
+	// 		bevelOffset: 0,
+	// 		bevelSegments: 5
+	// 	});
+
+	// 	textGeo.computeBoundingBox();
+
+	// 	let textMesh1 = new THREE.Mesh(textGeo, new THREE.MeshBasicMaterial({ color: 0xff0000 }));
+
+	// 	textMesh1.position.x = 0.0;
+	// 	textMesh1.position.y = 15.0;
+	// 	textMesh1.position.z = 50.0;
+
+	// 	scene.add(textMesh1);
+	// });
+
+	// const texture = new THREE.TextureLoader().load('../../resources/Test.png');
+
+	const geometry = new THREE.PlaneGeometry(0.3, 24, 4);
+	const material = new THREE.MeshBasicMaterial({ color: new THREE.Color(100.0, 0.6, 0.6), side: THREE.DoubleSide });
+	const plane = new THREE.Mesh(geometry, material);
+	const plane2 = new THREE.Mesh(geometry, material);
+
+	plane.position.set(8.0, 0.0, 30.0);
+	plane2.position.set(-8.0, 0.0, 30.0);
+
+	plane.rotateZ(THREE.MathUtils.degToRad(45));
+	plane2.rotateZ(THREE.MathUtils.degToRad(-45));
+
+	scene.add(plane);
+	scene.add(plane2);
+
 	document.getElementById('musicButton').addEventListener('click', onClickPlayMusic);
 	addEventListener('resize', onWindowResize, false);
 };
@@ -59,7 +103,6 @@ const update = function () {
 	stats.update();
 	TWEEN.update();
 
-	// controls.update();
 	camera.breathe(dt, time);
 
 	const validSpectrumAnalyzer = audioSpectrumAnalyzer !== undefined && audioSpectrumAnalyzer !== null;
@@ -84,12 +127,6 @@ const onClickPlayMusic = function () {
 	audioManager.loadAndPlayMusic();
 
 	camera.setToLookingSun();
-};
-
-const onClickJoin = function () {
-	// tween the camera
-
-	// trigger the animation of the "button"
 };
 
 const onWindowResize = function () {

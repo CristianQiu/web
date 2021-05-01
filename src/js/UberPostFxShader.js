@@ -31,7 +31,7 @@ const UberPostFxShader = {
 		vec3 chromaticAberration(vec2 vUv, sampler2D tDiffuse)
 		{
 			// TODO: maybe expose this...
-			const float bandOffset = 0.001;
+			const float bandOffset = -0.001;
 			const float baseIor = 0.9;
 
 			const vec3 back = vec3(0.0, 0.0, -1.0);
@@ -73,10 +73,23 @@ const UberPostFxShader = {
 			return mix(mainTexColor, gray, intensity);
 		}
 
+		vec3 vignette(vec2 vUv, vec3 mainTexColor)
+		{
+			// TODO: maybe expose this...
+			const float enlarge = 0.5;
+
+			float distToMid = 1.0 - length(abs(vec2(0.5) - vUv));
+			distToMid = clamp(distToMid + enlarge, 0.0, 1.0);
+			mainTexColor *= distToMid;
+
+			return mainTexColor;
+		}
+
 		void main() {
 			vec3 color = chromaticAberration(vUv, tDiffuse);
 			color = noiseScanLines(vUv, color);
 			color = grayScaled(color, grayScaleIntensity);
+			color = vignette(vUv, color);
 
 			gl_FragColor = vec4(color, 1.0);
 		}`,
