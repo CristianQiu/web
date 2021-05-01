@@ -1,6 +1,14 @@
 import * as THREE from 'three';
 import TWEEN from '@tweenjs/tween.js';
 
+const onMusicLoaded = function (buffer) {
+	this._audioSource.setBuffer(buffer);
+	this._loadingMusic = false;
+	this._fadeInVolTween.start();
+	this._audioSource.setLoop(true);
+	this._audioSource.play();
+};
+
 export default class AudioManager {
 
 	constructor(mainCameraListener) {
@@ -50,20 +58,12 @@ export default class AudioManager {
 			return;
 
 		this._loadingMusic = true;
-		const callback = this._onMusicLoaded.bind(this);
+		const callback = onMusicLoaded.bind(this);
 		this._audioLoader.load(this._musicFile, callback);
 	}
 
 	setVolume(volume) {
 		const vol = THREE.MathUtils.clamp(volume, 0.0, 1.0);
 		this._audioSource.setVolume(vol);
-	}
-
-	_onMusicLoaded(buffer) {
-		this._audioSource.setBuffer(buffer);
-		this._loadingMusic = false;
-		this._fadeInVolTween.start();
-		this._audioSource.setLoop(true);
-		this._audioSource.play();
 	}
 }

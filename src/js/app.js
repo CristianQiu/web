@@ -29,7 +29,7 @@ const start = function () {
 	camera = new SynthwaveCamera(150.0, w / h, 0.3, 250);
 	scene.add(camera.getCameraParent());
 
-	const pixelRatio = Math.min(devicePixelRatio, 0.875);
+	const pixelRatio = Math.min(devicePixelRatio, 0.9);
 
 	renderer = new SynthwaveRenderer(scene, camera.getCamera(), w, h, pixelRatio);
 	document.body.appendChild(renderer.getDomElement());
@@ -76,19 +76,37 @@ const start = function () {
 
 	// const texture = new THREE.TextureLoader().load('../../resources/Test.png');
 
-	const geometry = new THREE.PlaneGeometry(0.3, 24, 4);
-	const material = new THREE.MeshBasicMaterial({ color: new THREE.Color(100.0, 0.6, 0.6), side: THREE.DoubleSide });
+	const geometry = new THREE.PlaneGeometry(0.15, 32.1, 4);
+	const material = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.2, 0.2, 10.1), side: THREE.DoubleSide });
 	const plane = new THREE.Mesh(geometry, material);
 	const plane2 = new THREE.Mesh(geometry, material);
 
-	plane.position.set(8.0, 0.0, 30.0);
-	plane2.position.set(-8.0, 0.0, 30.0);
+	const plane3 = new THREE.Mesh(geometry, material);
+	const plane4 = new THREE.Mesh(geometry, material);
+	const plane5 = new THREE.Mesh(geometry, material);
+	const plane6 = new THREE.Mesh(geometry, material);
 
-	plane.rotateZ(THREE.MathUtils.degToRad(45));
-	plane2.rotateZ(THREE.MathUtils.degToRad(-45));
+
+	plane.position.set(8.0, 0.0, 20.0);
+	plane2.position.set(-8.0, 0.0, 20.0);
+	plane3.position.set(8.0, 0.0, 40.0);
+	plane4.position.set(-8.0, 0.0, 40.0);
+	plane5.position.set(8.0, 0.0, 60.0);
+	plane6.position.set(-8.0, 0.0, 60.0);
+
+	plane.rotateZ(THREE.MathUtils.degToRad(30));
+	plane2.rotateZ(THREE.MathUtils.degToRad(-30));
+	plane3.rotateZ(THREE.MathUtils.degToRad(30));
+	plane4.rotateZ(THREE.MathUtils.degToRad(-30));
+	plane5.rotateZ(THREE.MathUtils.degToRad(30));
+	plane6.rotateZ(THREE.MathUtils.degToRad(-30));
 
 	scene.add(plane);
 	scene.add(plane2);
+	scene.add(plane3);
+	scene.add(plane4);
+	scene.add(plane5);
+	scene.add(plane6);
 
 	document.getElementById('musicButton').addEventListener('click', onClickPlayMusic);
 	addEventListener('resize', onWindowResize, false);

@@ -8,14 +8,16 @@ export default class SynthwaveRenderer {
 
 	constructor(scene, camera, w, h, pixelRatio) {
 		this._renderer = new THREE.WebGLRenderer();
-		// this._renderer.outputEncoding = THREE.LinearEncoding;
-		// this._renderer.toneMapping = THREE.ACESFilmicToneMapping;
+		this._renderer.outputEncoding = THREE.LinearEncoding;
+		// Note: this must be implemented in the postprocessing stack.
+		// By default it does not work with the EffectComposer.
+		// this._renderer.toneMapping = THREE.NoToneMapping;
 		// this._renderer.toneMappingExposure = Math.pow(1.0, 4.0);
 
 		const res = new THREE.Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
-		this._uberPass = new UberPostFxPass(h, 0.05, 0.0);
+		this._uberPass = new UberPostFxPass(h, 0.1, 0.0, 1.0);
 
 		this._composer = new EffectComposer(this._renderer);
 		this._composer.addPass(this._scenePass);

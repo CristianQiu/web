@@ -4,7 +4,7 @@ import UberPostFxShader from './UberPostFxShader';
 
 export default class UberPostFxPass extends Pass {
 
-	constructor(scanlinesCount, scanlinesIntensity, grayScaleIntensity) {
+	constructor(scanlinesCount, scanlinesIntensity, grayScaleIntensity, exposure) {
 		super();
 		const shader = UberPostFxShader;
 		this._uniforms = THREE.UniformsUtils.clone(shader.uniforms);
@@ -15,6 +15,8 @@ export default class UberPostFxPass extends Pass {
 			this._uniforms.scanLineCount.value = scanlinesCount;
 		if (scanlinesIntensity !== undefined)
 			this._uniforms.scanLineIntensity.value = scanlinesIntensity;
+		if (exposure !== undefined)
+			this._uniforms.exposure.value = exposure;
 
 		this._material = new THREE.ShaderMaterial({
 			uniforms: this._uniforms,
