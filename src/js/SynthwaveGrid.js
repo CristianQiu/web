@@ -2,11 +2,28 @@ import * as THREE from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import SynthwaveGridShader from './SynthwaveGridShader';
 
+const freq = 0.1;
+const amp = 3.0;
+
+const corridorWidth = 2.25 * 4;
+const mountainEdgeSmoothness = 1.75;
+
+const minH = 1.5;
+const maxH = 2.5;
+
 const simplex = new SimplexNoise();
 const remap = function (a, b, c, d, x) {
 	let s = (x - a) / (b - a);
 	s = THREE.MathUtils.clamp(s, 0.0, 1.0);
 	return THREE.MathUtils.lerp(c, d, s);
+};
+const calcArrayAvg = function (array) {
+	let avgMean = 0.0;
+	for (let i = 0; i < array.length; ++i) {
+		avgMean += array[i];
+	}
+	avgMean /= array.length;
+	return avgMean;
 };
 
 export default class SynthwaveGrid {
@@ -83,37 +100,16 @@ export default class SynthwaveGrid {
 
 		const halfResX = this._vertexResX * 0.5;
 		const resX = this._vertexResX;
-		const corridorWidth = 2.25 * 4;
-		const mountainEdgeSmoothness = 1.75;
-
-		const repeat = 4;
-		const scale = 0.05;
-
-		const freq = 0.1;
-		const amp = 3.0;
 
 		elapsedTime *= freq;
 
-		let avgMean = 0.0;
-		for (let i = 0; i < audioMeans.length; ++i) {
-			avgMean += audioMeans[i];
-		}
-		avgMean /= audioMeans.length;
+		const avgMean = calcArrayAvg(audioMeans);
 
 		for (let i = 0; i < this._positionsBuffer.count; ++i) {
 			const col = i % resX;
-
 			const x = remap(0.0, resX - 1.0, -halfResX, halfResX, col);
 			const xAbs = Math.abs(x);
 			const z = Math.floor(i / resX);
-
-			// each row of vertices has the same frequency along it, and is repeated Z / "X times" at
-			// contiguous rows. Start from the end instead of the start.
-			const index = (audioMeans.length - 1) - Math.floor((z) / repeat) % audioMeans.length;
-			let y = audioMeans[index] * scale;
-
-			// leave a flat quad between each frequency band representation
-			// y = Math.floor(z % repeat) == 1 ? y : 0.0;
 
 			// smoothly flatten the mountains at their edges and flatten the middle corridor
 			let corridor = xAbs - corridorWidth;
@@ -128,17 +124,12 @@ export default class SynthwaveGrid {
 
 			const finalCorridorEdge = Math.min(corridor, edge);
 
-			const minH = 1.5;
-			const maxH = 2.5;
 			let t = z / this._vertexResY;
 			t *= t;
 
 			const noise = (simplex.noise3d(x * freq, elapsedTime + z * freq, avgMean * 0.0015) * 0.5 + 0.5) * amp;
-
 			const power = THREE.MathUtils.lerp(minH, maxH, t);
 			this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean * 0.006);
-
-			// this._positionsBuffer.setY(i, finalCorridorEdge * y);
 		}
 
 		this._positionsBuffer.needsUpdate = true;

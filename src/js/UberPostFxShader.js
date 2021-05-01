@@ -3,9 +3,9 @@ const UberPostFxShader = {
 	uniforms: {
 		'tDiffuse': { value: null },
 		'time': { value: 0.0 },
+		'saturationIntensity': { value: 1.0 },
 		'scanLineCount': { value: 2048 },
 		'scanLineIntensity': { value: 1.0 },
-		'grayScaleIntensity': { value: 1.0 },
 		'exposure': { value: 1.0 }
 	},
 
@@ -22,9 +22,9 @@ const UberPostFxShader = {
 
 		uniform sampler2D tDiffuse;
 		uniform float time;
+		uniform float saturationIntensity;
 		uniform float scanLineCount;
 		uniform float scanLineIntensity;
-		uniform float grayScaleIntensity;
 		uniform float exposure;
 
 		varying vec2 vUv;
@@ -68,11 +68,12 @@ const UberPostFxShader = {
 			return color;
 		}
 
-		vec3 grayScaled(vec3 mainTexColor, float intensity)
+		vec3 saturation(vec3 mainTexColor, float intensity)
 		{
-			vec3 gray = vec3(mainTexColor.r * 0.3 + mainTexColor.g * 0.59 + mainTexColor.b * 0.11);
+			// https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Saturation-Node.html
+			float luma = dot(mainTexColor, vec3(0.2126729, 0.7151522, 0.0721750));
 
-			return mix(mainTexColor, gray, intensity);
+			return vec3(luma) + vec3(saturationIntensity) * (mainTexColor - vec3(luma));
 		}
 
 		vec3 vignette(vec2 vUv, vec3 mainTexColor)
@@ -93,7 +94,9 @@ const UberPostFxShader = {
 			return a / b;
 		}
 
-		vec3 ACESFilmicToneMapping(vec3 color, float exposure) {
+		vec3 ACESFilmicToneMapping(vec3 color) {
+			color *= exposure / 0.6;
+
 			// sRGB => XYZ => D65_2_D60 => AP1 => RRT_SAT
 			const mat3 ACESInputMat = mat3(
 				vec3(0.59719, 0.07600, 0.02840), // transposed from source
@@ -117,13 +120,10 @@ const UberPostFxShader = {
 
 		void main() {
 			vec3 color = chromaticAberration(vUv, tDiffuse);
+			color = saturation(color, saturationIntensity);
 			color = noiseScanLines(vUv, color);
-			color = grayScaled(color, grayScaleIntensity);
 			color = vignette(vUv, color);
-
-			// pre-exposed, outside of the tone mapping function
-			color *= exposure / 0.6;
-			color = ACESFilmicToneMapping(color, exposure);
+			color = ACESFilmicToneMapping(color);
 
 			gl_FragColor = vec4(color, 1.0);
 		}`,
