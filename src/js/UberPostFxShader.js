@@ -33,7 +33,7 @@ const UberPostFxShader = {
 		vec3 chromaticAberration(vec2 vUv, sampler2D tDiffuse)
 		{
 			// TODO: maybe expose this...
-			const float bandOffset = -0.001;
+			const float bandOffset = -0.00075;
 			const float baseIor = 0.9;
 
 			const vec3 back = vec3(0.0, 0.0, -1.0);
@@ -58,8 +58,12 @@ const UberPostFxShader = {
 
 		vec3 noiseScanLines(vec2 vUv, vec3 mainTexColor)
 		{
+			// TODO: maybe expose this...
+			const float noiseWeight = 0.5;
+			const float oneMinusNoiseWeight = 1.0 - noiseWeight;
+
 			float noise = rand(vUv + mod(time, 16.0)) + 1.0 * 0.5;
-			vec3 color = (mainTexColor + (mainTexColor * noise)) * 0.5; // < average it
+			vec3 color = (mainTexColor * oneMinusNoiseWeight) + (mainTexColor * noise * noiseWeight);
 
 			vec2 scanLine = vec2(sin(vUv.y * scanLineCount), cos(vUv.y * scanLineCount));
 			color += mainTexColor * vec3(scanLine.x, scanLine.y, scanLine.x) * scanLineIntensity;
