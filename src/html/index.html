@@ -21,9 +21,9 @@
 			/* right: 0; */
 			/* margin: 50vh auto auto auto; */
 			position: absolute;
-			width: 100%;
-			height: 100%;
-			max-height: 50vh;
+			width: 90%;
+			height: 90%;
+			max-height: 60vh;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
@@ -64,28 +64,60 @@
 			/* border: 4px solid white; */
 			/* transition: all 2s linear 1; */
 			/* transform: translate(4px, -4px); */
+			transition: all 0.33s ease-in-out;
 		}
 
-		/* svg:hover {
-			transform: scale(1.25);
-		} */
+		svg:hover {
+			transform: scale(1.1);
+			pointer-events: none;
+		}
 
 		.shape {
-			fill: none;
+			fill-opacity: 0.9;
 			stroke-linejoin: round;
 			stroke-linecap: round;
-			stroke: rgb(255, 255, 255);
-			stroke-width: 1.0px;
+			stroke-width: 0.5px;
+			stroke-opacity: 1.0;
+			transform-origin: 50px 50px;
+			pointer-events: painted;
 		}
 
-		/* .triangle {
+		.circle {
+			/* display: none; */
+			fill: url(#gradCircle);
+			fill-opacity: 1.0;
+			transform: translateY(-15px);
+			stroke: #8519dd;
+		}
+
+		.inner {
+			fill: #BD367C;
+		}
+
+		.first {
+			fill: black;
+			transform: rotate(0deg);
+			stroke: #79B4D4;
+		}
+
+		.second {
+			fill: url(#gradTriangle);
+			transform: rotate(7deg);
+			stroke: #BD367C;
+		}
+
+		.third {
+			fill: rgb(0, 0, 0);
+			transform: rotate(14deg);
+			stroke: #79B4D4;
+		}
+
+		/* animation: dash var(--neonAnimationDuration) 2s ease-in-out normal infinite; */
+
+		/*
+		.triangle {
 			stroke-dasharray: 300;
 			stroke-dashoffset: 0;
-		} */
-
-		/* .triangle {
-			animation: dash var(--neonAnimationDuration) ease-in-out normal infinite;
-			transform-origin: 50px 50px;
 		} */
 
 		/* @keyframes dash {
@@ -93,22 +125,12 @@
 				stroke-dashoffset: 0;
 			}
 
-			20% {
+			50% {
 				stroke-dashoffset: 600;
 			}
 
 			100% {
 				stroke-dashoffset: 600;
-			}
-		} */
-
-		/* @keyframes scale {
-			0% {
-				transform: scale(0.5);
-			}
-
-			100% {
-				transform: scale(1.0);
 			}
 		} */
 	</style>
@@ -118,9 +140,22 @@
 	<button id="musicButton" type="button">Play music</button>
 	<div id="svgContainer">
 		<svg preserveAspectRatio="xMidYMid" viewBox="0 0 100 100" width="100%" height="100%">
-			<polygon points="15,85 50,15 85,85" class="shape triangle" />
-			<polygon points="5,5 95,5 95,95 5,95" class="shape square" />
-			<circle cx="50" cy="50" r="40" class="shape circle" />
+			<defs>
+				<linearGradient id="gradTriangle" gradientTransform="rotate(45)">
+					<stop offset="0%" stop-color="#008D8D" />
+					<stop offset="100%" stop-color="#7C007D" />
+				</linearGradient>
+				<linearGradient id="gradCircle" gradientTransform="rotate(90)">
+					<stop offset="0%" stop-color="#F3E74A" />
+					<stop offset="60%" stop-color="#BA646F" />
+					<stop offset="100%" stop-color="#28108D" />
+				</linearGradient>
+			</defs>
+			<!-- <polygon points="15,15 50,95 85,15" class="shape triangle third" />
+			<polygon points="15,15 50,95 85,15" class="shape triangle second" />
+			<polygon points="15,15 50,95 85,15" class="shape triangle first" />
+			<polygon points="18,17 50,90 82,17" class="shape inner" />
+			<circle cx="50" cy="50" r="30" class="shape circle" /> -->
 		</svg>
 	</div>
 	<!-- <div id="dummy"></div>div> -->

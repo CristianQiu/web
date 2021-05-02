@@ -12,11 +12,13 @@ const minH = 1.5;
 const maxH = 2.5;
 
 const simplex = new SimplexNoise();
+
 const remap = function (a, b, c, d, x) {
 	let s = (x - a) / (b - a);
 	s = THREE.MathUtils.clamp(s, 0.0, 1.0);
 	return THREE.MathUtils.lerp(c, d, s);
 };
+
 const calcArrayAvg = function (array) {
 	let avgMean = 0.0;
 	for (let i = 0; i < array.length; ++i) {

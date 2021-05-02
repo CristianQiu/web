@@ -4,7 +4,7 @@ const SynthwaveSkyboxShader = {
 
 	uniforms: {
 		'sunPosition': { value: new Vector3(0.0, 0.06, 1.0) },
-		'sunDiscSize': { value: 0.225 },
+		'sunDiscSize': { value: 0.215 },
 		'sunAntialiasing': { value: 3.0 },
 		'sunStripeHeights': { value: new Vector4(-0.26, -0.44, -0.63, -0.82) },
 		'sunStripeWidths': { value: new Vector4(0.03, 0.04, 0.05, 0.06) },

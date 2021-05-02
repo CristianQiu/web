@@ -6,8 +6,10 @@ import UberPostFxPass from './UberPostFxPass';
 
 export default class SynthwaveRenderer {
 
-	constructor(scene, camera, w, h, pixelRatio) {
+	constructor(scene, sceneOverlay, camera, w, h, pixelRatio) {
+		this._sceneOverlay = sceneOverlay;
 		this._renderer = new THREE.WebGLRenderer();
+		this._renderer.autoClear = false;
 		this._renderer.outputEncoding = THREE.LinearEncoding;
 		// Note: this must be implemented in the postprocessing stack.
 		// By default it does not work with the EffectComposer.
@@ -17,7 +19,7 @@ export default class SynthwaveRenderer {
 		const res = new THREE.Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
-		this._uberPass = new UberPostFxPass(1.25, h, 0.05, 1.0);
+		this._uberPass = new UberPostFxPass(1.0, h, 0.05, 1.33);
 
 		this._composer = new EffectComposer(this._renderer);
 		this._composer.addPass(this._scenePass);
@@ -44,6 +46,9 @@ export default class SynthwaveRenderer {
 	}
 
 	render() {
+		this._renderer.clear();
 		this._composer.render();
+		this._renderer.clearDepth();
+		this._renderer.render(this._sceneOverlay, this._scenePass.camera);
 	}
 }

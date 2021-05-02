@@ -68,9 +68,9 @@ const UberPostFxShader = {
 			return color;
 		}
 
+		// From https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Saturation-Node.html
 		vec3 saturation(vec3 mainTexColor, float intensity)
 		{
-			// https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Saturation-Node.html
 			float luma = dot(mainTexColor, vec3(0.2126729, 0.7151522, 0.0721750));
 
 			return vec3(luma) + vec3(saturationIntensity) * (mainTexColor - vec3(luma));
@@ -94,6 +94,7 @@ const UberPostFxShader = {
 			return a / b;
 		}
 
+		// Also https://discourse.threejs.org/t/effect-composer-gamma-output-difference/12039/4
 		vec3 ACESFilmicToneMapping(vec3 color) {
 			color *= exposure / 0.6;
 
@@ -121,9 +122,9 @@ const UberPostFxShader = {
 		void main() {
 			vec3 color = chromaticAberration(vUv, tDiffuse);
 			color = saturation(color, saturationIntensity);
-			color = noiseScanLines(vUv, color);
-			color = vignette(vUv, color);
 			color = ACESFilmicToneMapping(color);
+			color = vignette(vUv, color);
+			color = noiseScanLines(vUv, color);
 
 			gl_FragColor = vec4(color, 1.0);
 		}`,
