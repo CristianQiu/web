@@ -7,9 +7,8 @@ import SynthwaveSkybox from './SynthwaveSkybox';
 import SynthwaveGrid from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
-import SocialMediaReel from './SocialMediaReel';
 
-let stats, clock, camera, renderer, grid, audioManager, audioSpectrumAnalyzer, socialMediaReel;
+let stats, clock, camera, renderer, grid, audioManager, audioSpectrumAnalyzer;
 
 const start = function () {
 	stats = new Stats();
@@ -39,7 +38,6 @@ const start = function () {
 	scene.add(grid.getMesh());
 
 	audioManager = new AudioManager(camera.getCamera());
-	socialMediaReel = new SocialMediaReel(scene, camera.getCamera(), 3);
 
 	document.getElementById('musicButton').addEventListener('click', onClickJoin);
 	addEventListener('resize', onWindowResize, false);
@@ -75,14 +73,15 @@ const onClickJoin = function () {
 
 	const nameHeader = document.getElementById("name");
 	nameHeader.classList.add("fader");
-	nameHeader.style.visibility = "visible";
+
+	const infoBar = document.getElementById("info-bar");
+	infoBar.classList.add("fader-delayed");
 
 	audioManager.init();
 	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 8192);
 	audioManager.loadAndPlayMusic();
 
 	camera.setToLookingSun();
-	socialMediaReel.showIcons();
 };
 
 const onWindowResize = function () {

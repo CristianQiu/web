@@ -35,7 +35,6 @@ export default class SynthwaveCamera {
 		this._shouldBreathe = false;
 		this.setToLookingGridInstant();
 
-		// tweens
 		this._breathingTimer = 0.0;
 		this._transitionTimeMs = 4000;
 		const easing = TWEEN.Easing.Quintic.InOut;

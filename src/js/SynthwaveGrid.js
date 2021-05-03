@@ -113,7 +113,6 @@ export default class SynthwaveGrid {
 			const xAbs = Math.abs(x);
 			const z = Math.floor(i / resX);
 
-			// smoothly flatten the mountains at their edges and flatten the middle corridor
 			let corridor = xAbs - CorridorWidth;
 			corridor = Math.max(0.0, corridor);
 			corridor = Math.log(corridor + 1.0);
