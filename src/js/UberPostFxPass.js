@@ -46,4 +46,8 @@ export default class UberPostFxPass extends Pass {
 	setScanLinesCount(count) {
 		this._uniforms.scanLineCount.value = count;
 	}
+
+	setSaturation(intensity) {
+		this._uniforms.saturationIntensity.value = intensity;
+	}
 }

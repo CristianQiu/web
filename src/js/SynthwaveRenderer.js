@@ -3,6 +3,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import UberPostFxPass from './UberPostFxPass';
+import TWEEN from '@tweenjs/tween.js';
 
 export default class SynthwaveRenderer {
 
@@ -28,6 +29,19 @@ export default class SynthwaveRenderer {
 
 		this.setSize(w, h);
 		this.setPixelRatio(pixelRatio);
+
+		const saturationFrom = { x: 0.0 };
+		const saturationTo = { x: 1.0 };
+
+		this._uberPass.setSaturation(saturationFrom.x);
+
+		this._fadeToColorTween = new TWEEN.Tween(saturationFrom)
+			.to(saturationTo, 3000)
+			.easing(TWEEN.Easing.Quartic.InOut)
+			.delay(3000)
+			.onUpdate(() => {
+				this._uberPass.setSaturation(saturationFrom.x);
+			});
 	}
 
 	getDomElement() {
@@ -50,5 +64,9 @@ export default class SynthwaveRenderer {
 		this._composer.render();
 		this._renderer.clearDepth();
 		this._renderer.render(this._sceneOverlay, this._scenePass.camera);
+	}
+
+	fadeToColor() {
+		this._fadeToColorTween.start();
 	}
 }

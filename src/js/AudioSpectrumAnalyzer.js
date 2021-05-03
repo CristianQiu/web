@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 const NumBands = 32;
-const BandsBoundsFactor = 1.12246; // < 2^(1/6);
+const BandsBoundsFactor = 1.12246;
 const Bands = [
 	16.0, 20.0, 25.0, 31.5,
 	40.0, 50.0, 63.0, 80.0,

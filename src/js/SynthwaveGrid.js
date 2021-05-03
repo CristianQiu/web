@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import SynthwaveGridShader from './SynthwaveGridShader';
 
-const Freq = 0.1;
+const Freq = 0.07;
 const Amp = 3.0;
 
 const CorridorWidth = 2.25 * 4;
@@ -10,6 +10,8 @@ const MountainEdgeSmoothness = 1.75;
 
 const MinH = 1.5;
 const MaxH = 2.5;
+
+const speed = 1.0;
 
 const Simplex = new SimplexNoise();
 
@@ -92,6 +94,7 @@ export default class SynthwaveGrid {
 	}
 
 	animate(elapsedTime, audioMeans = undefined) {
+		elapsedTime *= speed;
 		// Note: good readings on how the buffer attribute works
 		// https://threejsfundamentals.org/threejs/lessons/threejs-custom-buffergeometry.html
 		// https://threejs.org/docs/#api/en/core/BufferAttribute
@@ -128,7 +131,9 @@ export default class SynthwaveGrid {
 			let t = z / this._vertexResY;
 			t *= t;
 
-			const noise = (Simplex.noise3d(x * Freq, elapsedTime + z * Freq, avgMean * 0.0015) * 0.5 + 0.5) * Amp;
+			// const noise = (Simplex.noise3d(x * Freq, elapsedTime + z * Freq, avgMean * 0.0015) * 0.5 + 0.5) * Amp;
+			const noise = (Simplex.noise(x * Freq, elapsedTime + z * Freq) * 0.5 + 0.5) * Amp;
+
 			const power = THREE.MathUtils.lerp(MinH, MaxH, t);
 			this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean * 0.006);
 		}

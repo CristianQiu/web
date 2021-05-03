@@ -8,7 +8,7 @@ import SynthwaveGrid from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
 
-let stats, clock, camera, renderer, grid, audioManager, audioSpectrumAnalyzer;
+let stats, clock, camera, renderer, skybox, grid, audioManager, audioSpectrumAnalyzer;
 
 const start = function () {
 	stats = new Stats();
@@ -30,7 +30,7 @@ const start = function () {
 	renderer = new SynthwaveRenderer(scene, sceneOverlay, camera.getCamera(), w, h, pixelRatio);
 	document.body.appendChild(renderer.getDomElement());
 
-	const skybox = new SynthwaveSkybox();
+	skybox = new SynthwaveSkybox();
 	scene.add(skybox.getMesh());
 
 	grid = new SynthwaveGrid(128, 128, 1.0);
@@ -39,7 +39,7 @@ const start = function () {
 
 	audioManager = new AudioManager(camera.getCamera());
 
-	document.getElementById('musicButton').addEventListener('click', onClickJoin);
+	document.getElementById('join').addEventListener('click', onClickJoin);
 	addEventListener('resize', onWindowResize, false);
 };
 
@@ -82,6 +82,8 @@ const onClickJoin = function () {
 	audioManager.loadAndPlayMusic();
 
 	camera.setToLookingSun();
+	skybox.makeSunAppear();
+	renderer.fadeToColor();
 };
 
 const onWindowResize = function () {
