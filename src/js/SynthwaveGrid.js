@@ -2,16 +2,16 @@ import * as THREE from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import SynthwaveGridShader from './SynthwaveGridShader';
 
-const freq = 0.1;
-const amp = 3.0;
+const Freq = 0.1;
+const Amp = 3.0;
 
-const corridorWidth = 2.25 * 4;
-const mountainEdgeSmoothness = 1.75;
+const CorridorWidth = 2.25 * 4;
+const MountainEdgeSmoothness = 1.75;
 
-const minH = 1.5;
-const maxH = 2.5;
+const MinH = 1.5;
+const MaxH = 2.5;
 
-const simplex = new SimplexNoise();
+const Simplex = new SimplexNoise();
 
 const remap = function (a, b, c, d, x) {
 	let s = (x - a) / (b - a);
@@ -103,7 +103,7 @@ export default class SynthwaveGrid {
 		const halfResX = this._vertexResX * 0.5;
 		const resX = this._vertexResX;
 
-		elapsedTime *= freq;
+		elapsedTime *= Freq;
 
 		const avgMean = calcArrayAvg(audioMeans);
 
@@ -114,23 +114,23 @@ export default class SynthwaveGrid {
 			const z = Math.floor(i / resX);
 
 			// smoothly flatten the mountains at their edges and flatten the middle corridor
-			let corridor = xAbs - corridorWidth;
+			let corridor = xAbs - CorridorWidth;
 			corridor = Math.max(0.0, corridor);
 			corridor = Math.log(corridor + 1.0);
-			corridor = THREE.MathUtils.smoothstep(corridor, 0.0, mountainEdgeSmoothness);
+			corridor = THREE.MathUtils.smoothstep(corridor, 0.0, MountainEdgeSmoothness);
 
 			let edge = halfResX - xAbs;
 			edge = Math.max(0.0, edge);
 			edge = Math.log(edge + 1.0);
-			edge = THREE.MathUtils.smoothstep(edge, 0.0, mountainEdgeSmoothness);
+			edge = THREE.MathUtils.smoothstep(edge, 0.0, MountainEdgeSmoothness);
 
 			const finalCorridorEdge = Math.min(corridor, edge);
 
 			let t = z / this._vertexResY;
 			t *= t;
 
-			const noise = (simplex.noise3d(x * freq, elapsedTime + z * freq, avgMean * 0.0015) * 0.5 + 0.5) * amp;
-			const power = THREE.MathUtils.lerp(minH, maxH, t);
+			const noise = (Simplex.noise3d(x * Freq, elapsedTime + z * Freq, avgMean * 0.0015) * 0.5 + 0.5) * Amp;
+			const power = THREE.MathUtils.lerp(MinH, MaxH, t);
 			this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean * 0.006);
 		}
 

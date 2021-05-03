@@ -4,11 +4,10 @@
 <head>
 	<meta charset="utf-8">
 	<title>Cristian Qiu Félez</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monoton">
 	<style>
 		body {
 			margin: 0;
-			--neonGrayscale: 0.2;
-			--neonAnimationDuration: 10s;
 		}
 
 		canvas {
@@ -40,7 +39,7 @@
 			background-size: 200% auto;
 			color: white;
 			box-shadow: 0 0 5px rgba(192, 177, 177, 0.849);
-			margin: 1em auto;
+			margin: auto 1em;
 			display: table-cell;
 			vertical-align: middle;
 			background-color: darkslateblue;
@@ -112,6 +111,49 @@
 			stroke: #79B4D4;
 		}
 
+		#name {
+			visibility: hidden;
+			color: white;
+			font-family: 'Courier New', Courier, monospace;
+			/* font-family: Monoton, monospace; */
+			font-size: calc(2vh + 2vw);
+			font-weight: normal;
+			text-transform: capitalize;
+			text-align: center;
+			/* text-shadow: 2px 2px 10px rgb(0, 255, 0); */
+			margin-top: calc(1vh + 1vw);
+			margin-bottom: calc(0.33vh + 0.33vw);
+		}
+
+		.fader {
+			animation: fadeIn 3.5s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 normal;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				/* transform: scale(0) translateY(100vh); */
+			}
+
+			to {
+				opacity: 1;
+				/* transform: scale(1) translateY(0vh); */
+			}
+		}
+
+		.info {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+		}
+
+		.subheader {
+			font-family: 'Courier New', Courier, monospace;
+			font-size: calc(1rem + 0.5vw);
+			color: white;
+			margin: auto 2vw auto 2vw;
+		}
+
 		/* animation: dash var(--neonAnimationDuration) 2s ease-in-out normal infinite; */
 
 		/*
@@ -137,7 +179,12 @@
 </head>
 
 <body>
-	<button id="musicButton" type="button">Play music</button>
+	<h1 id="name">Cristian Qiu Félez</h1>
+	<div class="info">
+		<p class="subheader">About me</p>
+		<p class="subheader">Projects</p>
+		<p class="subheader">Experience</p>
+	</div>
 	<div id="svgContainer">
 		<svg preserveAspectRatio="xMidYMid" viewBox="0 0 100 100" width="100%" height="100%">
 			<defs>
@@ -158,6 +205,7 @@
 			<circle cx="50" cy="50" r="30" class="shape circle" /> -->
 		</svg>
 	</div>
+	<button id="musicButton" type="button">Join</button>
 	<!-- <div id="dummy"></div>div> -->
 	<script src="../../dist/app.js"></script>
 </body>

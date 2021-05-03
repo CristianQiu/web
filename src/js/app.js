@@ -7,9 +7,9 @@ import SynthwaveSkybox from './SynthwaveSkybox';
 import SynthwaveGrid from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
+import SocialMediaReel from './SocialMediaReel';
 
-let stats, clock;
-let camera, renderer, grid, audioManager, audioSpectrumAnalyzer;
+let stats, clock, camera, renderer, grid, audioManager, audioSpectrumAnalyzer, socialMediaReel;
 
 const start = function () {
 	stats = new Stats();
@@ -39,21 +39,10 @@ const start = function () {
 	scene.add(grid.getMesh());
 
 	audioManager = new AudioManager(camera.getCamera());
+	socialMediaReel = new SocialMediaReel(scene, camera.getCamera(), 3);
 
-	document.getElementById('musicButton').addEventListener('click', onClickPlayMusic);
+	document.getElementById('musicButton').addEventListener('click', onClickJoin);
 	addEventListener('resize', onWindowResize, false);
-
-
-
-	const texture = new THREE.TextureLoader().load('../../resources/Test.png');
-	const plane = new THREE.PlaneBufferGeometry(16, 12, 32, 32);
-	const planeMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(1.0, 1.0, 1.0), map: texture });
-
-	const mesh = new THREE.Mesh(plane, planeMat);
-	mesh.position.set(0.0, 5.0, 27.5);
-
-	mesh.rotateY(THREE.MathUtils.degToRad(180));
-	sceneOverlay.add(mesh);
 };
 
 const update = function () {
@@ -80,15 +69,20 @@ const update = function () {
 	renderer.render();
 };
 
-const onClickPlayMusic = function () {
+const onClickJoin = function () {
 	if (audioManager.isInitialized())
 		return;
+
+	const nameHeader = document.getElementById("name");
+	nameHeader.classList.add("fader");
+	nameHeader.style.visibility = "visible";
 
 	audioManager.init();
 	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 8192);
 	audioManager.loadAndPlayMusic();
 
 	camera.setToLookingSun();
+	socialMediaReel.showIcons();
 };
 
 const onWindowResize = function () {
@@ -99,8 +93,6 @@ const onWindowResize = function () {
 	camera.updateProjectionMatrix();
 
 	renderer.setSize(w, h);
-
-	console.log("aspect" + (w / h));
 };
 
 start();

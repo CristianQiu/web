@@ -3,13 +3,13 @@ import { Object3D } from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import TWEEN from '@tweenjs/tween.js';
 
-const posFreq = 0.15;
-const posAmp = 0.15;
+const PosFreq = 0.15;
+const PosAmp = 0.15;
 
-const rotFreq = 0.15;
-const rotAmp = 0.5;
+const RotFreq = 0.15;
+const RotAmp = 0.5;
 
-const simplex = new SimplexNoise();
+const Simplex = new SimplexNoise();
 
 export default class SynthwaveCamera {
 
@@ -114,11 +114,11 @@ export default class SynthwaveCamera {
 			return;
 		}
 
-		const x = simplex.noise(time * posFreq, time * posFreq, 0.0) * posAmp * intensity;
-		const y = simplex.noise((time + 128.0) * posFreq, (time + 128.0) * posFreq, 0.0) * posAmp * intensity;
+		const x = Simplex.noise(time * PosFreq, time * PosFreq, 0.0) * PosAmp * intensity;
+		const y = Simplex.noise((time + 128.0) * PosFreq, (time + 128.0) * PosFreq, 0.0) * PosAmp * intensity;
 
-		let xEulers = simplex.noise((time + 64.0) * rotFreq, (time + 64.0) * rotFreq, 0.0) * rotAmp * intensity;
-		let yEulers = simplex.noise((time + 192.0) * rotFreq, (time + 192.0) * rotFreq, 0.0) * rotAmp * intensity;
+		let xEulers = Simplex.noise((time + 64.0) * RotFreq, (time + 64.0) * RotFreq, 0.0) * RotAmp * intensity;
+		let yEulers = Simplex.noise((time + 192.0) * RotFreq, (time + 192.0) * RotFreq, 0.0) * RotAmp * intensity;
 
 		xEulers = THREE.MathUtils.degToRad(xEulers);
 		yEulers = THREE.MathUtils.degToRad(yEulers);

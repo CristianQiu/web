@@ -59,7 +59,7 @@ const UberPostFxShader = {
 		vec3 noiseScanLines(vec2 vUv, vec3 mainTexColor)
 		{
 			// TODO: maybe expose this...
-			const float noiseWeight = 0.5;
+			const float noiseWeight = 0.33;
 			const float oneMinusNoiseWeight = 1.0 - noiseWeight;
 
 			float noise = rand(vUv + mod(time, 16.0)) + 1.0 * 0.5;
