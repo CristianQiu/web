@@ -131,7 +131,6 @@ export default class SynthwaveGrid {
 			let t = z / this._vertexResY;
 			t *= t;
 
-			// const noise = (Simplex.noise3d(x * Freq, elapsedTime + z * Freq, avgMean * 0.0015) * 0.5 + 0.5) * Amp;
 			const noise = (Simplex.noise(x * Freq, elapsedTime + z * Freq) * 0.5 + 0.5) * Amp;
 
 			const power = THREE.MathUtils.lerp(MinH, MaxH, t);

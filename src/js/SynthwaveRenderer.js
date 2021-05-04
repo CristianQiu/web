@@ -7,10 +7,8 @@ import TWEEN from '@tweenjs/tween.js';
 
 export default class SynthwaveRenderer {
 
-	constructor(scene, sceneOverlay, camera, w, h, pixelRatio) {
-		this._sceneOverlay = sceneOverlay;
+	constructor(scene, camera, w, h, pixelRatio) {
 		this._renderer = new THREE.WebGLRenderer();
-		this._renderer.autoClear = false;
 		this._renderer.outputEncoding = THREE.LinearEncoding;
 		// Note: this must be implemented in the postprocessing stack.
 		// By default it does not work with the EffectComposer.
@@ -60,10 +58,7 @@ export default class SynthwaveRenderer {
 	}
 
 	render() {
-		this._renderer.clear();
 		this._composer.render();
-		this._renderer.clearDepth();
-		this._renderer.render(this._sceneOverlay, this._scenePass.camera);
 	}
 
 	fadeToColor() {

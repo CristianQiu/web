@@ -4,13 +4,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>Cristian Qiu Félez</title>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monoton">
 	<style>
 		body {
 			margin: 0;
 			--fontFamily: 'Courier New', Courier, monospace;
 			--almostWhite: rgb(245, 245, 245);
 			--almostBlack: rgb(10, 10, 10);
+			--btnFadeSpeed: 0.35s;
 		}
 
 		canvas {
@@ -29,14 +29,14 @@
 			transform: translate(-50%, -50%);
 			width: 14rem;
 			height: 6rem;
-			border: 0.1rem solid var(--almostWhite);
+			border: 0.15rem solid var(--almostWhite);
 			text-align: center;
 			background-color: var(--almostBlack);
 			color: var(--almostWhite);
 			transition:
-				background-color 0.35s ease-in-out,
-				color 0.35s ease-in-out;
-			/* transform-origin: center; */
+				background-color var(--btnFadeSpeed) ease-in-out,
+				color var(--btnFadeSpeed) ease-in-out,
+				transform var(--btnFadeSpeed) ease-out;
 		}
 
 		#join::after {
@@ -47,8 +47,8 @@
 			width: 0;
 			margin: 0.25rem auto 0 auto;
 			transition:
-				width 0.25s cubic-bezier(0.86, 0, 0.07, 1),
-				background-color 0.35s ease-in-out;
+				width var(--btnFadeSpeed) cubic-bezier(0.86, 0, 0.07, 1),
+				color var(--btnFadeSpeed) ease-in-out;
 		}
 
 		#join:hover {
@@ -94,12 +94,17 @@
 			animation: fadeIn 3.5s cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
 		}
 
+		.fader-reverse {
+			animation: fadeIn 0.75s ease-in-out 0s 1 reverse forwards;
+		}
+
 		.fader-delayed {
 			animation: fadeIn 3.5s cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
 		}
 
 		@keyframes fadeIn {
 			from {
+				visibility: hidden;
 				opacity: 0;
 			}
 

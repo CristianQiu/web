@@ -8,16 +8,16 @@ import SynthwaveGrid from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
 
-let stats, clock, camera, renderer, skybox, grid, audioManager, audioSpectrumAnalyzer;
+let stats;
+let clock, camera, renderer, skybox, grid, audioManager, audioSpectrumAnalyzer;
 
 const start = function () {
 	stats = new Stats();
-	clock = new THREE.Clock();
-
 	document.body.appendChild(stats.dom);
 
+	clock = new THREE.Clock();
+
 	const scene = new THREE.Scene();
-	const sceneOverlay = new THREE.Scene();
 
 	const w = innerWidth;
 	const h = innerHeight;
@@ -27,7 +27,7 @@ const start = function () {
 
 	const pixelRatio = Math.min(devicePixelRatio, 0.9);
 
-	renderer = new SynthwaveRenderer(scene, sceneOverlay, camera.getCamera(), w, h, pixelRatio);
+	renderer = new SynthwaveRenderer(scene, camera.getCamera(), w, h, pixelRatio);
 	document.body.appendChild(renderer.getDomElement());
 
 	skybox = new SynthwaveSkybox();
@@ -40,6 +40,7 @@ const start = function () {
 	audioManager = new AudioManager(camera.getCamera());
 
 	document.getElementById('join').addEventListener('click', onClickJoin);
+	addEventListener('mousemove', onMouseMove);
 	addEventListener('resize', onWindowResize, false);
 };
 
@@ -52,7 +53,7 @@ const update = function () {
 	stats.update();
 	TWEEN.update();
 
-	camera.breathe(dt, time);
+	camera.update(dt, time);
 
 	const validSpectrumAnalyzer = audioSpectrumAnalyzer !== undefined && audioSpectrumAnalyzer !== null;
 
@@ -71,6 +72,9 @@ const onClickJoin = function () {
 	if (audioManager.isInitialized())
 		return;
 
+	const joinButton = document.getElementById("join");
+	joinButton.classList.add("fader-reverse");
+
 	const nameHeader = document.getElementById("name");
 	nameHeader.classList.add("fader");
 
@@ -86,6 +90,16 @@ const onClickJoin = function () {
 	renderer.fadeToColor();
 };
 
+const onMouseMove = function (e) {
+	const w = innerWidth;
+	const h = innerHeight;
+
+	let x = e.clientX / w;
+	let y = e.clientY / h;
+
+	camera.rotateAccordingToMouseWindowPos(x, y);
+};
+
 const onWindowResize = function () {
 	const w = innerWidth;
 	const h = innerHeight;
@@ -94,6 +108,7 @@ const onWindowResize = function () {
 	camera.updateProjectionMatrix();
 
 	renderer.setSize(w, h);
+	// console.log(devicePixelRatio + " width: " + w + " height " + h);
 };
 
 start();
