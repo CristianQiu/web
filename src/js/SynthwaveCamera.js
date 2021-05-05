@@ -9,7 +9,7 @@ const PosAmp = 0.15;
 const RotFreq = 0.15;
 const RotAmp = 0.5;
 
-const MouseRotAmp = 1.25;
+const MouseRotAmp = 1.5;
 const MouseRotSmoothness = 0.25;
 
 const Easing = TWEEN.Easing.Quintic.InOut;
@@ -121,7 +121,7 @@ export default class SynthwaveCamera {
 
 		const xRotOffset = !this._joined ? 90.0 : -5.0;
 
-		let yRot = THREE.MathUtils.lerp(-MouseRotAmp, MouseRotAmp, mouseX) + 180.0;
+		let yRot = THREE.MathUtils.lerp(MouseRotAmp, -MouseRotAmp, mouseX) + 180.0;
 		let xRot = THREE.MathUtils.lerp(-MouseRotAmp, MouseRotAmp, mouseY) + xRotOffset;
 
 		yRot = THREE.MathUtils.degToRad(yRot);

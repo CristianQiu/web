@@ -3,14 +3,18 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Cristian Qiu Félez</title>
+	<title>Cristian Qiu</title>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Exo:wght@900&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" rel="stylesheet">
 	<style>
 		body {
 			margin: 0;
-			--fontFamily: 'Courier New', Courier, monospace;
+			--contentFont: 'Mr Dafoe', cursive;
 			--almostWhite: rgb(245, 245, 245);
 			--almostBlack: rgb(10, 10, 10);
 			--btnFadeSpeed: 0.35s;
+			--fadeInTime: 3.5s;
 		}
 
 		canvas {
@@ -19,9 +23,10 @@
 			z-index: -1;
 		}
 
-		#join {
+		#join-button {
+			z-index: 1;
 			position: fixed;
-			font-family: var(--fontFamily);
+			font-family: var(--contentFont);
 			font-size: 2rem;
 			margin: 0;
 			top: 50%;
@@ -39,7 +44,7 @@
 				transform var(--btnFadeSpeed) ease-out;
 		}
 
-		#join::after {
+		#join-button::after {
 			display: block;
 			content: '';
 			background-color: var(--almostWhite);
@@ -51,47 +56,71 @@
 				color var(--btnFadeSpeed) ease-in-out;
 		}
 
-		#join:hover {
+		#join-button:hover {
 			cursor: pointer;
 			background-color: var(--almostWhite);
 			color: var(--almostBlack);
 			transform: translate(-50%, -50%) scale(1.1);
 		}
 
-		#join:hover::after {
+		#join-button:hover::after {
 			width: 8.5rem;
 			background-color: var(--almostBlack);
 		}
 
 		#name {
-			visibility: hidden;
-			color: var(--almostWhite);
-			font-family: var(--fontFamily);
-			font-size: calc(0.25rem + 2.25vh + 1.5vw);
-			font-weight: normal;
+			position: relative;
+			visibility: visible;
+			font-family: 'Exo', sans-serif;
+			font-size: calc(1.5rem + 2.25vh + 1.5vw);
 			text-transform: capitalize;
 			text-align: center;
+			/* letter-spacing: 0.25rem; */
+			white-space: nowrap;
 			margin-top: calc(0.25rem + 2.25vh + 1.5vw);
 			margin-bottom: calc(0.25rem + 1vh);
-			pointer-events: none;
+			transform: skew(-16deg);
+			/* background: linear-gradient(-2.5deg, #032d50 0%, #00a1ef 35%, rgb(236, 236, 236) 50%, #8313e7 55%, #ff61af 75%); */
+			color: rgb(255, 136, 156);
+			/* -webkit-text-stroke: calc(0.01rem + 0.05vh + 0.025vw) rgb(16, 16, 1); */
+			/* -webkit-background-clip: text; */
+			/* background-clip: text; */
+			/* -webkit-text-fill-color: transparent; */
+			text-shadow: 0 0 0.4rem #fe05e1, 0 0 0.3rem #fe05e1;
+		}
+
+		#name::after {
+			position: absolute;
+			display: block;
+			content: 'Game programmer';
+			font-size: calc(0.75rem + 1.5vh + 1.0vw);
+			font-family: 'Mr Dafoe', cursive;
+			font-weight: normal;
+			left: 50%;
+			top: 48%;
+			transform: translate(-50%, 0%) rotate(-3deg) skew(20deg);
+			-webkit-text-fill-color: white;
+			-webkit-text-stroke: 0;
+			text-shadow: 0 0 0.4rem #fe05e1, 0 0 0.3rem #fe05e1;
+			letter-spacing: normal;
 		}
 
 		#info-bar {
 			visibility: hidden;
-			display: flex;
+			display: none;
 			flex-direction: row;
 			justify-content: center;
 		}
 
-		.sub-header {
+		.info-bar-subheader {
 			color: var(--almostWhite);
-			font-family: var(--fontFamily);
+			font-family: var(--contentFont);
 			font-size: calc(0.25rem + 1.15vh + 0.25vw);
 			margin: auto 2.1vw auto 2.1vw;
 		}
 
 		.fader {
-			animation: fadeIn 3.5s cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
+			animation: fadeIn var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
 		}
 
 		.fader-reverse {
@@ -99,7 +128,7 @@
 		}
 
 		.fader-delayed {
-			animation: fadeIn 3.5s cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
+			animation: fadeIn var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
 		}
 
 		@keyframes fadeIn {
@@ -115,86 +144,38 @@
 		}
 
 		#svgContainer {
-			/* right: 0; */
-			/* margin: 50vh auto auto auto; */
 			position: absolute;
-			width: 90%;
-			height: 90%;
-			max-height: 60vh;
+			width: 100%;
+			height: 100%;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			/* background-color: black; */
-			z-index: -1;
+		}
+
+		.shape {
+			stroke-linejoin: round;
+			stroke-linecap: round;
+			stroke-width: 0.05vmin;
+			/* transform-origin: 50px 50px; */
+		}
+
+		/* animation: dash var(--neonAnimationDuration) 2s ease-in-out normal infinite; */
+
+		.triangle {
+			fill: none;
+			transform: rotate(0deg);
+			stroke: white;
+			stroke-dasharray: 300;
+			stroke-dashoffset: 0;
 		}
 
 		#dummy {
 			position: absolute;
 			right: 0;
 			width: 100px;
-			height: 1000px;
+			height: 3000px;
 			background-color: white;
 		}
-
-		svg {
-			/* border: 4px solid white; */
-			/* transition: all 2s linear 1; */
-			/* transform: translate(4px, -4px); */
-			transition: all 0.33s ease-in-out;
-		}
-
-		svg:hover {
-			transform: scale(1.1);
-			pointer-events: none;
-		}
-
-		.shape {
-			fill-opacity: 0.9;
-			stroke-linejoin: round;
-			stroke-linecap: round;
-			stroke-width: 0.5px;
-			stroke-opacity: 1.0;
-			transform-origin: 50px 50px;
-			pointer-events: painted;
-		}
-
-		.circle {
-			/* display: none; */
-			fill: url(#gradCircle);
-			fill-opacity: 1.0;
-			transform: translateY(-15px);
-			stroke: #8519dd;
-		}
-
-		.inner {
-			fill: #BD367C;
-		}
-
-		.first {
-			fill: black;
-			transform: rotate(0deg);
-			stroke: #79B4D4;
-		}
-
-		.second {
-			fill: url(#gradTriangle);
-			transform: rotate(7deg);
-			stroke: #BD367C;
-		}
-
-		.third {
-			fill: rgb(0, 0, 0);
-			transform: rotate(14deg);
-			stroke: #79B4D4;
-		}
-
-		/* animation: dash var(--neonAnimationDuration) 2s ease-in-out normal infinite; */
-
-		/*
-		.triangle {
-			stroke-dasharray: 300;
-			stroke-dashoffset: 0;
-		} */
 
 		/* @keyframes dash {
 			0% {
@@ -213,32 +194,18 @@
 </head>
 
 <body>
-	<button id="join" type="button">Meet me</button>
-	<h1 id="name">Cristian Qiu Félez</h1>
+	<button id="join-button" type="button">Meet me</button>
+	<h1 id="name">Cristian Qiu</h1>
 	<div id="info-bar">
-		<p class="sub-header">About me</p>
-		<p class="sub-header">Projects</p>
-		<p class="sub-header">Experience</p>
+		<p class="info-bar-subheader">About me</p>
+		<p class="info-bar-subheader">Projects</p>
+		<p class="info-bar-subheader">Experience</p>
 	</div>
 	<div id="svgContainer">
-		<svg preserveAspectRatio="xMidYMid" viewBox="0 0 100 100" width="100%" height="100%">
-			<defs>
-				<linearGradient id="gradTriangle" gradientTransform="rotate(45)">
-					<stop offset="0%" stop-color="#008D8D" />
-					<stop offset="100%" stop-color="#7C007D" />
-				</linearGradient>
-				<linearGradient id="gradCircle" gradientTransform="rotate(90)">
-					<stop offset="0%" stop-color="#F3E74A" />
-					<stop offset="60%" stop-color="#BA646F" />
-					<stop offset="100%" stop-color="#28108D" />
-				</linearGradient>
-			</defs>
-			<!-- <rect width="80%" height="20%" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" /> -->
-			<!-- <polygon points="15,15 50,95 85,15" class="shape triangle third" />
-			<polygon points="15,15 50,95 85,15" class="shape triangle second" />
-			<polygon points="15,15 50,95 85,15" class="shape triangle first" />
-			<polygon points="18,17 50,90 82,17" class="shape inner" /> -->
-			<!-- <circle cx="50" cy="50" r="30" class="shape circle" /> -->
+		<svg viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%">
+			<!-- preserveAspectRatio="xMidYMid" -->
+			<!-- <polygon points="15,85 50,5 85,85" class="shape triangle" /> -->
+			<!-- <polygon preserveAspectRatio="none" points="1,1 1,99 99,99 99,1" class="shape triangle" /> -->
 		</svg>
 	</div>
 	<!-- <div id="dummy"></div>div> -->

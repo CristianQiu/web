@@ -39,7 +39,7 @@ const start = function () {
 
 	audioManager = new AudioManager(camera.getCamera());
 
-	document.getElementById('join').addEventListener('click', onClickJoin);
+	document.getElementById('join-button').addEventListener('click', onClickJoin);
 	addEventListener('mousemove', onMouseMove);
 	addEventListener('resize', onWindowResize, false);
 };
@@ -72,7 +72,7 @@ const onClickJoin = function () {
 	if (audioManager.isInitialized())
 		return;
 
-	const joinButton = document.getElementById("join");
+	const joinButton = document.getElementById("join-button");
 	joinButton.classList.add("fader-reverse");
 
 	const nameHeader = document.getElementById("name");
@@ -108,7 +108,6 @@ const onWindowResize = function () {
 	camera.updateProjectionMatrix();
 
 	renderer.setSize(w, h);
-	// console.log(devicePixelRatio + " width: " + w + " height " + h);
 };
 
 start();
