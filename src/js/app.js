@@ -25,7 +25,7 @@ const start = function () {
 	camera = new SynthwaveCamera(150.0, w / h, 0.3, 250);
 	scene.add(camera.getCameraParent());
 
-	const pixelRatio = Math.min(devicePixelRatio, 0.9);
+	const pixelRatio = Math.min(devicePixelRatio, 0.85);
 
 	renderer = new SynthwaveRenderer(scene, camera.getCamera(), w, h, pixelRatio);
 	document.body.appendChild(renderer.getDomElement());
