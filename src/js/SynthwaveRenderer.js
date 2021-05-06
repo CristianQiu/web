@@ -17,7 +17,7 @@ export default class SynthwaveRenderer {
 
 		const res = new THREE.Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
-		this._bloomPass = new UnrealBloomPass(res, 1.1, 0.8, 0.59825);
+		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
 		this._uberPass = new UberPostFxPass(1.0, 0.0, 0.1, 1.25);
 
 		this._composer = new EffectComposer(this._renderer);

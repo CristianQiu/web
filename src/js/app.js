@@ -82,7 +82,7 @@ const onClickJoin = function () {
 	infoBar.classList.add("fader-delayed");
 
 	audioManager.init();
-	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 8192);
+	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 4096);
 	audioManager.loadAndPlayMusic();
 
 	camera.setToLookingSun();

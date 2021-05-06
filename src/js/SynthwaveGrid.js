@@ -135,6 +135,21 @@ export default class SynthwaveGrid {
 
 			const power = THREE.MathUtils.lerp(MinH, MaxH, t);
 			this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean * 0.006);
+
+			// experiments
+			// const othery = Math.sin(z);
+			// const index = (audioMeans.length - 1.0) - Math.floor(z / 3.0) % audioMeans.length;
+
+			// let val = audioMeans[index] * 0.05;
+
+			// if (x <= 8.0 && x >= -8.0)
+			// 	val = 0.0;
+
+			// if (z % 3 != 1)
+			// 	val = 0.0;
+
+			// this._positionsBuffer.setY(i, val);
+			// this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * val * 0.1);
 		}
 
 		this._positionsBuffer.needsUpdate = true;
