@@ -3,9 +3,9 @@ import { Vector3, Vector4, Color } from 'three';
 const SynthwaveSkyboxShader = {
 
 	uniforms: {
-		'sunPosition': { value: new Vector3(0.0, 0.06, 1.0) },
-		'sunDiscSize': { value: 0.215 },
-		'sunAntialiasing': { value: 3.0 },
+		'sunPosition': { value: new Vector3(0.0, 0.055, 1.0) },
+		'sunDiscSize': { value: 0.2 },
+		'sunAntialiasing': { value: 1.5 },
 		'sunStripeHeights': { value: new Vector4(-0.26, -0.44, -0.63, -0.82) },
 		'sunStripeWidths': { value: new Vector4(0.03, 0.04, 0.05, 0.06) },
 		'sunBottomColor': { value: new Color(0.85, 0.4, 0.85) },

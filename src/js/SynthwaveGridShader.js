@@ -5,7 +5,7 @@ const SynthwaveGridShader = {
 	uniforms: {
 		'time': { value: 0.0 },
 		'invGridSize': { value: 2.25 },
-		'lineWidth': { value: 0.5 },
+		'lineWidth': { value: 0.45 },
 		'gridSweepLineSpeed': { value: 30.0 },
 		'gridSweepLineMaxDist': { value: 100.0 },
 		'gridSweepLineWidth': { value: 15.0 },
@@ -52,7 +52,7 @@ const SynthwaveGridShader = {
 			vec2 dist1 = 1.0 - dist0;
 			vec2 grid = min(dist0, dist1);
 
-			vec2 antialias = fwidth(osPos.xz);
+			vec2 antialias = fwidth(osPos.xz) * 0.8;
 			grid = smoothstep(vec2(0.0), vec2(lineWidth) * antialias, grid);
 
 			// grid sweep line

@@ -69,24 +69,20 @@
 		}
 
 		#name {
-			position: relative;
 			visibility: visible;
+			position: relative;
 			font-family: 'Exo', sans-serif;
-			font-size: calc(1.5rem + 2.25vh + 1.5vw);
-			text-transform: capitalize;
+			font-size: calc(1.5rem + 2.5vh + 1.25vw);
+			text-transform: uppercase;
 			text-align: center;
-			/* letter-spacing: 0.25rem; */
 			white-space: nowrap;
-			margin-top: calc(0.25rem + 2.25vh + 1.5vw);
+			margin-top: calc(0.25rem + 3vh);
 			margin-bottom: calc(0.25rem + 1vh);
 			transform: skew(-16deg);
-			/* background: linear-gradient(-2.5deg, #032d50 0%, #00a1ef 35%, rgb(236, 236, 236) 50%, #8313e7 55%, #ff61af 75%); */
-			color: rgb(255, 136, 156);
-			/* -webkit-text-stroke: calc(0.01rem + 0.05vh + 0.025vw) rgb(16, 16, 1); */
-			/* -webkit-background-clip: text; */
-			/* background-clip: text; */
-			/* -webkit-text-fill-color: transparent; */
-			text-shadow: 0 0 0.4rem #fe05e1, 0 0 0.3rem #fe05e1;
+			color: rgb(187, 211, 251);
+			letter-spacing: 0.1rem;
+			/* text-shadow: 0 0 0.3rem #a0f1ff, 0 0 0.2rem #05fe6d; */
+			max-width: 90%;
 		}
 
 		#name::after {
@@ -95,6 +91,7 @@
 			content: 'Game programmer';
 			font-size: calc(0.75rem + 1.5vh + 1.0vw);
 			font-family: 'Mr Dafoe', cursive;
+			text-transform: capitalize;
 			font-weight: normal;
 			left: 50%;
 			top: 48%;
@@ -107,9 +104,10 @@
 
 		#info-bar {
 			visibility: hidden;
-			display: none;
+			display: flex;
 			flex-direction: row;
 			justify-content: center;
+			text-align: center;
 		}
 
 		.info-bar-subheader {
@@ -142,54 +140,6 @@
 				opacity: 1;
 			}
 		}
-
-		#svgContainer {
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-		}
-
-		.shape {
-			stroke-linejoin: round;
-			stroke-linecap: round;
-			stroke-width: 0.05vmin;
-			/* transform-origin: 50px 50px; */
-		}
-
-		/* animation: dash var(--neonAnimationDuration) 2s ease-in-out normal infinite; */
-
-		.triangle {
-			fill: none;
-			transform: rotate(0deg);
-			stroke: white;
-			stroke-dasharray: 300;
-			stroke-dashoffset: 0;
-		}
-
-		#dummy {
-			position: absolute;
-			right: 0;
-			width: 100px;
-			height: 3000px;
-			background-color: white;
-		}
-
-		/* @keyframes dash {
-			0% {
-				stroke-dashoffset: 0;
-			}
-
-			50% {
-				stroke-dashoffset: 600;
-			}
-
-			100% {
-				stroke-dashoffset: 600;
-			}
-		} */
 	</style>
 </head>
 
@@ -200,13 +150,6 @@
 		<p class="info-bar-subheader">About me</p>
 		<p class="info-bar-subheader">Projects</p>
 		<p class="info-bar-subheader">Experience</p>
-	</div>
-	<div id="svgContainer">
-		<svg viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%">
-			<!-- preserveAspectRatio="xMidYMid" -->
-			<!-- <polygon points="15,85 50,5 85,85" class="shape triangle" /> -->
-			<!-- <polygon preserveAspectRatio="none" points="1,1 1,99 99,99 99,1" class="shape triangle" /> -->
-		</svg>
 	</div>
 	<!-- <div id="dummy"></div>div> -->
 	<script src="../../dist/app.js"></script>

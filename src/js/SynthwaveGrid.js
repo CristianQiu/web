@@ -11,7 +11,7 @@ const MountainEdgeSmoothness = 1.75;
 const MinH = 1.5;
 const MaxH = 2.5;
 
-const speed = 1.0;
+const speed = 1.25;
 
 const Simplex = new SimplexNoise();
 
