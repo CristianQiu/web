@@ -4,6 +4,7 @@ const UberPostFxShader = {
 		'tDiffuse': { value: null },
 		'time': { value: 0.0 },
 		'saturationIntensity': { value: 1.0 },
+		'noiseWeight': { value: 0.33 },
 		'scanLineCount': { value: 2048 },
 		'scanLineIntensity': { value: 1.0 },
 		'exposure': { value: 1.0 }
@@ -23,6 +24,7 @@ const UberPostFxShader = {
 		uniform sampler2D tDiffuse;
 		uniform float time;
 		uniform float saturationIntensity;
+		uniform float noiseWeight;
 		uniform float scanLineCount;
 		uniform float scanLineIntensity;
 		uniform float exposure;
@@ -58,9 +60,7 @@ const UberPostFxShader = {
 
 		vec3 noiseScanLines(vec2 vUv, vec3 mainTexColor)
 		{
-			// TODO: maybe expose this...
-			const float noiseWeight = 0.33;
-			const float oneMinusNoiseWeight = 1.0 - noiseWeight;
+			float oneMinusNoiseWeight = 1.0 - noiseWeight;
 
 			float noise = rand(vUv + mod(time, 16.0)) + 1.0 * 0.5;
 			vec3 color = (mainTexColor * oneMinusNoiseWeight) + (mainTexColor * noise * noiseWeight);

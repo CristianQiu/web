@@ -42,6 +42,8 @@ const start = function () {
 	document.getElementById('join-button').addEventListener('click', onClickJoin);
 	addEventListener('mousemove', onMouseMove);
 	addEventListener('resize', onWindowResize, false);
+
+	document.getElementById('debug').innerHTML = (w / h);
 };
 
 const update = function () {
@@ -108,6 +110,8 @@ const onWindowResize = function () {
 	camera.updateProjectionMatrix();
 
 	renderer.setSize(w, h);
+
+	document.getElementById('debug').innerHTML = (w / h);
 };
 
 start();

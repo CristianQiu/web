@@ -4,13 +4,15 @@ import UberPostFxShader from './UberPostFxShader';
 
 export default class UberPostFxPass extends Pass {
 
-	constructor(saturationIntensity, scanlinesCount, scanlinesIntensity, exposure) {
+	constructor(saturationIntensity, noiseWeight, scanlinesCount, scanlinesIntensity, exposure) {
 		super();
 		const shader = UberPostFxShader;
 		this._uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
 		if (saturationIntensity !== undefined)
 			this._uniforms.saturationIntensity.value = saturationIntensity;
+		if (noiseWeight !== undefined)
+			this._uniforms.noiseWeight.value = noiseWeight;
 		if (scanlinesCount !== undefined)
 			this._uniforms.scanLineCount.value = scanlinesCount;
 		if (scanlinesIntensity !== undefined)
@@ -43,11 +45,15 @@ export default class UberPostFxPass extends Pass {
 		this.fsQuad.render(renderer);
 	}
 
-	setScanLinesCount(count) {
-		this._uniforms.scanLineCount.value = count;
-	}
-
 	setSaturation(intensity) {
 		this._uniforms.saturationIntensity.value = intensity;
+	}
+
+	setNoiseWeight(weight) {
+		this._uniforms.noiseWeight.value = weight;
+	}
+
+	setScanLinesCount(count) {
+		this._uniforms.scanLineCount.value = count;
 	}
 }

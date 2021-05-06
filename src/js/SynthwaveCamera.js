@@ -164,5 +164,23 @@ export default class SynthwaveCamera {
 
 		this._camera.position.set(x, y, 0.0);
 		this._camera.rotation.set(xEulers, yEulers, 0.0);
+
+		// this.fovAdjustments();
 	}
+
+	// fovAdjustments() {
+	// 	const minFov = 40.0;
+	// 	const maxFov = 70.0;
+
+	// 	const aspectMaxFov = 0.4;
+	// 	const aspectMinFov = 2.0;
+
+	// 	let t = innerWidth / innerHeight;
+	// 	t = THREE.MathUtils.clamp(t, aspectMaxFov, aspectMinFov);
+	// 	t = THREE.MathUtils.inverseLerp(aspectMaxFov, aspectMinFov, t);
+
+	// 	const fov = THREE.MathUtils.lerp(maxFov, minFov, t);
+	// 	this._camera.fov = fov;
+	// 	this._camera.updateProjectionMatrix();
+	// }
 }

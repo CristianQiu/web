@@ -17,7 +17,7 @@ const SynthwaveSkyboxShader = {
 		'nadirColor': { value: new Color(0.0, 0.0, 0.0) },
 		'horizonColor': { value: new Color(0.5, 0.1, 0.5) },
 		'zenithColor': { value: new Color(0.0, 0.1, 1.0) },
-		'flareColor': { value: new Color(0.555, 0.555, 10.0) },
+		'flareColor': { value: new Color(0.555, 0.555, 2.0) },
 		'flarePosition': { value: -0.01 },
 		'flareWidth': { value: 0.0105 },
 		'flareFalloff': { value: 0.001 }

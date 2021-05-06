@@ -11,8 +11,8 @@ const SynthwaveGridShader = {
 		'gridSweepLineWidth': { value: 10.0 },
 		'gridHeightFaded': { value: 0.5 },
 		'mountainHeightPeak': { value: 0.05 },
-		'gridSweepLineColor': { value: new Color(0.7, 5.0, 5.0) },
-		'gridColor': { value: new Color(5.0, 0.7, 5.0) },
+		'gridSweepLineColor': { value: new Color(0.6, 2.0, 2.0) },
+		'gridColor': { value: new Color(2.0, 0.6, 2.0) },
 		'floorColor': { value: new Color(0.075, 0.0, 0.125) },
 		'mountainColor': { value: new Color(0.3, 0.0, 0.125) }
 	},
