@@ -4,10 +4,11 @@ const UberPostFxShader = {
 		'tDiffuse': { value: null },
 		'time': { value: 0.0 },
 		'saturationIntensity': { value: 1.0 },
-		'noiseWeight': { value: 0.33 },
-		'scanLineCount': { value: 2048 },
-		'scanLineIntensity': { value: 1.0 },
-		'exposure': { value: 1.0 }
+		'noiseWeight': { value: 0.4 },
+		'scanLineCount': { value: 1024.0 },
+		'scanLineIntensity': { value: 0.1 },
+		'vignetteFallOffIntensity': { value: 0.15 },
+		'exposure': { value: 1.25 }
 	},
 
 	vertexShader: /* glsl */`
@@ -27,6 +28,7 @@ const UberPostFxShader = {
 		uniform float noiseWeight;
 		uniform float scanLineCount;
 		uniform float scanLineIntensity;
+		uniform float vignetteFallOffIntensity;
 		uniform float exposure;
 
 		varying vec2 vUv;
@@ -36,8 +38,7 @@ const UberPostFxShader = {
 		{
 			// TODO: maybe expose this...
 			const float bandOffset = -0.00075;
-			const float baseIor = 0.80;
-
+			const float baseIor = 0.9;
 			const vec3 back = vec3(0.0, 0.0, -1.0);
 
 			vec3 normal = vec3((2.0 * vUv - vec2(1.0)), 1.0);
@@ -58,38 +59,13 @@ const UberPostFxShader = {
 			return vec3(r, g, b);
 		}
 
-		vec3 noiseScanLines(vec2 vUv, vec3 mainTexColor)
-		{
-			float oneMinusNoiseWeight = 1.0 - noiseWeight;
-
-			float noise = rand(vUv + mod(time, 16.0)) + 1.0 * 0.5;
-			vec3 color = (mainTexColor * oneMinusNoiseWeight) + (mainTexColor * noise * noiseWeight);
-
-			vec2 scanLine = vec2(sin(vUv.y * scanLineCount), cos(vUv.y * scanLineCount));
-			color += mainTexColor * vec3(scanLine.x, scanLine.y, scanLine.x) * scanLineIntensity;
-			color = mainTexColor + 1.0 * (color - mainTexColor);
-
-			return color;
-		}
-
 		// From https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Saturation-Node.html
 		vec3 saturation(vec3 mainTexColor, float intensity)
 		{
-			float luma = dot(mainTexColor, vec3(0.2126729, 0.7151522, 0.0721750));
+			const vec3 dotWith = vec3(0.2126729, 0.7151522, 0.0721750);
+			float luma = dot(mainTexColor, dotWith);
 
 			return vec3(luma) + vec3(saturationIntensity) * (mainTexColor - vec3(luma));
-		}
-
-		vec3 vignette(vec2 vUv, vec3 mainTexColor)
-		{
-			// TODO: maybe expose this...
-			const float enlarge = 0.5;
-
-			float distToMid = 1.0 - length(abs(vec2(0.5) - vUv));
-			distToMid = clamp(distToMid + enlarge, 0.0, 1.0);
-			mainTexColor *= distToMid;
-
-			return mainTexColor;
 		}
 
 		vec3 RRTAndODTFit(vec3 v) {
@@ -121,6 +97,31 @@ const UberPostFxShader = {
 			color = ACESOutputMat * color;
 
 			return clamp(color, 0.0, 1.0);
+		}
+
+		vec3 vignette(vec2 vUv, vec3 mainTexColor)
+		{
+			// TODO: maybe expose this...
+			const float vignetteFocusArea = 15.0;
+
+			vUv *= 1.0 - vUv.yx;
+			float vignette = vUv.x * vUv.y * vignetteFocusArea;
+			vignette = pow(vignette, vignetteFallOffIntensity);
+
+			return mainTexColor * vignette;
+		}
+
+		vec3 noiseScanLines(vec2 vUv, vec3 mainTexColor)
+		{
+			float oneMinusNoiseWeight = 1.0 - noiseWeight;
+			float noise = rand(vUv + mod(time, 16.0)) + 1.0 * 0.5;
+			vec3 color = (mainTexColor * oneMinusNoiseWeight) + (mainTexColor * noise * noiseWeight);
+
+			float s = vUv.y * scanLineCount;
+			vec2 scanLine = vec2(sin(s), cos(s));
+			color += mainTexColor * vec3(scanLine, scanLine.x) * scanLineIntensity;
+
+			return mainTexColor + 1.0 * (color - mainTexColor);
 		}
 
 		void main() {
