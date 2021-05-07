@@ -36,7 +36,7 @@ const UberPostFxShader = {
 		{
 			// TODO: maybe expose this...
 			const float bandOffset = -0.00075;
-			const float baseIor = 0.9;
+			const float baseIor = 0.80;
 
 			const vec3 back = vec3(0.0, 0.0, -1.0);
 

@@ -9,7 +9,7 @@ const CorridorWidth = 2.25 * 4;
 const MountainEdgeSmoothness = 1.75;
 
 const MinH = 1.5;
-const MaxH = 2.5;
+const MaxH = 1.5;
 
 const speed = 1.25;
 

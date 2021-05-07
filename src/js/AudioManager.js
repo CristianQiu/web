@@ -12,8 +12,7 @@ const onMusicLoaded = function (buffer) {
 export default class AudioManager {
 
 	constructor(mainCameraListener) {
-		// this._musicFile = '../../resources/Like Before Royalty Free Planet INTLCMD.mp3';
-		this._musicFile = '../../resources/nina.mp3';
+		this._musicFile = '../../resources/bgMusic.mp3';
 		this._initialized = false;
 		this._loadingMusic = false;
 

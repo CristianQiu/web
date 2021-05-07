@@ -6,12 +6,13 @@ const SynthwaveGridShader = {
 		'time': { value: 0.0 },
 		'invGridSize': { value: 2.25 },
 		'lineWidth': { value: 0.45 },
+		'gridAntialias': { value: 0.8 },
 		'gridSweepLineSpeed': { value: 25.0 },
 		'gridSweepLineMaxDist': { value: 200.0 },
 		'gridSweepLineWidth': { value: 10.0 },
 		'gridHeightFaded': { value: 0.5 },
 		'mountainHeightPeak': { value: 0.05 },
-		'gridSweepLineColor': { value: new Color(0.6, 2.0, 2.0) },
+		'gridSweepLineColor': { value: new Color(0.65, 2.0, 2.0) },
 		'gridColor': { value: new Color(2.0, 0.6, 2.0) },
 		'floorColor': { value: new Color(0.075, 0.0, 0.125) },
 		'mountainColor': { value: new Color(0.3, 0.0, 0.125) }
@@ -29,6 +30,7 @@ const SynthwaveGridShader = {
 		uniform float time;
 		uniform float invGridSize;
 		uniform float lineWidth;
+		uniform float gridAntialias;
 		uniform float gridSweepLineSpeed;
 		uniform float gridSweepLineMaxDist;
 		uniform float gridSweepLineWidth;
@@ -52,7 +54,7 @@ const SynthwaveGridShader = {
 			vec2 dist1 = 1.0 - dist0;
 			vec2 grid = min(dist0, dist1);
 
-			vec2 antialias = fwidth(osPos.xz) * 0.8;
+			vec2 antialias = fwidth(osPos.xz) * gridAntialias;
 			grid = smoothstep(vec2(0.0), vec2(lineWidth) * antialias, grid);
 
 			// grid sweep line

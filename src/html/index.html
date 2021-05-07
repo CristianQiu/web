@@ -23,52 +23,6 @@
 			z-index: -1;
 		}
 
-		#join-button {
-			display: none;
-			z-index: 1;
-			position: fixed;
-			font-family: var(--contentFont);
-			font-size: 2rem;
-			margin: 0;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			width: 14rem;
-			height: 6rem;
-			border: 0.15rem solid var(--almostWhite);
-			text-align: center;
-			background-color: var(--almostBlack);
-			color: var(--almostWhite);
-			transition:
-				background-color var(--btnFadeSpeed) ease-in-out,
-				color var(--btnFadeSpeed) ease-in-out,
-				transform var(--btnFadeSpeed) ease-out;
-		}
-
-		#join-button::after {
-			display: block;
-			content: '';
-			background-color: var(--almostWhite);
-			height: 0.1rem;
-			width: 0;
-			margin: 0.25rem auto 0 auto;
-			transition:
-				width var(--btnFadeSpeed) cubic-bezier(0.86, 0, 0.07, 1),
-				color var(--btnFadeSpeed) ease-in-out;
-		}
-
-		#join-button:hover {
-			cursor: pointer;
-			background-color: var(--almostWhite);
-			color: var(--almostBlack);
-			transform: translate(-50%, -50%) scale(1.1);
-		}
-
-		#join-button:hover::after {
-			width: 8.5rem;
-			background-color: var(--almostBlack);
-		}
-
 		#name {
 			visibility: hidden;
 			position: relative;
@@ -118,6 +72,70 @@
 			margin: auto 2.1vw auto 2.1vw;
 		}
 
+		#debug {
+			position: fixed;
+			color: white;
+			font-size: 2rem;
+		}
+
+		.center-flex-container {
+			position: fixed;
+			display: flex;
+			flex-direction: column;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			align-items: center;
+			/* background-color: black; */
+		}
+
+		.center-flex-item {
+			display: inline-flex;
+			width: auto;
+			align-items: center;
+			white-space: nowrap;
+		}
+
+		.rotule {
+			font-family: 'Exo', sans-serif;
+			text-transform: uppercase;
+			font-size: 5rem;
+			transform: skew(-16deg);
+			color: var(--almostWhite);
+			letter-spacing: 0.1rem;
+			/* text-shadow: 0 0 0.3rem var(--almostWhite); */
+		}
+
+		.sub-rotule {
+			font-size: 5rem;
+			font-family: 'Mr Dafoe', cursive;
+			text-transform: capitalize;
+			font-weight: normal;
+			/* text-shadow: 0 0 0.3rem var(--almostWhite); */
+			color: var(--almostWhite);
+		}
+
+		#meet:hover {
+			cursor: pointer;
+		}
+
+		#meet::after {
+			position: absolute;
+			content: '';
+			width: 0rem;
+			height: 0.2rem;
+			margin: 5rem 0 0 7rem;
+			background-color: var(--almostWhite);
+			transition:
+				width var(--btnFadeSpeed) cubic-bezier(0.86, 0, 0.07, 1),
+				transform var(--btnFadeSpeed) cubic-bezier(0.86, 0, 0.07, 1);
+		}
+
+		#meet:hover::after {
+			width: 15rem;
+			transform: translateX(-7.5rem);
+		}
+
 		.fader {
 			animation: fadeIn var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
 		}
@@ -141,73 +159,6 @@
 				opacity: 1;
 			}
 		}
-
-		#debug {
-			position: fixed;
-			color: white;
-			font-size: 2rem;
-		}
-
-		.center-flex-container {
-			position: fixed;
-			display: flex;
-			flex-direction: column;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			align-items: center;
-			/* background-color: black; */
-		}
-
-		.center-flex-item {
-			width: auto;
-			display: inline-flex;
-			align-items: center;
-			white-space: nowrap;
-		}
-
-		.rotule {
-			font-family: 'Exo', sans-serif;
-			text-transform: uppercase;
-			font-size: 5rem;
-			transform: skew(-16deg);
-			color: var(--almostWhite);
-			letter-spacing: 0.1rem;
-			text-shadow: 0 0 0.3rem var(--almostWhite);
-		}
-
-		.sub-rotule {
-			font-size: 5rem;
-			font-family: 'Mr Dafoe', cursive;
-			text-transform: capitalize;
-			font-weight: normal;
-			text-shadow: 0 0 0.3rem var(--almostWhite);
-			color: var(--almostWhite);
-		}
-
-		#meet::after {
-			position: absolute;
-			content: '';
-			width: 0rem;
-			background-color: var(--almostWhite);
-			height: 0.2rem;
-			margin: 5rem 0 0 7rem;
-
-
-			display: inline-flex;
-			align-items: center;
-			white-space: nowrap;
-			transform-origin: center;
-
-			transition:
-				width var(--btnFadeSpeed) cubic-bezier(0.86, 0, 0.07, 1),
-				transform var(--btnFadeSpeed) cubic-bezier(0.86, 0, 0.07, 1);
-		}
-
-		#meet:hover::after {
-			width: 15rem;
-			transform: translateX(-7.5rem);
-		}
 	</style>
 </head>
 
@@ -216,7 +167,6 @@
 		<span class="center-flex-item rotule">Cristian Qiu</span>
 		<span id="meet" class="center-flex-item sub-rotule">Meet me</span>
 	</div>
-	<button id="join-button" type="button">Meet me</button>
 	<h1 id="name">Cristian Qiu</h1>
 	<div id="info-bar">
 		<p class="info-bar-subheader">About me</p>

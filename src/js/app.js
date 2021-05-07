@@ -39,7 +39,7 @@ const start = function () {
 
 	audioManager = new AudioManager(camera.getCamera());
 
-	document.getElementById('join-button').addEventListener('click', onClickJoin);
+	document.getElementById('meet').addEventListener('click', onClickJoin);
 	addEventListener('mousemove', onMouseMove);
 	addEventListener('resize', onWindowResize, false);
 
@@ -74,7 +74,7 @@ const onClickJoin = function () {
 	if (audioManager.isInitialized())
 		return;
 
-	const joinButton = document.getElementById("join-button");
+	const joinButton = document.getElementById("meet").parentElement;
 	joinButton.classList.add("fader-reverse");
 
 	const nameHeader = document.getElementById("name");
@@ -84,7 +84,7 @@ const onClickJoin = function () {
 	infoBar.classList.add("fader-delayed");
 
 	audioManager.init();
-	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 4096);
+	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource());
 	audioManager.loadAndPlayMusic();
 
 	camera.setToLookingSun();
