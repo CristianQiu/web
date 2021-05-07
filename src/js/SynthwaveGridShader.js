@@ -9,10 +9,10 @@ const SynthwaveGridShader = {
 		'gridAntialias': { value: 0.8 },
 		'gridSweepLineSpeed': { value: 25.0 },
 		'gridSweepLineMaxDist': { value: 200.0 },
-		'gridSweepLineWidth': { value: 10.0 },
+		'gridSweepLineWidth': { value: 5.0 },
 		'gridHeightFaded': { value: 0.5 },
 		'mountainHeightPeak': { value: 0.05 },
-		'gridSweepLineColor': { value: new Color(0.65, 2.0, 2.0) },
+		'gridSweepLineColor': { value: new Color(0.7, 2.0, 2.0) },
 		'gridColor': { value: new Color(2.0, 0.6, 2.0) },
 		'floorColor': { value: new Color(0.075, 0.0, 0.125) },
 		'mountainColor': { value: new Color(0.3, 0.0, 0.125) }
