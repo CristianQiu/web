@@ -22,7 +22,7 @@ const start = function () {
 	const w = innerWidth;
 	const h = innerHeight;
 
-	camera = new SynthwaveCamera(150.0, w / h, 0.3, 250);
+	camera = new SynthwaveCamera(160.0, w / h, 0.3, 250);
 	scene.add(camera.getCameraParent());
 
 	const pixelRatio = Math.min(devicePixelRatio, 0.85);
@@ -55,6 +55,7 @@ const update = function () {
 	stats.update();
 	TWEEN.update();
 
+	skybox.update(dt);
 	camera.update(dt, time);
 
 	const validSpectrumAnalyzer = audioSpectrumAnalyzer !== undefined && audioSpectrumAnalyzer !== null;
@@ -100,6 +101,7 @@ const onMouseMove = function (e) {
 	let y = e.clientY / h;
 
 	camera.rotateAccordingToMouseWindowPos(x, y);
+	skybox.moveSunAccordingToMouseWindowPos(x, y);
 };
 
 const onWindowResize = function () {

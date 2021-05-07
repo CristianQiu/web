@@ -3,7 +3,7 @@ import { Vector3, Vector4, Color } from 'three';
 const SynthwaveSkyboxShader = {
 
 	uniforms: {
-		'sunPosition': { value: new Vector3(0.0, 0.055, 1.0) },
+		'sunPosition': { value: new Vector3(0.0, 0.05, 1.0) },
 		'sunDiscSize': { value: 0.2 },
 		'sunAntialiasing': { value: 1.5 },
 		'sunStripeHeights': { value: new Vector4(-0.26, -0.44, -0.63, -0.82) },
@@ -18,9 +18,9 @@ const SynthwaveSkyboxShader = {
 		'horizonColor': { value: new Color(0.5, 0.1, 0.5) },
 		'zenithColor': { value: new Color(0.0, 0.1, 1.0) },
 		'flareColor': { value: new Color(0.555, 0.555, 2.0) },
-		'flarePosition': { value: -0.01 },
-		'flareWidth': { value: 0.0105 },
-		'flareFalloff': { value: 0.001 }
+		'flarePosition': { value: -0.02 },
+		'flareWidth': { value: 0.01 },
+		'flareFalloff': { value: 0.0005 }
 	},
 
 	vertexShader: /* glsl */`

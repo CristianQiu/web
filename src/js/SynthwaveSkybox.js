@@ -32,8 +32,12 @@ export default class SynthwaveSkybox {
 			.delay(3000)
 			.onUpdate(() => {
 				sunStripeWidths.setX(sunStripeFrom.x);
-				this._material.uniforms.sunStripeWidths.value = sunStripeWidths;
 			});
+
+		this._sunPhiOffsetAmp = 0.4;
+		this._sunThetaAmp = 1.0;
+		this._sunMovementSmoothness = 0.25;
+		this._sunTargetPosSpherical = new THREE.Vector3();
 	}
 
 	getMesh() {
@@ -42,5 +46,20 @@ export default class SynthwaveSkybox {
 
 	makeSunAppear() {
 		this._makeSunAppearTween.start();
+	}
+
+	moveSunAccordingToMouseWindowPos(mouseX, mouseY) {
+		let phi = THREE.MathUtils.lerp(-this._sunPhiOffsetAmp, this._sunPhiOffsetAmp, mouseY);
+		let theta = THREE.MathUtils.lerp(-this._sunThetaAmp, this._sunThetaAmp, mouseX);
+
+		phi = THREE.MathUtils.degToRad(phi + 87.5);
+		theta = THREE.MathUtils.degToRad(theta);
+
+		this._sunTargetPosSpherical.setFromSphericalCoords(1.0, phi, theta);
+	}
+
+	update(dt) {
+		const t = 1.0 - Math.pow(this._sunMovementSmoothness, dt);
+		this._material.uniforms.sunPosition.value.lerp(this._sunTargetPosSpherical, t);
 	}
 }
