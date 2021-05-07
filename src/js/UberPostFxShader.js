@@ -114,7 +114,7 @@ const UberPostFxShader = {
 		vec3 noiseScanLines(vec2 vUv, vec3 mainTexColor)
 		{
 			float oneMinusNoiseWeight = 1.0 - noiseWeight;
-			float noise = rand(vUv + mod(time, 16.0)) + 1.0 * 0.5;
+			float noise = rand(vUv + mod(time, 4.0)) + 1.0 * 0.5;
 			vec3 color = (mainTexColor * oneMinusNoiseWeight) + (mainTexColor * noise * noiseWeight);
 
 			float s = vUv.y * scanLineCount;
