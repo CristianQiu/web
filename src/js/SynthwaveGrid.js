@@ -5,11 +5,11 @@ import SynthwaveGridShader from './SynthwaveGridShader';
 const Freq = 0.07;
 const Amp = 3.0;
 
-const CorridorWidth = 2.25 * 4;
+const CorridorWidth = 2.0 * 4;
 const MountainEdgeSmoothness = 1.75;
 
-const MinH = 1.5;
-const MaxH = 1.5;
+const MinH = 1.25;
+const MaxH = 2.5;
 
 const speed = 1.25;
 
@@ -132,9 +132,15 @@ export default class SynthwaveGrid {
 			t *= t;
 
 			const noise = (Simplex.noise(x * Freq, elapsedTime + z * Freq) * 0.5 + 0.5) * Amp;
-
 			const power = THREE.MathUtils.lerp(MinH, MaxH, t);
+
+			// onst a = (Math.sin((x + z) * Freq * 3.0) + 1.0) * 0.5 * 2.0 * avgMean * 0.01 * finalCorridorEdge;
+			// let a = (Math.sin(x * Freq * 3.0) + 1.0) * 0.5 * Amp;
+			// const b = (Math.sin(z * Freq * 3.0) + 1.0) * 0.5 * Amp;
+			// a = Math.min(a, b) * power;
+
 			this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean * 0.006);
+			// this._positionsBuffer.setY(i, a);
 
 			// experiments
 			// const othery = Math.sin(z);
@@ -148,8 +154,8 @@ export default class SynthwaveGrid {
 			// if (z % 3 != 1)
 			// 	val = 0.0;
 
-			// this._positionsBuffer.setY(i, val);
-			// this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * val * 0.1);
+			// this._positionsBuffer.setY(i, val * 0.15);
+			// this._positionsBuffer.setY(i, (power * finalCorridorEdge) + Math.pow(noise, 1.0) * finalCorridorEdge + (val * 0.2 * finalCorridorEdge));
 		}
 
 		this._positionsBuffer.needsUpdate = true;

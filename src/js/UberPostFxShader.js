@@ -33,15 +33,29 @@ const UberPostFxShader = {
 
 		varying vec2 vUv;
 
-		// From https://github.com/gkjohnson/threejs-sandbox/blob/beb92e4a84456304a800e27b26f6d521f8b8360e/lens-effects/src/LensDistortionShader.js
-		vec3 chromaticAberration(vec2 vUv, sampler2D tDiffuse)
+		// From https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
+		vec2 curveUv(vec2 uv)
 		{
-			// TODO: maybe expose this...
+			// TODO: expose this?
+			const float warpIntensity = 0.125;
+
+			vec2 delta = uv - 0.5;
+			float deltaSq = dot(delta, delta);
+			float deltaSqSq = deltaSq * deltaSq;
+			float offset = deltaSqSq * 0.125;
+
+			return uv + delta * offset;
+		}
+
+		// From https://github.com/gkjohnson/threejs-sandbox/blob/beb92e4a84456304a800e27b26f6d521f8b8360e/lens-effects/src/LensDistortionShader.js
+		vec3 chromaticAberration(vec2 uv, sampler2D tDiffuse)
+		{
+			// TODO: expose this?
 			const float bandOffset = -0.00075;
 			const float baseIor = 0.9;
 			const vec3 back = vec3(0.0, 0.0, -1.0);
 
-			vec3 normal = vec3((2.0 * vUv - vec2(1.0)), 1.0);
+			vec3 normal = vec3((2.0 * uv - vec2(1.0)), 1.0);
 			normal = normalize(normal);
 
 			float r_ior = 1.0 + bandOffset * 0.0;
@@ -52,9 +66,9 @@ const UberPostFxShader = {
 			vec3 g_refracted = refract(back, normal, baseIor / g_ior);
 			vec3 b_refracted = refract(back, normal, baseIor / b_ior);
 
-			float r = texture2D(tDiffuse, vUv + r_refracted.xy).r;
-			float g = texture2D(tDiffuse, vUv + g_refracted.xy).g;
-			float b = texture2D(tDiffuse, vUv + b_refracted.xy).b;
+			float r = texture2D(tDiffuse, uv + r_refracted.xy).r;
+			float g = texture2D(tDiffuse, uv + g_refracted.xy).g;
+			float b = texture2D(tDiffuse, uv + b_refracted.xy).b;
 
 			return vec3(r, g, b);
 		}
@@ -68,13 +82,14 @@ const UberPostFxShader = {
 			return vec3(luma) + vec3(saturationIntensity) * (mainTexColor - vec3(luma));
 		}
 
+		// From three.js source
 		vec3 RRTAndODTFit(vec3 v) {
 			vec3 a = v * (v + 0.0245786) - 0.000090537;
 			vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081;
 			return a / b;
 		}
 
-		// Also https://discourse.threejs.org/t/effect-composer-gamma-output-difference/12039/4
+		// Also from https://discourse.threejs.org/t/effect-composer-gamma-output-difference/12039/4
 		vec3 ACESFilmicToneMapping(vec3 color) {
 			color *= exposure / 0.6;
 
@@ -99,25 +114,36 @@ const UberPostFxShader = {
 			return clamp(color, 0.0, 1.0);
 		}
 
-		vec3 vignette(vec2 vUv, vec3 mainTexColor)
+		// From https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
+		float vignette(vec2 uv)
 		{
-			// TODO: maybe expose this...
+			// TODO: expose this?
 			const float vignetteFocusArea = 15.0;
 
-			vUv *= 1.0 - vUv.yx;
-			float vignette = vUv.x * vUv.y * vignetteFocusArea;
-			vignette = pow(vignette, vignetteFallOffIntensity);
-
-			return mainTexColor * vignette;
+			uv *= 1.0 - uv.yx;
+			float vignette = uv.x * uv.y * vignetteFocusArea;
+			return pow(vignette, vignetteFallOffIntensity);
 		}
 
-		vec3 noiseScanLines(vec2 vUv, vec3 mainTexColor)
+		// From https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
+		float crtVignette(vec2 uv){
+			const float radius = 0.015;
+
+			vec2 absUv = abs(uv * 2.0 - 1.0) - vec2(1.0, 1.0) + radius;
+			float dist = length(max(vec2(0.0), absUv)) / radius;
+			float square = smoothstep(0.4, 1.0, dist);
+
+			return clamp(1.0 - square, 0.0, 1.0);
+		}
+
+		// From three.js source
+		vec3 noiseScanLines(vec2 uv, vec3 mainTexColor)
 		{
 			float oneMinusNoiseWeight = 1.0 - noiseWeight;
-			float noise = rand(vUv + mod(time, 4.0)) + 1.0 * 0.5;
+			float noise = rand(uv + mod(time, 4.0)) + 1.0 * 0.5;
 			vec3 color = (mainTexColor * oneMinusNoiseWeight) + (mainTexColor * noise * noiseWeight);
 
-			float s = vUv.y * scanLineCount;
+			float s = uv.y * scanLineCount;
 			vec2 scanLine = vec2(sin(s), cos(s));
 			color += mainTexColor * vec3(scanLine, scanLine.x) * scanLineIntensity;
 
@@ -125,13 +151,17 @@ const UberPostFxShader = {
 		}
 
 		void main() {
-			vec3 color = chromaticAberration(vUv, tDiffuse);
+			vec2 curvedUv = curveUv(vUv);
+
+			vec3 color = chromaticAberration(curvedUv, tDiffuse);
 			color = saturation(color, saturationIntensity);
 			color = ACESFilmicToneMapping(color);
-			color = vignette(vUv, color);
-			color = noiseScanLines(vUv, color);
+			color = noiseScanLines(curvedUv, color);
 
-			gl_FragColor = vec4(color, 1.0);
+			float crtVig = crtVignette(curvedUv);
+			float vig = vignette(curvedUv);
+
+			gl_FragColor = vec4(color * crtVig * vig, 1.0);
 		}`,
 };
 

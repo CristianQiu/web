@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
 	<title>Cristian Qiu</title>
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Exo:wght@900&display=swap" rel="stylesheet">
@@ -103,7 +104,9 @@
 			transform: skew(-16deg);
 			color: var(--almostWhite);
 			letter-spacing: 0.1rem;
-			/* text-shadow: 0 0 0.3rem var(--almostWhite); */
+			text-shadow: 0 0 0.3rem var(--almostWhite);
+
+			animation: fadeInFromLeft 7s ease-in-out normal forwards;
 		}
 
 		.sub-rotule {
@@ -111,8 +114,10 @@
 			font-family: 'Mr Dafoe', cursive;
 			text-transform: capitalize;
 			font-weight: normal;
-			/* text-shadow: 0 0 0.3rem var(--almostWhite); */
+			text-shadow: 0 0 0.3rem var(--almostWhite);
 			color: var(--almostWhite);
+
+
 		}
 
 		#meet:hover {
@@ -137,18 +142,27 @@
 		}
 
 		.fader {
-			animation: fadeIn var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
+			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
 		}
 
 		.fader-reverse {
-			animation: fadeIn 0.75s ease-in-out 0s 1 reverse forwards;
+			animation: alphaFade 0.75s ease-in-out 0s 1 reverse forwards;
 		}
 
 		.fader-delayed {
-			animation: fadeIn var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
+			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
 		}
 
-		@keyframes fadeIn {
+		/*
+		.crossfader-left{
+			animation
+		}
+
+		.crossfader-right{
+
+		} */
+
+		@keyframes alphaFade {
 			from {
 				visibility: hidden;
 				opacity: 0;
@@ -159,12 +173,28 @@
 				opacity: 1;
 			}
 		}
+
+		@keyframes fadeInFromLeft {
+			from {
+				transform: translate(-100px, 0px);
+			}
+
+			to {
+				transform: inherit;
+			}
+		}
+
+		@keyframes fadeInFromRight {
+			from {}
+
+			to {}
+		}
 	</style>
 </head>
 
 <body>
 	<div class="center-flex-container">
-		<span class="center-flex-item rotule">Cristian Qiu</span>
+		<!-- <span class="center-flex-item rotule">Cristian Qiu</span> -->
 		<span id="meet" class="center-flex-item sub-rotule">Meet me</span>
 	</div>
 	<h1 id="name">Cristian Qiu</h1>

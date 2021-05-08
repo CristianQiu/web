@@ -13,7 +13,7 @@ let clock, camera, renderer, skybox, grid, audioManager, audioSpectrumAnalyzer;
 
 const start = function () {
 	stats = new Stats();
-	document.body.appendChild(stats.dom);
+	// document.body.appendChild(stats.dom);
 
 	clock = new THREE.Clock();
 
@@ -22,11 +22,10 @@ const start = function () {
 	const w = innerWidth;
 	const h = innerHeight;
 
-	camera = new SynthwaveCamera(160.0, w / h, 0.3, 250);
+	camera = new SynthwaveCamera(150.0, w / h, 0.3, 250);
 	scene.add(camera.getCameraParent());
 
-	const pixelRatio = Math.min(devicePixelRatio, 0.85);
-
+	const pixelRatio = Math.max(0.9, devicePixelRatio * 0.6);
 	renderer = new SynthwaveRenderer(scene, camera.getCamera(), w, h, pixelRatio);
 	document.body.appendChild(renderer.getDomElement());
 

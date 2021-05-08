@@ -56,7 +56,7 @@ export default class SynthwaveCamera {
 			});
 
 		const fromFov = { x: fov };
-		const toFov = { x: 60.0 };
+		const toFov = { x: 50.0 };
 		this._tweenToLookSunFov = new TWEEN.Tween(fromFov)
 			.to(toFov, this._transitionTimeMs)
 			.easing(Easing)
