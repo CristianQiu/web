@@ -5,8 +5,8 @@ const SynthwaveGridShader = {
 	uniforms: {
 		'time': { value: 0.0 },
 		'invGridSize': { value: 2.25 },
-		'lineWidth': { value: 0.45 },
-		'gridAntialias': { value: 0.8 },
+		'lineWidth': { value: 0.5 },
+		'gridAntialias': { value: 1.0 },
 		'gridSweepLineSpeed': { value: 25.0 },
 		'gridSweepLineMaxDist': { value: 200.0 },
 		'gridSweepLineWidth': { value: 5.0 },
