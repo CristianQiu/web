@@ -37,7 +37,7 @@ export default class SynthwaveSkybox {
 		this._sunPhiOffsetAmp = 0.4;
 		this._sunThetaAmp = 1.0;
 		this._sunMovementSmoothness = 0.25;
-		this._sunTargetPosSpherical = new THREE.Vector3();
+		this._sunTargetPosSpherical = new THREE.Vector3().copy(SynthwaveSkyboxShader.uniforms.sunPosition.value);
 	}
 
 	getMesh() {
