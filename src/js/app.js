@@ -13,7 +13,7 @@ let clock, camera, renderer, skybox, grid, audioManager, audioSpectrumAnalyzer;
 
 const start = function () {
 	stats = new Stats();
-	// document.body.appendChild(stats.dom);
+	document.body.appendChild(stats.dom);
 
 	clock = new THREE.Clock();
 
@@ -38,11 +38,11 @@ const start = function () {
 
 	audioManager = new AudioManager(camera.getCamera());
 
-	document.getElementById('meet').addEventListener('click', onClickJoin);
+	document.getElementById('join').addEventListener('click', onClickJoin);
 	addEventListener('mousemove', onMouseMove);
 	addEventListener('resize', onWindowResize, false);
 
-	document.getElementById('debug').innerHTML = (w / h);
+	renderer.fadeInCrt();
 };
 
 const update = function () {
@@ -70,12 +70,17 @@ const update = function () {
 	renderer.render();
 };
 
+const removeUnneededElementsOnceJoined = function () {
+	const removables = document.body.getElementsByClassName("removable");
+	for (let i = 0; i < removables.length; ++i) {
+		removables[i].remove();
+		--i;
+	}
+};
+
 const onClickJoin = function () {
 	if (audioManager.isInitialized())
 		return;
-
-	const joinButton = document.getElementById("meet").parentElement;
-	joinButton.classList.add("fader-reverse");
 
 	const nameHeader = document.getElementById("name");
 	nameHeader.classList.add("fader");
@@ -89,10 +94,15 @@ const onClickJoin = function () {
 
 	camera.setToLookingSun();
 	skybox.makeSunAppear();
-	renderer.fadeToColor();
+	renderer.turnOnCrt();
+
+	removeUnneededElementsOnceJoined();
 };
 
 const onMouseMove = function (e) {
+	if (!audioManager.isInitialized())
+		return;
+
 	const w = innerWidth;
 	const h = innerHeight;
 
@@ -111,8 +121,6 @@ const onWindowResize = function () {
 	camera.updateProjectionMatrix();
 
 	renderer.setSize(w, h);
-
-	document.getElementById('debug').innerHTML = (w / h);
 };
 
 start();

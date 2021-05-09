@@ -9,8 +9,21 @@
 	<link href="https://fonts.googleapis.com/css2?family=Exo:wght@900&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" rel="stylesheet">
 	<style>
+		@font-face {
+			font-family: 'VCR';
+			src: url(../../resources/VCR_OSD_MONO_1.001.ttf);
+		}
+
 		body {
 			margin: 0;
+			--crtFontFamily: 'VCR';
+			--crtTextColor: rgb(200, 200, 200);
+			--crtAvColor: rgb(60, 241, 60);
+
+			--responsiveTime: 0.2s;
+			/* --responsiveEase: cubic-bezier(0.86, 0, 0.07, 1); */
+			--responsiveEase: ease-out;
+
 			--contentFont: 'Mr Dafoe', cursive;
 			--almostWhite: rgb(245, 245, 245);
 			--almostBlack: rgb(10, 10, 10);
@@ -21,7 +34,7 @@
 		canvas {
 			position: fixed;
 			top: 0;
-			z-index: -1;
+			z-index: -10;
 		}
 
 		#name {
@@ -73,72 +86,15 @@
 			margin: auto 2.1vw auto 2.1vw;
 		}
 
-		#debug {
-			position: fixed;
-			color: white;
-			font-size: 2rem;
-		}
-
-		.center-flex-container {
-			position: fixed;
-			display: flex;
-			flex-direction: column;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			align-items: center;
-			/* background-color: black; */
-		}
-
-		.center-flex-item {
-			display: inline-flex;
-			width: auto;
-			align-items: center;
-			white-space: nowrap;
-		}
-
-		.rotule {
-			font-family: 'Exo', sans-serif;
-			text-transform: uppercase;
-			font-size: 5rem;
-			transform: skew(-16deg);
-			color: var(--almostWhite);
-			letter-spacing: 0.1rem;
-			text-shadow: 0 0 0.3rem var(--almostWhite);
-
-			animation: fadeInFromLeft 7s ease-in-out normal forwards;
-		}
-
 		.sub-rotule {
-			font-size: 5rem;
+			/* font-size: 5rem; */
+			font-size: calc(5vh + 5vw);
 			font-family: 'Mr Dafoe', cursive;
 			text-transform: capitalize;
 			font-weight: normal;
 			text-shadow: 0 0 0.3rem var(--almostWhite);
 			color: var(--almostWhite);
-
-
-		}
-
-		#meet:hover {
-			cursor: pointer;
-		}
-
-		#meet::after {
-			position: absolute;
-			content: '';
-			width: 0rem;
-			height: 0.2rem;
-			margin: 5rem 0 0 7rem;
-			background-color: var(--almostWhite);
-			transition:
-				width var(--btnFadeSpeed) cubic-bezier(0.86, 0, 0.07, 1),
-				transform var(--btnFadeSpeed) cubic-bezier(0.86, 0, 0.07, 1);
-		}
-
-		#meet:hover::after {
-			width: 15rem;
-			transform: translateX(-7.5rem);
+			transition: font-size 0.4s ease-in-out;
 		}
 
 		.fader {
@@ -153,15 +109,6 @@
 			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
 		}
 
-		/*
-		.crossfader-left{
-			animation
-		}
-
-		.crossfader-right{
-
-		} */
-
 		@keyframes alphaFade {
 			from {
 				visibility: hidden;
@@ -174,37 +121,141 @@
 			}
 		}
 
-		@keyframes fadeInFromLeft {
-			from {
-				transform: translate(-100px, 0px);
-			}
+		.flex-container-center {
+			position: fixed;
+			display: flex;
+			flex-direction: column;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: rgba(82, 82, 253, 0.781);
+			transition:
+				width var(--responsiveTime) var(--responsiveEase),
+				height var(--responsiveTime) var(--responsiveEase);
+		}
 
-			to {
-				transform: inherit;
+		#join:hover {
+			color: black;
+			cursor: pointer;
+		}
+
+		#join:hover::before {
+			width: 100%;
+		}
+
+		#join::before {
+			position: absolute;
+			content: '';
+			display: block;
+			background-color: rgb(255, 234, 4);
+			width: 0;
+			height: 50%;
+			left: 0;
+			top: 25%;
+			z-index: -1;
+		}
+
+		.flex-horizontal-bar {
+			display: flex;
+			position: fixed;
+			flex-direction: row;
+			width: 100%;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.crt-text {
+			color: var(--crtTextColor);
+			font-family: var(--crtFontFamily);
+			font-size: calc(2vh + 0.5vw);
+			transform: font-size;
+			padding: calc(3vh) calc(3vw);
+			white-space: nowrap;
+			opacity: 0.825;
+			transition:
+				font-size var(--responsiveTime) var(--responsiveEase),
+				padding var(--responsiveTime) var(--responsiveEase);
+		}
+
+		#crt-av {
+			color: var(--crtAvColor);
+			font-size: calc(3vh + 1vw);
+		}
+
+		.crt-text-blink-display-after {
+			animation:
+				alphaBlink 2s linear infinite,
+				hiddenToShowSlow 2s ease-out;
+		}
+
+		.crt-text-blink {
+			animation: alphaBlink 2s linear infinite;
+		}
+
+		.display-after-time-slow {
+			animation: hiddenToShowSlow 2s ease-out;
+		}
+
+		.display-after-time-fast {
+			animation: hiddenToShowFast 2s ease-out;
+		}
+
+		@keyframes alphaBlink {
+			50% {
+				opacity: 0;
 			}
 		}
 
-		@keyframes fadeInFromRight {
-			from {}
+		@keyframes hiddenToShowSlow {
+			0% {
+				visibility: hidden;
+			}
 
-			to {}
+			75% {
+				visibility: hidden;
+			}
+
+			100% {
+				visibility: visible;
+			}
+		}
+
+		@keyframes hiddenToShowFast {
+			0% {
+				visibility: hidden;
+			}
+
+			33% {
+				visibility: hidden;
+			}
+
+			100% {
+				visibility: visible;
+			}
 		}
 	</style>
 </head>
 
 <body>
-	<div class="center-flex-container">
-		<!-- <span class="center-flex-item rotule">Cristian Qiu</span> -->
-		<span id="meet" class="center-flex-item sub-rotule">Meet me</span>
+	<div class="flex-horizontal-bar" style="top: 0">
+		<span id="crt-av" class="crt-text display-after-time-fast">AV-1</span>
+		<span class="removable crt-text crt-text-blink-display-after">NO-SIGNAL</span>
 	</div>
+	<div class="removable flex-container-center display-after-time-slow">
+		<span id="join" class="crt-text">&nbspAV-2 WEB&nbsp</span>
+	</div>
+	<div class="removable flex-horizontal-bar display-after-time-slow" style="bottom: 0; justify-content: center;">
+		<span class="crt-text" style="font-size: calc(3vh + 0.75vw)">CRISTIAN QIU</span>
+	</div>
+
 	<h1 id="name">Cristian Qiu</h1>
 	<div id="info-bar">
 		<p class="info-bar-subheader">About me</p>
 		<p class="info-bar-subheader">Projects</p>
 		<p class="info-bar-subheader">Experience</p>
 	</div>
-	<!-- <div id="dummy"></div>div> -->
-	<div id="debug">DEBUG</div>
+
+	<!-- <div id="dummy"></div> -->
 	<script src="../../dist/app.js"></script>
 </body>
 

@@ -8,7 +8,8 @@ const UberPostFxShader = {
 		'scanLineCount': { value: 1024.0 },
 		'scanLineIntensity': { value: 0.1 },
 		'vignetteFallOffIntensity': { value: 0.15 },
-		'exposure': { value: 1.25 }
+		'exposure': { value: 1.25 },
+		'turnOnIntensity': { value: 1.0 }
 	},
 
 	vertexShader: /* glsl */`
@@ -30,6 +31,7 @@ const UberPostFxShader = {
 		uniform float scanLineIntensity;
 		uniform float vignetteFallOffIntensity;
 		uniform float exposure;
+		uniform float turnOnIntensity;
 
 		varying vec2 vUv;
 
@@ -37,12 +39,12 @@ const UberPostFxShader = {
 		vec2 curveUv(vec2 uv)
 		{
 			// TODO: expose this?
-			const float warpIntensity = 0.125;
+			const float warpIntensity = 0.025; // 0.125
 
 			vec2 delta = uv - 0.5;
 			float deltaSq = dot(delta, delta);
 			float deltaSqSq = deltaSq * deltaSq;
-			float offset = deltaSqSq * 0.125;
+			float offset = deltaSqSq * warpIntensity;
 
 			return uv + delta * offset;
 		}
@@ -118,7 +120,7 @@ const UberPostFxShader = {
 		float vignette(vec2 uv)
 		{
 			// TODO: expose this?
-			const float vignetteFocusArea = 15.0;
+			const float vignetteFocusArea = 5.0;
 
 			uv *= 1.0 - uv.yx;
 			float vignette = uv.x * uv.y * vignetteFocusArea;
@@ -151,9 +153,13 @@ const UberPostFxShader = {
 		}
 
 		void main() {
+			const vec3 offColor = vec3(0.2, 0.225, 0.25);
+
 			vec2 curvedUv = curveUv(vUv);
 
 			vec3 color = chromaticAberration(curvedUv, tDiffuse);
+
+			color = mix(offColor, color, turnOnIntensity);
 			color = saturation(color, saturationIntensity);
 			color = ACESFilmicToneMapping(color);
 			color = noiseScanLines(curvedUv, color);

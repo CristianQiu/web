@@ -22,16 +22,16 @@ export default class SynthwaveRenderer {
 		this._scanLineNormalThreshold = 300.0;
 		this._scanLinesLessThreshold = 150.0;
 
-		const startBloom = 0.0;
-		const startSat = 0.0;
-		const startNoise = 10.0;
 		const startVig = 5.0;
+		const endVig = 0.15;
+
+		const startTurnOn = 0.0;
+		const endTurnOn = 1.0;
 
 		const res = new THREE.Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
-		this._bloomPass = new UnrealBloomPass(res, startBloom, 0.7, 0.59825);
-		// this._uberPass = new UberPostFxPass(1.0, 0.4, this._scanLinesCountNormal, 0.05, 0.15, 1.25);
-		this._uberPass = new UberPostFxPass(startSat, startNoise, this._scanLinesCountNormal, 0.1, startVig, 1.25);
+		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
+		this._uberPass = new UberPostFxPass(0.75, 0.4, this._scanLinesCountNormal, 0.1, startVig, 1.25, startTurnOn);
 
 		this._composer = new EffectComposer(this._renderer);
 		this._composer.addPass(this._scenePass);
@@ -41,30 +41,24 @@ export default class SynthwaveRenderer {
 		this.setPixelRatio(pixelRatio);
 		this.setSize(w, h);
 
-		const fromSat = { x: startSat };
-		const toSat = { x: 0.75, };
+		const fromVig = { x: startVig };
+		const toVig = { x: endVig };
 
-		this._uberPass.setSaturation(fromSat.x);
-
-		this._fadeToColorTween = new TWEEN.Tween(fromSat)
-			.to(toSat, 3000)
+		this._fadeVignette = new TWEEN.Tween(fromVig)
+			.to(toVig, 1250)
 			.easing(TWEEN.Easing.Quartic.InOut)
-			.delay(3000)
 			.onUpdate(() => {
-				this._uberPass.setSaturation(fromSat.x);
+				this._uberPass.setVignetteFallOffIntensity(fromVig.x);
 			});
 
-		const fromBloomVigNoise = { bloom: startBloom, noise: startNoise, vig: startVig };
-		const toBloomVigNoise = { bloom: 1.0, noise: 0.4, vig: 0.25 };
+		const fromTurnOn = { x: startTurnOn };
+		const toTurnOn = { x: endTurnOn };
 
-		this._fadeVignetteNoise = new TWEEN.Tween(fromBloomVigNoise)
-			.to(toBloomVigNoise, 2000)
+		this._fadeTurnOn = new TWEEN.Tween(fromTurnOn)
+			.to(toTurnOn, 2000)
 			.easing(TWEEN.Easing.Quartic.InOut)
 			.onUpdate(() => {
-				this._bloomPass.strength = fromBloomVigNoise.bloom;
-
-				this._uberPass.setNoiseWeight(fromBloomVigNoise.noise);
-				this._uberPass.setVignetteFallOffIntensity(fromBloomVigNoise.vig);
+				this._uberPass.setTurnOnIntensity(fromTurnOn.x);
 			});
 	}
 
@@ -90,8 +84,11 @@ export default class SynthwaveRenderer {
 		this._composer.render();
 	}
 
-	fadeToColor() {
-		this._fadeToColorTween.start();
-		this._fadeVignetteNoise.start();
+	fadeInCrt() {
+		this._fadeVignette.start();
+	}
+
+	turnOnCrt() {
+		this._fadeTurnOn.start();
 	}
 }
