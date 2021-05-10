@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import Maths from './Maths';
 
 const NumBands = 32;
 const BandsBoundsFactor = 1.12246;
@@ -38,13 +39,13 @@ export default class AudioSpectrumAnalyzer extends THREE.AudioAnalyser {
 		for (let i = 0; i < length; ++i) {
 			const prevFrameSmoothedMean = this._smoothedMeans[i];
 			const decayed = prevFrameSmoothedMean - this._decayRate * dt;
-			this._smoothedMeans[i] = Math.max(0.0, decayed);
+			this._smoothedMeans[i] = Maths.fastMax(0.0, decayed);
 
 			const lowerBound = Bands[i] / BandsBoundsFactor;
 			const upperBound = Bands[i] * BandsBoundsFactor;
 
-			let minIndex = Math.floor((lowerBound / sampleRate) * twiceSpectrumLength);
-			let maxIndex = Math.floor((upperBound / sampleRate) * twiceSpectrumLength);
+			let minIndex = Maths.fastFloor((lowerBound / sampleRate) * twiceSpectrumLength);
+			let maxIndex = Maths.fastFloor((upperBound / sampleRate) * twiceSpectrumLength);
 
 			minIndex = THREE.MathUtils.clamp(minIndex, 0, spectrumLengthMinusOne);
 			maxIndex = THREE.MathUtils.clamp(maxIndex, 0, spectrumLengthMinusOne);
@@ -54,13 +55,13 @@ export default class AudioSpectrumAnalyzer extends THREE.AudioAnalyser {
 
 			for (let j = minIndex; j <= maxIndex; ++j) {
 				mean += spectrum[j];
-				max = Math.max(spectrum[j], max);
+				max = Maths.fastMax(spectrum[j], max);
 			}
 
 			// Note: this actually makes peak levels instead means but keep the name since I may tweak it.
 			mean /= (maxIndex - minIndex + 1.0);
 			this._rawMeans[i] = max;
-			this._smoothedMeans[i] = Math.max(this._smoothedMeans[i], max - (max - mean) * filter);
+			this._smoothedMeans[i] = Maths.fastMax(this._smoothedMeans[i], max - (max - mean) * filter);
 		}
 	}
 }

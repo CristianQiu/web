@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { Object3D } from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import TWEEN from '@tweenjs/tween.js';
 
@@ -37,7 +36,7 @@ export default class SynthwaveCamera {
 		this._parentLookingToSunPos = new THREE.Vector3(0.0, 2.75, 0.0);
 		this._parentLookingToSunRot = new THREE.Euler(xEulers, yEulers, zEulers);
 
-		this._cameraParent = new Object3D();
+		this._cameraParent = new THREE.Object3D();
 		this._cameraParent.add(this._camera);
 		this._shouldBreathe = false;
 		this.setToLookingGridInstant();
