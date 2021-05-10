@@ -108,7 +108,7 @@ export default class SynthwaveGrid {
 		const count = this._positionsBuffer.count;
 		for (let i = 0; i < count; ++i) {
 			const col = i % resX;
-			const x = Maths.remap(0.0, resX - 1.0, -halfResX, halfResX, col);
+			const x = Maths.fastRemap(0.0, resX - 1.0, -halfResX, halfResX, col);
 			const xAbs = Maths.fastAbs(x);
 			const z = Maths.fastFloor(i / resX);
 
@@ -125,10 +125,9 @@ export default class SynthwaveGrid {
 			const finalCorridorEdge = Maths.fastMin(corridor, edge);
 
 			let t = z / this._vertexResY;
-			t *= t;
 
 			const noise = (Simplex.noise(x * Freq, elapsedTime + z * Freq) * 0.5 + 0.5) * Amp;
-			const power = THREE.MathUtils.lerp(MinH, MaxH, t);
+			const power = Maths.fastLerp(MinH, MaxH, t * t);
 
 			// onst a = (Math.sin((x + z) * Freq * 3.0) + 1.0) * 0.5 * 2.0 * avgMean * 0.01 * finalCorridorEdge;
 			// let a = (Math.sin(x * Freq * 3.0) + 1.0) * 0.5 * Amp;
