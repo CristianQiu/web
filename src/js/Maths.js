@@ -5,12 +5,16 @@ export default class Maths {
 		return x >>> 0;
 	}
 
+	static fastMin(a, b) {
+		return a < b ? a : b;
+	}
+
 	static fastMax(a, b) {
 		return a > b ? a : b;
 	}
 
-	static fastMin(a, b) {
-		return a < b ? a : b;
+	static fastAbs(x) {
+		return x > 0.0 ? x : -x;
 	}
 
 	static remap(a, b, c, d, x) {

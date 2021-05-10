@@ -32,7 +32,7 @@ const start = function () {
 	skybox = new SynthwaveSkybox();
 	scene.add(skybox.getMesh());
 
-	grid = new SynthwaveGrid(128, 128, 1.0);
+	grid = new SynthwaveGrid(96, 128, 1.0);
 	grid.generate();
 	scene.add(grid.getMesh());
 
@@ -105,7 +105,7 @@ const onClickJoin = function () {
 	infoBar.classList.add("fader-delayed");
 
 	audioManager.init();
-	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource(), 1024);
+	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource());
 	audioManager.loadAndPlayMusic();
 
 	camera.setToLookingSun();
