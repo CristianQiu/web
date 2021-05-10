@@ -55,7 +55,7 @@ const UberPostFxShader = {
 		vec3 chromaticAberration(vec2 uv, sampler2D tDiffuse)
 		{
 			// TODO: expose this?
-			const float bandOffset = -0.00075;
+			const float bandOffset = -0.001;
 			const float baseIor = 0.9;
 			const vec3 back = vec3(0.0, 0.0, -1.0);
 
@@ -156,14 +156,14 @@ const UberPostFxShader = {
 
 			vec2 curvedUv = curveUv(vUv);
 
+			float crtVig = crtVignette(curvedUv);
+			float vig = vignette(curvedUv);
+
 			vec3 color = chromaticAberration(curvedUv, tDiffuse);
 			color = mix(offColor, color, turnOnIntensity);
 			color = saturation(color, saturationIntensity);
 			color = ACESFilmicToneMapping(color);
 			color = noiseScanLines(curvedUv, color);
-
-			float crtVig = crtVignette(curvedUv);
-			float vig = vignette(curvedUv);
 
 			gl_FragColor = vec4(color * crtVig * vig, 1.0);
 		}`,

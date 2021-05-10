@@ -7,9 +7,11 @@ import SynthwaveSkybox from './SynthwaveSkybox';
 import SynthwaveGrid from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
+import { Vector3 } from 'three';
 
 let stats;
 let clock, camera, renderer, skybox, grid, audioManager, audioSpectrumAnalyzer;
+let pointer, raycaster, hits;
 
 const start = function () {
 	stats = new Stats();
@@ -38,18 +40,31 @@ const start = function () {
 
 	audioManager = new AudioManager(camera.getCamera());
 
+	pointer = new THREE.Vector2();
+	raycaster = new THREE.Raycaster();
+	hits = [];
+
 	document.getElementById('join').addEventListener('click', onClickJoin);
-	addEventListener('mousemove', onMouseMove);
+	addEventListener('pointermove', onPointerMove);
 	addEventListener('resize', onWindowResize, false);
 
 	renderer.fadeInCrt();
 };
+
+let frames = 0.0;
 
 const update = function () {
 	requestAnimationFrame(update);
 
 	const dt = clock.getDelta();
 	const time = clock.getElapsedTime();
+
+	// frames += dt;
+
+	// if (frames >= 0.033) {
+	// 	frames -= 0.033;
+
+	// dt = 0.033;
 
 	stats.update();
 	TWEEN.update();
@@ -68,19 +83,43 @@ const update = function () {
 	}
 
 	renderer.render();
+	//}
+};
+
+const setGridIntersectedPoint = function (pointerX, pointerY) {
+	pointer.set(pointerX * 2.0 - 1.0, -(pointerY * 2.0 - 1.0));
+	raycaster.setFromCamera(pointer, camera.getCamera());
+
+	hits.length = 0;
+	const intersects = raycaster.intersectObject(grid.getMesh(), false, hits);
+
+	if (intersects.length > 0)
+		grid.setIntersectedPoint(intersects[0].point);
 };
 
 const removeUnneededElementsOnceJoined = function () {
 	const removables = document.body.getElementsByClassName("removable");
-	for (let i = 0; i < removables.length; ++i) {
-		removables[i].remove();
-		--i;
-	}
+
+	setTimeout(() => {
+		for (let i = 0; i < removables.length; ++i) {
+			removables[i].remove();
+			--i;
+		}
+	}, 100);
 };
 
 const onClickJoin = function () {
 	if (audioManager.isInitialized())
 		return;
+
+	removeUnneededElementsOnceJoined();
+
+	const avHtml = document.getElementById("crt-av");
+	avHtml.innerHTML = "AV-2";
+
+	setTimeout(() => {
+		avHtml.parentElement.remove();
+	}, 5000);
 
 	const nameHeader = document.getElementById("name");
 	nameHeader.classList.add("fader");
@@ -95,11 +134,9 @@ const onClickJoin = function () {
 	camera.setToLookingSun();
 	skybox.makeSunAppear();
 	renderer.turnOnCrt();
-
-	removeUnneededElementsOnceJoined();
 };
 
-const onMouseMove = function (e) {
+const onPointerMove = function (e) {
 	if (!audioManager.isInitialized())
 		return;
 
@@ -111,6 +148,7 @@ const onMouseMove = function (e) {
 
 	camera.rotateAccordingToMouseWindowPos(x, y);
 	skybox.moveSunAccordingToMouseWindowPos(x, y);
+	setGridIntersectedPoint(x, y);
 };
 
 const onWindowResize = function () {

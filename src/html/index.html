@@ -14,8 +14,7 @@
 			src: url(../../resources/VCR_OSD_MONO_1.001.ttf);
 		}
 
-		body {
-			margin: 0;
+		:root {
 			--crtFontFamily: 'VCR';
 			--crtTextColor: rgb(200, 200, 200);
 			--crtAvColor: rgb(60, 241, 60);
@@ -29,6 +28,10 @@
 			--almostBlack: rgb(10, 10, 10);
 			--btnFadeSpeed: 0.35s;
 			--fadeInTime: 3.5s;
+		}
+
+		body {
+			margin: 0;
 		}
 
 		canvas {
@@ -139,7 +142,16 @@
 			cursor: pointer;
 		}
 
+		#join:active {
+			color: black;
+			cursor: pointer;
+		}
+
 		#join:hover::before {
+			width: 100%;
+		}
+
+		#join:active::before {
 			width: 100%;
 		}
 
@@ -184,12 +196,8 @@
 
 		.crt-text-blink-display-after {
 			animation:
-				alphaBlink 2s linear infinite,
+				alphaBlink 2s steps(1, start) infinite,
 				hiddenToShowSlow 2s ease-out;
-		}
-
-		.crt-text-blink {
-			animation: alphaBlink 2s linear infinite;
 		}
 
 		.display-after-time-slow {
