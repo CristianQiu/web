@@ -7,11 +7,9 @@ import SynthwaveSkybox from './SynthwaveSkybox';
 import SynthwaveGrid from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
-import { Vector3 } from 'three';
 
 let stats;
 let clock, camera, renderer, skybox, grid, audioManager, audioSpectrumAnalyzer;
-let pointer, raycaster, hits;
 
 const start = function () {
 	stats = new Stats();
@@ -39,10 +37,6 @@ const start = function () {
 	scene.add(grid.getMesh());
 
 	audioManager = new AudioManager(camera.getCamera());
-
-	pointer = new THREE.Vector2();
-	raycaster = new THREE.Raycaster();
-	hits = [];
 
 	document.getElementById('join').addEventListener('click', onClickJoin);
 	addEventListener('pointermove', onPointerMove);
@@ -86,37 +80,20 @@ const update = function () {
 	//}
 };
 
-const setGridIntersectedPoint = function (pointerX, pointerY) {
-	pointer.set(pointerX * 2.0 - 1.0, -(pointerY * 2.0 - 1.0));
-	raycaster.setFromCamera(pointer, camera.getCamera());
+const onClickJoin = function () {
+	if (audioManager.isInitialized())
+		return;
 
-	hits.length = 0;
-	const intersects = raycaster.intersectObject(grid.getMesh(), false, hits);
-
-	if (intersects.length > 0)
-		grid.setIntersectedPoint(intersects[0].point);
-};
-
-const removeUnneededElementsOnceJoined = function () {
 	const removables = document.body.getElementsByClassName("removable");
-
 	setTimeout(() => {
 		for (let i = 0; i < removables.length; ++i) {
 			removables[i].remove();
 			--i;
 		}
 	}, 100);
-};
-
-const onClickJoin = function () {
-	if (audioManager.isInitialized())
-		return;
-
-	removeUnneededElementsOnceJoined();
 
 	const avHtml = document.getElementById("crt-av");
 	avHtml.innerHTML = "AV-2";
-
 	setTimeout(() => {
 		avHtml.parentElement.remove();
 	}, 5000);
@@ -148,7 +125,6 @@ const onPointerMove = function (e) {
 
 	camera.rotateAccordingToMouseWindowPos(x, y);
 	skybox.moveSunAccordingToMouseWindowPos(x, y);
-	setGridIntersectedPoint(x, y);
 };
 
 const onWindowResize = function () {

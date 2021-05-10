@@ -160,8 +160,4 @@ export default class SynthwaveGrid {
 
 		this._positionsBuffer.needsUpdate = true;
 	}
-
-	setIntersectedPoint(p) {
-		this._material.uniforms.intersectPoint.value.copy(p);
-	}
 }

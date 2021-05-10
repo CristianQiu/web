@@ -1,4 +1,4 @@
-import { Color, Vector3 } from 'three';
+import { Color } from 'three';
 
 const SynthwaveGridShader = {
 
@@ -16,7 +16,6 @@ const SynthwaveGridShader = {
 		'gridColor': { value: new Color(2.0, 0.7, 2.0) },
 		'floorColor': { value: new Color(0.075, 0.0, 0.125) },
 		'mountainColor': { value: new Color(0.3, 0.0, 0.125) },
-		'intersectPoint': { value: new Vector3(0.0, 0.0, 3.0) }
 	},
 
 	vertexShader: /* glsl */`
@@ -43,7 +42,6 @@ const SynthwaveGridShader = {
 		uniform vec3 gridColor;
 		uniform vec3 floorColor;
 		uniform vec3 mountainColor;
-		uniform vec3 intersectPoint;
 
 		varying vec3 objectPosition;
 		varying vec4 worldPosition;
@@ -70,10 +68,6 @@ const SynthwaveGridShader = {
 
 			// make the grid be faded at a certain height and color floor and mountains where there's no grid
 			float gridHeightFade = smoothstep(0.0, gridHeightFaded, osPos.y);
-
-			if (length(worldPosition.xyz - intersectPoint) <= 6.0)
-				gridHeightFade = 0.0;
-
 			float gridIntensity = (1.0 - min(grid.x, grid.y)) * (1.0 - gridHeightFade);
 
 			float tMountain = mix(0.0, mountainHeightPeak, sign(osPos.y) * pow(osPos.y, 2.0));
