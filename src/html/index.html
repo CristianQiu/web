@@ -54,7 +54,7 @@
 			color: rgb(187, 211, 251);
 			letter-spacing: 0.1rem;
 			text-shadow: 0 0 0.3rem #a0f1ff;
-			max-width: 90%;
+			max-width: 100%;
 		}
 
 		#name::after {
@@ -76,28 +76,22 @@
 
 		#info-bar {
 			visibility: hidden;
+			position: fixed;
 			display: flex;
 			flex-direction: row;
 			justify-content: center;
 			text-align: center;
+			align-items: center;
+			width: 100%;
+			bottom: 2vh;
 		}
 
 		.info-bar-subheader {
 			color: var(--almostWhite);
 			font-family: var(--contentFont);
-			font-size: calc(0.25rem + 1.15vh + 0.25vw);
-			margin: auto 2.1vw auto 2.1vw;
-		}
-
-		.sub-rotule {
-			/* font-size: 5rem; */
-			font-size: calc(5vh + 5vw);
-			font-family: 'Mr Dafoe', cursive;
-			text-transform: capitalize;
-			font-weight: normal;
-			text-shadow: 0 0 0.3rem var(--almostWhite);
-			color: var(--almostWhite);
-			transition: font-size 0.4s ease-in-out;
+			font-size: calc(2.25vh + 1.25vw);
+			margin: auto 3.5vw auto 3.5vw;
+			white-space: nowrap;
 		}
 
 		.fader {
