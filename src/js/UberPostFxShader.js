@@ -8,6 +8,7 @@ const UberPostFxShader = {
 		'scanLineCount': { value: 1024.0 },
 		'scanLineIntensity': { value: 0.1 },
 		'vignetteFallOffIntensity': { value: 0.15 },
+		'vignetteFocusIntensity': { value: 15.0 },
 		'exposure': { value: 1.25 },
 		'turnOnIntensity': { value: 1.0 }
 	},
@@ -30,6 +31,7 @@ const UberPostFxShader = {
 		uniform float scanLineCount;
 		uniform float scanLineIntensity;
 		uniform float vignetteFallOffIntensity;
+		uniform float vignetteFocusIntensity;
 		uniform float exposure;
 		uniform float turnOnIntensity;
 
@@ -119,11 +121,8 @@ const UberPostFxShader = {
 		// From https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
 		float vignette(vec2 uv)
 		{
-			// TODO: expose this?
-			const float vignetteFocusArea = 5.0;
-
 			uv *= 1.0 - uv.yx;
-			float vignette = uv.x * uv.y * vignetteFocusArea;
+			float vignette = uv.x * uv.y * vignetteFocusIntensity;
 			return pow(vignette, vignetteFallOffIntensity);
 		}
 
@@ -158,7 +157,6 @@ const UberPostFxShader = {
 			vec2 curvedUv = curveUv(vUv);
 
 			vec3 color = chromaticAberration(curvedUv, tDiffuse);
-
 			color = mix(offColor, color, turnOnIntensity);
 			color = saturation(color, saturationIntensity);
 			color = ACESFilmicToneMapping(color);

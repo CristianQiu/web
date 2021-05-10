@@ -4,7 +4,7 @@ import UberPostFxShader from './UberPostFxShader';
 
 export default class UberPostFxPass extends Pass {
 
-	constructor(saturationIntensity, noiseWeight, scanlinesCount, scanlinesIntensity, vignetteFallOffIntensity, exposure, turnOnIntensity) {
+	constructor(saturationIntensity, noiseWeight, scanlinesCount, scanlinesIntensity, vignetteFallOffIntensity, vignetteFocusIntensity, exposure, turnOnIntensity) {
 		super();
 		const shader = UberPostFxShader;
 		this._uniforms = THREE.UniformsUtils.clone(shader.uniforms);
@@ -19,6 +19,8 @@ export default class UberPostFxPass extends Pass {
 			this._uniforms.scanLineIntensity.value = scanlinesIntensity;
 		if (vignetteFallOffIntensity !== undefined)
 			this._uniforms.vignetteFallOffIntensity.value = vignetteFallOffIntensity;
+		if (vignetteFocusIntensity !== undefined)
+			this._uniforms.vignetteFocusIntensity.value = vignetteFocusIntensity;
 		if (exposure !== undefined)
 			this._uniforms.exposure.value = exposure;
 		if (turnOnIntensity !== undefined)
@@ -61,8 +63,9 @@ export default class UberPostFxPass extends Pass {
 		this._uniforms.scanLineCount.value = count;
 	}
 
-	setVignetteFallOffIntensity(intensity) {
-		this._uniforms.vignetteFallOffIntensity.value = intensity;
+	setVignetteFallOffFocusIntensity(fallOff, focus) {
+		this._uniforms.vignetteFallOffIntensity.value = fallOff;
+		this._uniforms.vignetteFocusIntensity.value = focus;
 	}
 
 	setTurnOnIntensity(intensity) {

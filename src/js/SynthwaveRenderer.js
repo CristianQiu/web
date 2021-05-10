@@ -25,13 +25,16 @@ export default class SynthwaveRenderer {
 		const startVig = 5.0;
 		const endVig = 0.15;
 
+		const startVigFocus = 5.0;
+		const endVigFocus = 15.0;
+
 		const startTurnOn = 0.0;
 		const endTurnOn = 1.0;
 
 		const res = new THREE.Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
-		this._uberPass = new UberPostFxPass(0.75, 0.4, this._scanLinesCountNormal, 0.1, startVig, 1.25, startTurnOn);
+		this._uberPass = new UberPostFxPass(0.75, 0.4, this._scanLinesCountNormal, 0.1, startVig, startVigFocus, 1.25, startTurnOn);
 
 		this._composer = new EffectComposer(this._renderer);
 		this._composer.addPass(this._scenePass);
@@ -41,14 +44,14 @@ export default class SynthwaveRenderer {
 		this.setPixelRatio(pixelRatio);
 		this.setSize(w, h);
 
-		const fromVig = { x: startVig };
-		const toVig = { x: endVig };
+		const fromVig = { x: startVig, y: startVigFocus };
+		const toVig = { x: endVig, y: endVigFocus };
 
 		this._fadeVignette = new TWEEN.Tween(fromVig)
 			.to(toVig, 1250)
 			.easing(TWEEN.Easing.Quartic.InOut)
 			.onUpdate(() => {
-				this._uberPass.setVignetteFallOffIntensity(fromVig.x);
+				this._uberPass.setVignetteFallOffFocusIntensity(fromVig.x, fromVig.y);
 			});
 
 		const fromTurnOn = { x: startTurnOn };
