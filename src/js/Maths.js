@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 export default class Maths {
 	static fastFloor(x) {
 		return x >>> 0;
@@ -11,6 +9,10 @@ export default class Maths {
 
 	static fastMax(a, b) {
 		return a > b ? a : b;
+	}
+
+	static fastClamp(val, min, max) {
+		return this.fastMax(min, this.fastMin(max, val));
 	}
 
 	static fastAbs(x) {

@@ -30,6 +30,7 @@ export default class AudioSpectrumAnalyzer extends THREE.AudioAnalyser {
 
 	analyzeFrameMeans(dt, sampleRate) {
 		const spectrum = this.getFrequencyData();
+		const decayRateTimesDt = this._decayRate * dt;
 		const twiceSpectrumLength = 2.0 * spectrum.length;
 		const spectrumLengthMinusOne = spectrum.length - 1;
 		const length = Bands.length;
@@ -38,7 +39,7 @@ export default class AudioSpectrumAnalyzer extends THREE.AudioAnalyser {
 
 		for (let i = 0; i < length; ++i) {
 			const prevFrameSmoothedMean = this._smoothedMeans[i];
-			const decayed = prevFrameSmoothedMean - this._decayRate * dt;
+			const decayed = prevFrameSmoothedMean - decayRateTimesDt;
 			this._smoothedMeans[i] = Maths.fastMax(0.0, decayed);
 
 			const lowerBound = Bands[i] / BandsBoundsFactor;
@@ -47,8 +48,8 @@ export default class AudioSpectrumAnalyzer extends THREE.AudioAnalyser {
 			let minIndex = Maths.fastFloor((lowerBound / sampleRate) * twiceSpectrumLength);
 			let maxIndex = Maths.fastFloor((upperBound / sampleRate) * twiceSpectrumLength);
 
-			minIndex = THREE.MathUtils.clamp(minIndex, 0, spectrumLengthMinusOne);
-			maxIndex = THREE.MathUtils.clamp(maxIndex, 0, spectrumLengthMinusOne);
+			minIndex = Maths.fastClamp(minIndex, 0, spectrumLengthMinusOne);
+			maxIndex = Maths.fastClamp(maxIndex, 0, spectrumLengthMinusOne);
 
 			let mean = 0.0;
 			let max = 0.0;
