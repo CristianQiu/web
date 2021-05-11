@@ -12,7 +12,7 @@ const MountainEdgeSmoothness = 1.75;
 const MinH = 1.25;
 const MaxH = 2.5;
 
-const speed = 5.25; // 1.25
+const speed = 1.25;
 
 const Simplex = new SimplexNoise();
 
@@ -43,6 +43,11 @@ export default class SynthwaveGrid {
 			}
 		});
 		this._mesh = new THREE.Mesh(this._geometry, this._material);
+
+		this._worker = new Worker(new URL('../js/SynthwaveGridAnimationWorkerJob.js', import.meta.url));
+		// this._worker.onmessage = () => {
+		// 	console.log("Worker has finished?");
+		// };
 	}
 
 	getMesh() {
@@ -86,9 +91,23 @@ export default class SynthwaveGrid {
 
 		this._geometry.setIndex(indices);
 		this._geometry.setAttribute('position', this._positionsBuffer);
+
+		const positionsBufferCopy = new THREE.Float32BufferAttribute(this._positionsBuffer.array).array;
+
+		console.log(positionsBufferCopy.buffer)
+
+		this._worker.postMessage({
+			// resX: this._vertexResX,
+			// resY: this._vertexResY,
+			// corridorWidth: CorridorWidth,
+			// MountainEdgeSmoothness
+			name: 'buffer',
+			data: positionsBufferCopy.buffer
+		}, [positionsBufferCopy.buffer]);
 	}
 
 	animate(elapsedTime, audioMeans = undefined) {
+		return;
 		elapsedTime *= speed;
 		// Note: good readings on how the buffer attribute works
 		// https://threejsfundamentals.org/threejs/lessons/threejs-custom-buffergeometry.html
@@ -98,16 +117,21 @@ export default class SynthwaveGrid {
 		if (audioMeans === undefined || audioMeans === null)
 			return;
 
-		const halfResX = this._vertexResX * 0.5;
-		const minusHalfResX = -halfResX;
 		const resX = this._vertexResX;
+		const halfResX = resX * 0.5;
+		const minusHalfResX = -halfResX;
 		const resXMinusOne = resX - 1.0;
 
 		elapsedTime *= Freq;
 
 		const avgMean = calcArrayAvg(audioMeans) * 0.006;
-
 		const count = this._positionsBuffer.count;
+
+		// Very important note: this code is EXTREMELY slower on iOS.
+		// I actually don't know if the issue is Safari itself or something related to Apple's CPUs.
+		// At least is not strictly related to Safari because Chrome has the same issue on iOS.
+		// I have even tested on an Iphone 12 and it is slow to a NONSENSE degree.
+		// For reference, my Pixel 3a runs 60fps rock solid even before the optimization process.
 		for (let i = 0; i < count; ++i) {
 			const col = i % resX;
 			const x = Maths.fastRemap(0.0, resXMinusOne, minusHalfResX, halfResX, col);
@@ -117,12 +141,12 @@ export default class SynthwaveGrid {
 			let corridor = xAbs - CorridorWidth;
 			corridor = Maths.fastMax(0.0, corridor);
 			corridor = Maths.fastLog(corridor + 1.0);
-			corridor = THREE.MathUtils.smoothstep(corridor, 0.0, MountainEdgeSmoothness);
+			corridor = Maths.smoothstep(corridor, 0.0, MountainEdgeSmoothness);
 
 			let edge = halfResX - xAbs;
 			edge = Maths.fastMax(0.0, edge);
 			edge = Maths.fastLog(edge + 1.0);
-			edge = THREE.MathUtils.smoothstep(edge, 0.0, MountainEdgeSmoothness);
+			edge = Maths.smoothstep(edge, 0.0, MountainEdgeSmoothness);
 
 			const finalCorridorEdge = Maths.fastMin(corridor, edge);
 
