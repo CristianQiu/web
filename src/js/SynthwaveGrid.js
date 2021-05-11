@@ -12,7 +12,7 @@ const MountainEdgeSmoothness = 1.75;
 const MinH = 1.25;
 const MaxH = 2.5;
 
-const speed = 1.25;
+const speed = 5.25; // 1.25
 
 const Simplex = new SimplexNoise();
 
@@ -99,27 +99,29 @@ export default class SynthwaveGrid {
 			return;
 
 		const halfResX = this._vertexResX * 0.5;
+		const minusHalfResX = -halfResX;
 		const resX = this._vertexResX;
+		const resXMinusOne = resX - 1.0;
 
 		elapsedTime *= Freq;
 
-		const avgMean = calcArrayAvg(audioMeans);
+		const avgMean = calcArrayAvg(audioMeans) * 0.006;
 
 		const count = this._positionsBuffer.count;
 		for (let i = 0; i < count; ++i) {
 			const col = i % resX;
-			const x = Maths.fastRemap(0.0, resX - 1.0, -halfResX, halfResX, col);
+			const x = Maths.fastRemap(0.0, resXMinusOne, minusHalfResX, halfResX, col);
 			const xAbs = Maths.fastAbs(x);
 			const z = Maths.fastFloor(i / resX);
 
 			let corridor = xAbs - CorridorWidth;
 			corridor = Maths.fastMax(0.0, corridor);
-			corridor = Math.log(corridor + 1.0);
+			corridor = Maths.fastLog(corridor + 1.0);
 			corridor = THREE.MathUtils.smoothstep(corridor, 0.0, MountainEdgeSmoothness);
 
 			let edge = halfResX - xAbs;
 			edge = Maths.fastMax(0.0, edge);
-			edge = Math.log(edge + 1.0);
+			edge = Maths.fastLog(edge + 1.0);
 			edge = THREE.MathUtils.smoothstep(edge, 0.0, MountainEdgeSmoothness);
 
 			const finalCorridorEdge = Maths.fastMin(corridor, edge);
@@ -129,32 +131,7 @@ export default class SynthwaveGrid {
 			const noise = (Simplex.noise(x * Freq, elapsedTime + z * Freq) * 0.5 + 0.5) * Amp;
 			const power = Maths.fastLerp(MinH, MaxH, t * t);
 
-			// onst a = (Math.sin((x + z) * Freq * 3.0) + 1.0) * 0.5 * 2.0 * avgMean * 0.01 * finalCorridorEdge;
-			// let a = (Math.sin(x * Freq * 3.0) + 1.0) * 0.5 * Amp;
-			// const b = (Math.sin(z * Freq * 3.0) + 1.0) * 0.5 * Amp;
-			// a = Math.min(a, b) * power;
-
-			// pow eats 4 fps. 34 to 30 approx
-			this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean * 0.006);
-			// this._positionsBuffer.setY(i, 1.0 * finalCorridorEdge * avgMean * 0.006);
-
-			// experiments
-			// const noise = Simplex.noise(0.0, 0.0) * Amp;
-			// this._positionsBuffer.setY(i, x) * Amp;
-
-			// const othery = Math.sin(z);
-			// const index = (audioMeans.length - 1.0) - Math.floor(z / 3.0) % audioMeans.length;
-
-			// let val = audioMeans[index] * 0.05;
-
-			// if (x <= 8.0 && x >= -8.0)
-			// 	val = 0.0;
-
-			// if (z % 3 != 1)
-			// 	val = 0.0;
-
-			// this._positionsBuffer.setY(i, val * 0.15);
-			// this._positionsBuffer.setY(i, (power * finalCorridorEdge) + Math.pow(noise, 1.0) * finalCorridorEdge + (val * 0.2 * finalCorridorEdge));
+			this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean);
 		}
 
 		this._positionsBuffer.needsUpdate = true;
