@@ -45,20 +45,11 @@ const start = function () {
 	renderer.fadeInCrt();
 };
 
-let frames = 0.0;
-
 const update = function () {
 	requestAnimationFrame(update);
 
 	const dt = clock.getDelta();
 	const time = clock.getElapsedTime();
-
-	// frames += dt;
-
-	// if (frames >= 0.033) {
-	// 	frames -= 0.033;
-
-	// dt = 0.033;
 
 	stats.update();
 	TWEEN.update();
@@ -77,7 +68,6 @@ const update = function () {
 	}
 
 	renderer.render();
-	//}
 };
 
 const onClickJoin = function () {

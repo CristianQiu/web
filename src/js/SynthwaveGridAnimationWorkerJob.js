@@ -1,11 +1,8 @@
-// import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
-// import { Float32BufferAttribute } from 'three';
+import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import Maths from './Maths';
 
-// const Simplex = new SimplexNoise();
-
-let freq = 0.07;
-let amp = 3.0;
+let Freq = 0.07;
+let Amp = 3.0;
 
 let corridorWidth = 2.0 * 4;
 let mountainEdgeSmoothness = 1.75;
@@ -17,46 +14,39 @@ let resX = 96;
 let resY = 128;
 
 let avgMean = 1.0;
-// let positionsBuffer;
+let dt = 0.0;
 
-onmessage = function (objEvent) {
-	const buffer = objEvent.data;
+const Simplex = new SimplexNoise();
 
-	const start = this.performance.now();
+onmessage = function (obj) {
+	const tArray = obj.data.typedArray;
+	// console.log("WORKER TYPEDARRAY ");
+	// console.log(tArray);
 
-	const typedArr = new Float32Array(buffer);
-	// const bufferAttr = new Float32BufferAttribute();
-	// execute(buffer);
+	for (let i = 0; i < 1; ++i) {
+		// const start = this.performance.now();
+		execute(tArray);
+		// console.log("Worker computed vertices in: " + (this.performance.now() - start));
+		dt += 0.001;
+	}
 
-	console.log(buffer.data);
-	// buffer.set
-	// console.log(this.performance.now() - start);
+	postMessage({
+		name: 'buffer',
+		typedArray: tArray
+	}, [tArray.buffer]);
 };
 
-// const calcArrayAvg = function (array) {
-// 	let avgMean = 0.0;
-// 	for (let i = 0; i < array.length; ++i) {
-// 		avgMean += array[i];
-// 	}
-// 	avgMean /= array.length;
-// 	return avgMean;
-// };
-
-function execute(positionsBuffer) {
+function execute(typedArray) {
 	const halfResX = resX * 0.5;
 	const minusHalfResX = -halfResX;
 	const resXMinusOne = resX - 1.0;
 
-	elapsedTime *= Freq;
+	// elapsedTime *= Freq;
+	const elapsedTime = dt;
 
-	// const avgMean = calcArrayAvg(audioMeans) * 0.006;
-	const count = positionsBuffer.count;
+	// const avgMean = Maths.calcArrayAvg(audioMeans) * 0.006;
+	const count = Maths.fastFloor(typedArray.length / 3.0);
 
-	// Very important note: this code is EXTREMELY slower on iOS.
-	// I actually don't know if the issue is Safari itself or something related to Apple's CPUs.
-	// At least is not strictly related to Safari because Chrome has the same issue on iOS.
-	// I have even tested on an Iphone 12 and it is slow to a NONSENSE degree.
-	// For reference, my Pixel 3a runs 60fps rock solid even before the optimization process.
 	for (let i = 0; i < count; ++i) {
 		const col = i % resX;
 		const x = Maths.fastRemap(0.0, resXMinusOne, minusHalfResX, halfResX, col);
@@ -77,12 +67,9 @@ function execute(positionsBuffer) {
 
 		let t = z / resY;
 
-		// const noise = (Simplex.noise(x * Freq, elapsedTime + z * Freq) * 0.5 + 0.5) * Amp;
+		const noise = (Simplex.noise(x * Freq, elapsedTime + z * Freq) * 0.5 + 0.5) * Amp;
 		const power = Maths.fastLerp(minH, maxH, t * t);
 
-		positionsBuffer.setY(i, Math.pow(z, power) * finalCorridorEdge * avgMean);
-		// this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean);
+		typedArray[i * 3 + 1] = Math.pow(noise, power) * finalCorridorEdge * avgMean;
 	}
-
-	positionsBuffer.needsUpdate = true;
 }

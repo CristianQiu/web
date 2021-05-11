@@ -16,15 +16,6 @@ const speed = 1.25;
 
 const Simplex = new SimplexNoise();
 
-const calcArrayAvg = function (array) {
-	let avgMean = 0.0;
-	for (let i = 0; i < array.length; ++i) {
-		avgMean += array[i];
-	}
-	avgMean /= array.length;
-	return avgMean;
-};
-
 export default class SynthwaveGrid {
 
 	constructor(vertexResX = 64, vertexResY = 64, quadSize = 1.0) {
@@ -43,11 +34,6 @@ export default class SynthwaveGrid {
 			}
 		});
 		this._mesh = new THREE.Mesh(this._geometry, this._material);
-
-		this._worker = new Worker(new URL('../js/SynthwaveGridAnimationWorkerJob.js', import.meta.url));
-		// this._worker.onmessage = () => {
-		// 	console.log("Worker has finished?");
-		// };
 	}
 
 	getMesh() {
@@ -92,18 +78,28 @@ export default class SynthwaveGrid {
 		this._geometry.setIndex(indices);
 		this._geometry.setAttribute('position', this._positionsBuffer);
 
-		const positionsBufferCopy = new THREE.Float32BufferAttribute(this._positionsBuffer.array).array;
+		const scope = this;
+		this._worker = new Worker(new URL('../js/SynthwaveGridAnimationWorkerJob.js', import.meta.url));
+		this._worker.onmessage = function (obj) {
+			// console.log("MAIN THREAD RECEIVES TYPEDARRAY");
+			// console.log(obj.data.typedArray);
 
-		console.log(positionsBufferCopy.buffer)
+			scope._positionsBuffer.array = obj.data.typedArray;
+			scope._positionsBuffer.needsUpdate = true;
 
+			// scope._worker.postMessage({
+			// 	name: 'buffer',
+			// 	typedArray: obj.data.typedArray
+			// }, [obj.data.typedArray.buffer]);
+		};
+
+		// Note: make a copy to transfer it because THREE gets annoyed by NaNs since "ownership" of the array
+		// from this thread is taken away
+		const newTypedArray = new THREE.Float32BufferAttribute(this._positionsBuffer.array).array;
 		this._worker.postMessage({
-			// resX: this._vertexResX,
-			// resY: this._vertexResY,
-			// corridorWidth: CorridorWidth,
-			// MountainEdgeSmoothness
 			name: 'buffer',
-			data: positionsBufferCopy.buffer
-		}, [positionsBufferCopy.buffer]);
+			typedArray: newTypedArray
+		}, [newTypedArray.buffer]);
 	}
 
 	animate(elapsedTime, audioMeans = undefined) {
@@ -124,7 +120,7 @@ export default class SynthwaveGrid {
 
 		elapsedTime *= Freq;
 
-		const avgMean = calcArrayAvg(audioMeans) * 0.006;
+		const avgMean = Maths.calcArrayAvg(audioMeans) * 0.006;
 		const count = this._positionsBuffer.count;
 
 		// Very important note: this code is EXTREMELY slower on iOS.

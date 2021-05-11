@@ -8,6 +8,10 @@ export default class Maths {
 		return x >>> 0;
 	}
 
+	static fastAbs(x) {
+		return x > 0.0 ? x : -x;
+	}
+
 	static fastMin(a, b) {
 		return a < b ? a : b;
 	}
@@ -18,10 +22,6 @@ export default class Maths {
 
 	static fastClamp(val, min, max) {
 		return this.fastMax(min, this.fastMin(max, val));
-	}
-
-	static fastAbs(x) {
-		return x > 0.0 ? x : -x;
 	}
 
 	static fastLerp(a, b, t) {
@@ -51,5 +51,13 @@ export default class Maths {
 
 	static fastLog(x) {
 		return 0.6931471805599453 * this.fastLog2(x);
+	}
+
+	static calcArrayAvg(array) {
+		let avgMean = 0.0;
+		for (let i = 0; i < array.length; ++i) {
+			avgMean += array[i];
+		}
+		return avgMean /= array.length;
 	}
 }
