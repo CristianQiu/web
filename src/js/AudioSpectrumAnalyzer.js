@@ -55,8 +55,9 @@ export default class AudioSpectrumAnalyzer extends THREE.AudioAnalyser {
 			let max = 0.0;
 
 			for (let j = minIndex; j <= maxIndex; ++j) {
-				mean += spectrum[j];
-				max = Maths.fastMax(spectrum[j], max);
+				const spec = spectrum[j];
+				mean += spec;
+				max = Maths.fastMax(spec, max);
 			}
 
 			// Note: this actually makes peak levels instead means but keep the name since I may tweak it.

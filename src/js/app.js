@@ -34,6 +34,7 @@ const start = function () {
 
 	grid = new SynthwaveGrid(96, 128, 1.0);
 	grid.generate();
+	grid.createWorker();
 	scene.add(grid.getMesh());
 
 	audioManager = new AudioManager(camera.getCamera());
@@ -68,6 +69,9 @@ const update = function () {
 	}
 
 	renderer.render();
+
+	const memory = performance.memory;
+	document.getElementById("debug").innerHTML = (memory.usedJSHeapSize / 1048576).toFixed(2);
 };
 
 const onClickJoin = function () {

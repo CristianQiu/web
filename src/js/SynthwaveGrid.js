@@ -34,6 +34,7 @@ export default class SynthwaveGrid {
 			}
 		});
 		this._mesh = new THREE.Mesh(this._geometry, this._material);
+		this._receivedWorkFromThread = true;
 	}
 
 	getMesh() {
@@ -77,32 +78,12 @@ export default class SynthwaveGrid {
 
 		this._geometry.setIndex(indices);
 		this._geometry.setAttribute('position', this._positionsBuffer);
-
-		const scope = this;
-		this._worker = new Worker(new URL('../js/SynthwaveGridAnimationWorkerJob.js', import.meta.url));
-		this._worker.onmessage = function (obj) {
-			// console.log("MAIN THREAD RECEIVES TYPEDARRAY");
-			// console.log(obj.data.typedArray);
-
-			scope._positionsBuffer.array = obj.data.typedArray;
-			scope._positionsBuffer.needsUpdate = true;
-
-			// scope._worker.postMessage({
-			// 	name: 'buffer',
-			// 	typedArray: obj.data.typedArray
-			// }, [obj.data.typedArray.buffer]);
-		};
-
-		// Note: make a copy to transfer it because THREE gets annoyed by NaNs since "ownership" of the array
-		// from this thread is taken away
-		const newTypedArray = new THREE.Float32BufferAttribute(this._positionsBuffer.array).array;
-		this._worker.postMessage({
-			name: 'buffer',
-			typedArray: newTypedArray
-		}, [newTypedArray.buffer]);
 	}
 
 	animate(elapsedTime, audioMeans = undefined) {
+		if (this._receivedWorkFromThread) {
+			this.postWorkerJob();
+		}
 		return;
 		elapsedTime *= speed;
 		// Note: good readings on how the buffer attribute works
@@ -123,12 +104,17 @@ export default class SynthwaveGrid {
 		const avgMean = Maths.calcArrayAvg(audioMeans) * 0.006;
 		const count = this._positionsBuffer.count;
 
+		if (this.start === undefined)
+			this.start = 0;
+
 		// Very important note: this code is EXTREMELY slower on iOS.
 		// I actually don't know if the issue is Safari itself or something related to Apple's CPUs.
 		// At least is not strictly related to Safari because Chrome has the same issue on iOS.
 		// I have even tested on an Iphone 12 and it is slow to a NONSENSE degree.
 		// For reference, my Pixel 3a runs 60fps rock solid even before the optimization process.
-		for (let i = 0; i < count; ++i) {
+		const start = performance.now();
+
+		for (let i = this.start; i < count; i += 2) {
 			const col = i % resX;
 			const x = Maths.fastRemap(0.0, resXMinusOne, minusHalfResX, halfResX, col);
 			const xAbs = Maths.fastAbs(x);
@@ -154,6 +140,41 @@ export default class SynthwaveGrid {
 			this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean);
 		}
 
+		const ms = (performance.now() - start);
+
 		this._positionsBuffer.needsUpdate = true;
+
+		this.start = (this.start + 1) % 2;
+
+		document.getElementById("debug").innerHTML = ms / 1000;
+
+	}
+
+	createWorker() {
+		const scope = this;
+		this._worker = new Worker(new URL('../js/SynthwaveGridAnimationWorkerJob.js', import.meta.url));
+		this._worker.onmessage = function (obj) {
+			scope._secondBufferTypedArray = scope._positionsBuffer.array;
+			scope._positionsBuffer.array = obj.data.typedArray;
+			scope._positionsBuffer.needsUpdate = true;
+			scope._receivedWorkFromThread = true;
+
+			// document.getElementById("debug").innerHTML = obj.data.ms / 1000;
+		};
+	}
+
+	postWorkerJob() {
+		this._receivedWorkFromThread = false;
+
+		// Note: make a copy to transfer it because THREE gets annoyed by NaNs since "ownership" of the array
+		// from this thread is taken away
+		if (this._secondBufferTypedArray === undefined) {
+			this._secondBufferTypedArray = new THREE.Float32BufferAttribute(this._positionsBuffer.array).array;
+		}
+
+		this._worker.postMessage({
+			name: 'buffer',
+			typedArray: this._secondBufferTypedArray
+		}, [this._secondBufferTypedArray.buffer]);
 	}
 }

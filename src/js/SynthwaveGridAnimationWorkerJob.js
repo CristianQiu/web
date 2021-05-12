@@ -20,18 +20,15 @@ const Simplex = new SimplexNoise();
 
 onmessage = function (obj) {
 	const tArray = obj.data.typedArray;
-	// console.log("WORKER TYPEDARRAY ");
-	// console.log(tArray);
 
-	for (let i = 0; i < 1; ++i) {
-		// const start = this.performance.now();
-		execute(tArray);
-		// console.log("Worker computed vertices in: " + (this.performance.now() - start));
-		dt += 0.001;
-	}
+	const start = this.performance.now();
+	execute(tArray);
+	const ms = (this.performance.now() - start);
+	dt += 0.1115;
 
 	postMessage({
 		name: 'buffer',
+		ms: ms,
 		typedArray: tArray
 	}, [tArray.buffer]);
 };

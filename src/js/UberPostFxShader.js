@@ -41,7 +41,7 @@ const UberPostFxShader = {
 		vec2 curveUv(vec2 uv)
 		{
 			// TODO: expose this?
-			const float warpIntensity = 0.025; // 0.125
+			const float warpIntensity = 0.025;
 
 			vec2 delta = uv - 0.5;
 			float deltaSq = dot(delta, delta);
