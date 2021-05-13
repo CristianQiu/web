@@ -2,16 +2,14 @@ import * as THREE from 'three';
 import SynthwaveGridShader from './SynthwaveGridShader';
 import Maths from './Maths';
 
-const CorridorWidth = 2.25 * 3.0;
-const MountainEdgeSmoothness = 1.75;
-
-const Speed = 1.25;
-
 export default class SynthwaveGrid {
 
 	constructor(vertexResX = 64, vertexResY = 64, quadSize = 1.0) {
 		this._vertexRes = new THREE.Vector2(vertexResX, vertexResY);
 		this._quadSize = quadSize;
+		this._corridorWidth = 2.25 * 3.0;
+		this._mountainEdgeSmoothness = 2.25 * 2.0;
+		this._speed = 1.5;
 
 		this._geometry = new THREE.BufferGeometry();
 		const uniforms = THREE.UniformsUtils.clone(SynthwaveGridShader.uniforms);
@@ -73,12 +71,13 @@ export default class SynthwaveGrid {
 	}
 
 	animate(elapsedTime, audioMeans = undefined) {
-		elapsedTime *= Speed;
+		elapsedTime *= this._speed;
 
 		this._material.uniforms.time.value = elapsedTime;
 		this._material.uniforms.resolution.value = this._vertexRes;
-		this._material.uniforms.corridorWidth.value = CorridorWidth;
-		this._material.uniforms.mountainEdgeSmoothness.value = MountainEdgeSmoothness;
+		this._material.uniforms.corridorWidth.value = this._corridorWidth;
+		this._material.uniforms.mountainEdgeSmoothness.value = this._mountainEdgeSmoothness;
+		this._material.uniforms.quadScale.value = this._quadSize;
 
 		if (audioMeans === undefined || audioMeans === null)
 			return;

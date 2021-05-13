@@ -38,7 +38,6 @@ export default class Maths {
 			return 0.0;
 		if (x >= max)
 			return 1.0;
-
 		x = (x - min) / (max - min);
 		return x * x * (3.0 - 2.0 * x);
 	}
@@ -55,9 +54,9 @@ export default class Maths {
 
 	static calcArrayAvg(array) {
 		let avgMean = 0.0;
-		for (let i = 0; i < array.length; ++i) {
+		const l = array.length;
+		for (let i = 0; i < l; ++i)
 			avgMean += array[i];
-		}
 		return avgMean /= array.length;
 	}
 }

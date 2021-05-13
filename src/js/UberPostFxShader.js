@@ -13,7 +13,8 @@ const UberPostFxShader = {
 		'turnOnIntensity': { value: 1.0 },
 		'warpIntensity': { value: 0.025 },
 		'bandOffset': { value: -0.001 },
-		'baseIor': { value: 0.9 }
+		'baseIor': { value: 0.9 },
+		'crtVignetteRadius': { value: 0.015 }
 	},
 
 	vertexShader: /* glsl */`
@@ -40,6 +41,7 @@ const UberPostFxShader = {
 		uniform float warpIntensity;
 		uniform float bandOffset;
 		uniform float baseIor;
+		uniform float crtVignetteRadius;
 
 		varying vec2 vUv;
 
@@ -128,10 +130,8 @@ const UberPostFxShader = {
 
 		// From https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
 		float crtVignette(vec2 uv){
-			const float radius = 0.015;
-
-			vec2 absUv = abs(uv * 2.0 - 1.0) - vec2(1.0, 1.0) + radius;
-			float dist = length(max(vec2(0.0), absUv)) / radius;
+			vec2 absUv = abs(uv * 2.0 - 1.0) - vec2(1.0, 1.0) + crtVignetteRadius;
+			float dist = length(max(vec2(0.0), absUv)) / crtVignetteRadius;
 			float square = smoothstep(0.4, 1.0, dist);
 
 			return clamp(1.0 - square, 0.0, 1.0);

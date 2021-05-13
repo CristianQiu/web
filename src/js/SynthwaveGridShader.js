@@ -4,7 +4,7 @@ const SynthwaveGridShader = {
 
 	uniforms: {
 		'time': { value: 0.0 },
-		'invGridSize': { value: 2.25 },
+		'gridSize': { value: 2.25 },
 		'lineWidth': { value: 0.5 },
 		'gridAntialias': { value: 1.0 },
 		'gridSweepLineSpeed': { value: 25.0 },
@@ -20,10 +20,11 @@ const SynthwaveGridShader = {
 		'corridorWidth': { value: 2.0 },
 		'mountainEdgeSmoothness': { value: 1.75 },
 		'audioAvgMean': { value: 0.0 },
+		'quadScale': { value: 0.75 },
 		'freq': { value: 0.07 },
-		'amp': { value: 5.0 },
-		'minH': { value: 0.25 },
-		'maxH': { value: 1.5 }
+		'amp': { value: 3.0 },
+		'minH': { value: 1.0 },
+		'maxH': { value: 3.75 }
 	},
 
 	vertexShader: /* glsl */`
@@ -32,6 +33,7 @@ const SynthwaveGridShader = {
 		uniform float corridorWidth;
 		uniform float mountainEdgeSmoothness;
 		uniform float audioAvgMean;
+		uniform float quadScale;
 		uniform float freq;
 		uniform float amp;
 		uniform float minH;
@@ -73,29 +75,21 @@ const SynthwaveGridShader = {
 
 		void main() {
 			vec3 pos = position;
+
 			float xAbs = abs(pos.x);
+			float edgeCorridorSmoothness = mountainEdgeSmoothness * 0.5;
+			float halfResX = resolution.x * 0.5 * quadScale;
 
-			float corridor = xAbs - corridorWidth;
-			corridor = max(0.0, corridor);
-			// corridor = log(corridor + 1.0);
-			corridor = smoothstep(corridor, 0.0, mountainEdgeSmoothness);
+			float corridor = smoothstep(corridorWidth - edgeCorridorSmoothness, corridorWidth + edgeCorridorSmoothness, xAbs);
+			float edge = 1.0 - smoothstep(halfResX - mountainEdgeSmoothness, halfResX, xAbs);
 
-			// TODO: QUAD SCALE
-			float edge = resolution.x - xAbs;
-			edge = max(0.0, edge);
-			// edge = log(edge + 1.0);
-			edge = smoothstep(edge, 0.0, mountainEdgeSmoothness);
-
-			float finalCorridorEdge = min(corridor, edge);
+			float corridorEdge = min(corridor, edge);
 			float t = pos.z / resolution.y;
 
-			float noise = (snoise(vec2(pos.x * freq, time * freq + pos.z * freq)) * 0.5 + 0.5) * amp;
-			float power = mix(minH, maxH, t);
+			float noise = (snoise(vec2(pos.x * freq, (pos.z + time) * freq)) * 0.5 + 0.5) * amp;
+			float power = mix(minH, maxH, t * t);
 
-			// float height = pow(noise, power) * finalCorridorEdge * audioAvgMean;
-			float height = pow(noise, power) * finalCorridorEdge;
-
-			pos.y = height;
+			pos.y = pow(noise, power) * corridorEdge * audioAvgMean;
 
 			objectPosition = pos;
 			worldPosition = modelMatrix * vec4(pos, 1.0);
@@ -105,7 +99,7 @@ const SynthwaveGridShader = {
 
 	fragmentShader: /* glsl */`
 		uniform float time;
-		uniform float invGridSize;
+		uniform float gridSize;
 		uniform float lineWidth;
 		uniform float gridAntialias;
 		uniform float gridSweepLineSpeed;
@@ -117,6 +111,7 @@ const SynthwaveGridShader = {
 		uniform vec3 gridColor;
 		uniform vec3 floorColor;
 		uniform vec3 mountainColor;
+		uniform vec2 resolution;
 
 		varying vec3 objectPosition;
 		varying vec4 worldPosition;
@@ -128,7 +123,7 @@ const SynthwaveGridShader = {
 			osPos.z += time;
 
 			// calculate the grid
-			vec2 dist0 = fract(osPos.xz / invGridSize);
+			vec2 dist0 = fract(osPos.xz / gridSize);
 			vec2 dist1 = 1.0 - dist0;
 			vec2 grid = min(dist0, dist1);
 
