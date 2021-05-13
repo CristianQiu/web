@@ -32,7 +32,7 @@ const start = function () {
 	skybox = new SynthwaveSkybox();
 	scene.add(skybox.getMesh());
 
-	grid = new SynthwaveGrid(256, 256, 1.0);
+	grid = new SynthwaveGrid(256, 256, 0.5);
 	grid.generate();
 	scene.add(grid.getMesh());
 

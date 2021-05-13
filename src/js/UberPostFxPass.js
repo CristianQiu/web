@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Pass, FullScreenQuad } from '../../node_modules/three/examples/jsm/postprocessing/Pass';
+import { Pass, FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass';
 import UberPostFxShader from './UberPostFxShader';
 
 export default class UberPostFxPass extends Pass {

@@ -10,7 +10,10 @@ const UberPostFxShader = {
 		'vignetteFallOffIntensity': { value: 0.15 },
 		'vignetteFocusIntensity': { value: 15.0 },
 		'exposure': { value: 1.25 },
-		'turnOnIntensity': { value: 1.0 }
+		'turnOnIntensity': { value: 1.0 },
+		'warpIntensity': { value: 0.025 },
+		'bandOffset': { value: -0.001 },
+		'baseIor': { value: 0.9 }
 	},
 
 	vertexShader: /* glsl */`
@@ -34,15 +37,15 @@ const UberPostFxShader = {
 		uniform float vignetteFocusIntensity;
 		uniform float exposure;
 		uniform float turnOnIntensity;
+		uniform float warpIntensity;
+		uniform float bandOffset;
+		uniform float baseIor;
 
 		varying vec2 vUv;
 
 		// From https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
 		vec2 curveUv(vec2 uv)
 		{
-			// TODO: expose this?
-			const float warpIntensity = 0.025;
-
 			vec2 delta = uv - 0.5;
 			float deltaSq = dot(delta, delta);
 			float deltaSqSq = deltaSq * deltaSq;
@@ -54,9 +57,6 @@ const UberPostFxShader = {
 		// From https://github.com/gkjohnson/threejs-sandbox/blob/beb92e4a84456304a800e27b26f6d521f8b8360e/lens-effects/src/LensDistortionShader.js
 		vec3 chromaticAberration(vec2 uv, sampler2D tDiffuse)
 		{
-			// TODO: expose this?
-			const float bandOffset = -0.001;
-			const float baseIor = 0.9;
 			const vec3 back = vec3(0.0, 0.0, -1.0);
 
 			vec3 normal = vec3((2.0 * uv - vec2(1.0)), 1.0);

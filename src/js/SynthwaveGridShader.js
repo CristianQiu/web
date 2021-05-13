@@ -1,4 +1,4 @@
-import { Color } from 'three';
+import { Color, Vector2 } from 'three';
 
 const SynthwaveGridShader = {
 
@@ -16,9 +16,27 @@ const SynthwaveGridShader = {
 		'gridColor': { value: new Color(2.0, 0.7, 2.0) },
 		'floorColor': { value: new Color(0.075, 0.0, 0.125) },
 		'mountainColor': { value: new Color(0.3, 0.0, 0.125) },
+		'resolution': { value: new Vector2(256, 256) },
+		'corridorWidth': { value: 2.0 },
+		'mountainEdgeSmoothness': { value: 1.75 },
+		'audioAvgMean': { value: 0.0 },
+		'freq': { value: 0.07 },
+		'amp': { value: 5.0 },
+		'minH': { value: 0.25 },
+		'maxH': { value: 1.5 }
 	},
 
 	vertexShader: /* glsl */`
+		uniform float time;
+		uniform vec2 resolution;
+		uniform float corridorWidth;
+		uniform float mountainEdgeSmoothness;
+		uniform float audioAvgMean;
+		uniform float freq;
+		uniform float amp;
+		uniform float minH;
+		uniform float maxH;
+
 		varying vec3 objectPosition;
 		varying vec4 worldPosition;
 
@@ -27,6 +45,7 @@ const SynthwaveGridShader = {
 			return mod(((x * 34.0) + 1.0) * x, 289.0);
 		}
 
+		// From https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 		float snoise(vec2 v)
 		{
 			const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
@@ -53,40 +72,30 @@ const SynthwaveGridShader = {
 		}
 
 		void main() {
-
-			const float freq = 0.05;
-			const float amp = 2.0;
-			float height = snoise(vec2(position.x, position.z) * vec2(freq)) * amp;
-
 			vec3 pos = position;
+			float xAbs = abs(pos.x);
+
+			float corridor = xAbs - corridorWidth;
+			corridor = max(0.0, corridor);
+			// corridor = log(corridor + 1.0);
+			corridor = smoothstep(corridor, 0.0, mountainEdgeSmoothness);
+
+			// TODO: QUAD SCALE
+			float edge = resolution.x - xAbs;
+			edge = max(0.0, edge);
+			// edge = log(edge + 1.0);
+			edge = smoothstep(edge, 0.0, mountainEdgeSmoothness);
+
+			float finalCorridorEdge = min(corridor, edge);
+			float t = pos.z / resolution.y;
+
+			float noise = (snoise(vec2(pos.x * freq, time * freq + pos.z * freq)) * 0.5 + 0.5) * amp;
+			float power = mix(minH, maxH, t);
+
+			// float height = pow(noise, power) * finalCorridorEdge * audioAvgMean;
+			float height = pow(noise, power) * finalCorridorEdge;
+
 			pos.y = height;
-
-			float col = mod(1.0, pos.z);
-			float x = mix(col, 0.0, pos.z);
-			float xAbs = abs(x);
-
-			float corr = xAbs - 8.0;
-			corr = max(0.0, corr);
-			corr = log(corr + 1.0);
-			corr = smoothstep(corr, 0.0, 1.75);
-
-			float edge = xAbs - 8.0;
-			edge = max(0.0, corr);
-			edge = log(edge + 1.0);
-			edge = smoothstep(edge, 0.0, 1.75);
-
-			float t = pos.z / 128.0;
-
-			float finalcorredge = min(corr, edge);
-			float noise = pow(t, 6.12312311);
-			noise = pow(pow(t, 6.123), 1.01);
-			noise = pow(pow(t, 6.123), 1.02);
-			noise = pow(pow(t, 6.123), 1.03);
-			noise = pow(pow(t, 6.123), 1.04);
-
-			float power = pow(noise, mix(1.5, 2.5, t * t));
-			power *= 0.000001;
-
 
 			objectPosition = pos;
 			worldPosition = modelMatrix * vec4(pos, 1.0);

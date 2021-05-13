@@ -1,4 +1,4 @@
-// https://gist.github.com/imbcmdth/6338194
+// From https://gist.github.com/imbcmdth/6338194
 const a = new ArrayBuffer(4);
 const i = new Int32Array(a);
 const f = new Float32Array(a);
