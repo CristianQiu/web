@@ -81,9 +81,6 @@ export default class SynthwaveGrid {
 	}
 
 	animate(elapsedTime, audioMeans = undefined) {
-		if (this._receivedWorkFromThread) {
-			this.postWorkerJob();
-		}
 		return;
 		elapsedTime *= speed;
 		// Note: good readings on how the buffer attribute works
@@ -147,34 +144,5 @@ export default class SynthwaveGrid {
 		this.start = (this.start + 1) % 2;
 
 		document.getElementById("debug").innerHTML = ms / 1000;
-
-	}
-
-	createWorker() {
-		const scope = this;
-		this._worker = new Worker(new URL('../js/SynthwaveGridAnimationWorkerJob.js', import.meta.url));
-		this._worker.onmessage = function (obj) {
-			scope._secondBufferTypedArray = scope._positionsBuffer.array;
-			scope._positionsBuffer.array = obj.data.typedArray;
-			scope._positionsBuffer.needsUpdate = true;
-			scope._receivedWorkFromThread = true;
-
-			// document.getElementById("debug").innerHTML = obj.data.ms / 1000;
-		};
-	}
-
-	postWorkerJob() {
-		this._receivedWorkFromThread = false;
-
-		// Note: make a copy to transfer it because THREE gets annoyed by NaNs since "ownership" of the array
-		// from this thread is taken away
-		if (this._secondBufferTypedArray === undefined) {
-			this._secondBufferTypedArray = new THREE.Float32BufferAttribute(this._positionsBuffer.array).array;
-		}
-
-		this._worker.postMessage({
-			name: 'buffer',
-			typedArray: this._secondBufferTypedArray
-		}, [this._secondBufferTypedArray.buffer]);
 	}
 }

@@ -32,9 +32,8 @@ const start = function () {
 	skybox = new SynthwaveSkybox();
 	scene.add(skybox.getMesh());
 
-	grid = new SynthwaveGrid(96, 128, 1.0);
+	grid = new SynthwaveGrid(256, 256, 1.0);
 	grid.generate();
-	grid.createWorker();
 	scene.add(grid.getMesh());
 
 	audioManager = new AudioManager(camera.getCamera());
