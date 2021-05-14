@@ -10,8 +10,8 @@ const SynthwaveGridShader = {
 		'gridSweepLineSpeed': { value: 25.0 },
 		'gridSweepLineMaxDist': { value: 200.0 },
 		'gridSweepLineWidth': { value: 5.0 },
-		'gridHeightFaded': { value: 0.5 },
-		'mountainHeightPeak': { value: 0.05 },
+		'gridHeightFaded': { value: 1.0 },
+		'mountainHeightPeak': { value: 0.75 },
 		'gridSweepLineColor': { value: new Color(0.7, 2.0, 2.0) },
 		'gridColor': { value: new Color(2.0, 0.7, 2.0) },
 		'floorColor': { value: new Color(0.075, 0.0, 0.125) },
@@ -112,6 +112,7 @@ const SynthwaveGridShader = {
 		uniform vec3 floorColor;
 		uniform vec3 mountainColor;
 		uniform vec2 resolution;
+		uniform float quadScale;
 
 		varying vec3 objectPosition;
 		varying vec4 worldPosition;
@@ -143,7 +144,9 @@ const SynthwaveGridShader = {
 			float tMountain = mix(0.0, mountainHeightPeak, sign(osPos.y) * pow(osPos.y, 2.0));
 			tMountain = clamp(tMountain, 0.0, 1.0);
 
-			vec3 mountainOrFloorColor = mix(floorColor, mountainColor, tMountain);
+			vec3 mountainColorDistFadeIn = mix(floorColor, mountainColor, z / (resolution.y * quadScale));
+
+			vec3 mountainOrFloorColor = mix(floorColor, mountainColorDistFadeIn, tMountain);
 			vec3 color = mix(mountainOrFloorColor, finalGridColor, gridIntensity);
 
 			gl_FragColor = vec4(color, 1.0);

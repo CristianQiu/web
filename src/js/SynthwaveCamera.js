@@ -8,7 +8,7 @@ const PosAmp = 0.15;
 const RotFreq = 0.15;
 const RotAmp = 0.5;
 
-const MouseRotAmp = 1.5;
+const MouseRotAmp = 2.0;
 const MouseRotSmoothness = 0.25;
 
 const Easing = TWEEN.Easing.Quintic.InOut;

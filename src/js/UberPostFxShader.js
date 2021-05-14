@@ -12,7 +12,7 @@ const UberPostFxShader = {
 		'exposure': { value: 1.25 },
 		'turnOnIntensity': { value: 1.0 },
 		'warpIntensity': { value: 0.025 },
-		'bandOffset': { value: -0.001 },
+		'bandOffset': { value: -0.00075 },
 		'baseIor': { value: 0.9 },
 		'crtVignetteRadius': { value: 0.015 }
 	},

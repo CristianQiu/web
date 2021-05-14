@@ -7,9 +7,9 @@ export default class SynthwaveGrid {
 	constructor(vertexResX = 64, vertexResY = 64, quadSize = 1.0) {
 		this._vertexRes = new THREE.Vector2(vertexResX, vertexResY);
 		this._quadSize = quadSize;
-		this._corridorWidth = 2.25 * 3.0;
+		this._corridorWidth = 2.25 * 3.5;
 		this._mountainEdgeSmoothness = 2.25 * 2.0;
-		this._speed = 1.5;
+		this._speed = 2.0;
 
 		this._geometry = new THREE.BufferGeometry();
 		const uniforms = THREE.UniformsUtils.clone(SynthwaveGridShader.uniforms);
@@ -84,46 +84,5 @@ export default class SynthwaveGrid {
 
 		const avgMean = Maths.calcArrayAvg(audioMeans) * 0.006;
 		this._material.uniforms.audioAvgMean.value = avgMean;
-
-		// const resX = this._vertexRes.x;
-		// const halfResX = resX * 0.5;
-		// const minusHalfResX = -halfResX;
-		// const resXMinusOne = resX - 1.0;
-
-		// elapsedTime *= Freq;
-
-		// const count = this._positionsBuffer.count;
-
-		// // Very important note: this code is EXTREMELY slower on iOS.
-		// // I actually don't know if the issue is Safari itself or something related to Apple's CPUs.
-		// // At least is not strictly related to Safari because Chrome has the same issue on iOS.
-		// // I have even tested on an Iphone 12 and it is slow to a NONSENSE degree.
-		// // For reference, my Pixel 3a runs 60fps rock solid even before the optimization process.
-
-		// for (let i = this.start; i < count; i += 2) {
-		// 	const col = i % resX;
-		// 	const x = Maths.fastRemap(0.0, resXMinusOne, minusHalfResX, halfResX, col);
-		// 	const xAbs = Maths.fastAbs(x);
-		// 	const z = Maths.fastFloor(i / resX);
-
-		// 	let corridor = xAbs - CorridorWidth;
-		// 	corridor = Maths.fastMax(0.0, corridor);
-		// 	corridor = Maths.fastLog(corridor + 1.0);
-		// 	corridor = Maths.smoothstep(corridor, 0.0, MountainEdgeSmoothness);
-
-		// 	let edge = halfResX - xAbs;
-		// 	edge = Maths.fastMax(0.0, edge);
-		// 	edge = Maths.fastLog(edge + 1.0);
-		// 	edge = Maths.smoothstep(edge, 0.0, MountainEdgeSmoothness);
-
-		// 	const finalCorridorEdge = Maths.fastMin(corridor, edge);
-
-		// 	let t = z / this._vertexRes.y;
-
-		// 	const noise = (Simplex.noise(x * Freq, elapsedTime + z * Freq) * 0.5 + 0.5) * Amp;
-		// 	const power = Maths.fastLerp(MinH, MaxH, t * t);
-
-		// 	this._positionsBuffer.setY(i, Math.pow(noise, power) * finalCorridorEdge * avgMean);
-		// }
 	}
 }
