@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Clock, Scene, } from 'three';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import TWEEN from '@tweenjs/tween.js';
 import SynthwaveCamera from './SynthwaveCamera';
@@ -15,9 +15,9 @@ const start = function () {
 	stats = new Stats();
 	document.body.appendChild(stats.dom);
 
-	clock = new THREE.Clock();
+	clock = new Clock();
 
-	const scene = new THREE.Scene();
+	const scene = new Scene();
 
 	const w = innerWidth;
 	const h = innerHeight;
@@ -39,9 +39,8 @@ const start = function () {
 	audioManager = new AudioManager(camera.getCamera());
 
 	document.getElementById('join').addEventListener('click', onClickJoin);
-	if (DeviceMotionEvent) {
-		addEventListener('devicemotion', onDeviceMotion);
-
+	if (DeviceOrientationEvent) {
+		addEventListener('deviceorientation', onDeviceOrientation);
 	}
 	addEventListener('pointermove', onPointerMove);
 	addEventListener('resize', onWindowResize); // false? opt
@@ -123,9 +122,11 @@ const onClickJoin = function () {
 	renderer.turnOnCrt();
 };
 
-const onDeviceMotion = function (e) {
-	const debugMotion = document.getElementById("motionDebug");
-	debugMotion.innerHTML = e.acceleration;
+const onDeviceOrientation = function (e) {
+	// const debugMotion = document.getElementById("motionDebug");
+	// debugMotion.innerHTML = "alpha " + e.alpha.toFixed(2) + " beta " + e.beta.toFixed(2) + " gamma" + e.gamma.toFixed(2);
+
+	// in vertical, BETA PITCH, GAMMA YAW, ALPHA ROLL
 };
 
 const onPointerMove = function (e) {
@@ -137,6 +138,9 @@ const onPointerMove = function (e) {
 
 	let x = e.clientX / w;
 	let y = e.clientY / h;
+
+	// const debugMotion = document.getElementById("motionDebug");
+	// debugMotion.innerHTML = 'pointer moved';
 
 	camera.rotateAccordingToMouseWindowPos(x, y);
 	skybox.moveSunAccordingToMouseWindowPos(x, y);

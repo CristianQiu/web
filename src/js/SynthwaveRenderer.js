@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { WebGLRenderer, Vector2, LinearEncoding } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
@@ -8,8 +8,8 @@ import TWEEN from '@tweenjs/tween.js';
 export default class SynthwaveRenderer {
 
 	constructor(scene, camera, w, h, pixelRatio) {
-		this._renderer = new THREE.WebGLRenderer();
-		this._renderer.outputEncoding = THREE.LinearEncoding;
+		this._renderer = new WebGLRenderer();
+		this._renderer.outputEncoding = LinearEncoding;
 		// Note: this must be implemented in the postprocessing stack.
 		// By default it does not work with the EffectComposer.
 		// this._renderer.toneMapping = THREE.NoToneMapping;
@@ -31,7 +31,7 @@ export default class SynthwaveRenderer {
 		const startTurnOn = 0.0;
 		const endTurnOn = 1.0;
 
-		const res = new THREE.Vector2(w, h);
+		const res = new Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
 		this._uberPass = new UberPostFxPass(0.75, 0.4, this._scanLinesCountNormal, 0.1, startVig, startVigFocus, 1.125, startTurnOn);

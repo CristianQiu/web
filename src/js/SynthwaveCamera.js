@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Euler, PerspectiveCamera, Vector3, Quaternion, Object3D, MathUtils } from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import TWEEN from '@tweenjs/tween.js';
 
@@ -18,25 +18,25 @@ const Simplex = new SimplexNoise();
 export default class SynthwaveCamera {
 
 	constructor(fov, aspect, near, far) {
-		this._tempEulers = new THREE.Euler(0.0, 0.0, 0.0);
-		this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+		this._tempEulers = new Euler(0.0, 0.0, 0.0);
+		this._camera = new PerspectiveCamera(fov, aspect, near, far);
 
-		let xEulers = THREE.Math.degToRad(90.0);
-		let yEulers = THREE.Math.degToRad(180.0);
-		let zEulers = THREE.Math.degToRad(0.0);
+		let xEulers = MathUtils.degToRad(90.0);
+		let yEulers = MathUtils.degToRad(180.0);
+		let zEulers = MathUtils.degToRad(0.0);
 
-		this._parentLookingToGridPos = new THREE.Vector3(0.0, 2.0, 75.0);
-		this._parentLookingToGridRot = new THREE.Euler(xEulers, yEulers, zEulers);
+		this._parentLookingToGridPos = new Vector3(0.0, 2.0, 75.0);
+		this._parentLookingToGridRot = new Euler(xEulers, yEulers, zEulers);
 
-		xEulers = THREE.Math.degToRad(-5.0);
-		yEulers = THREE.Math.degToRad(180.0);
-		zEulers = THREE.Math.degToRad(0.0);
-		this._targetParentRotQuat = new THREE.Quaternion().setFromEuler(this._parentLookingToGridRot);
+		xEulers = MathUtils.degToRad(-5.0);
+		yEulers = MathUtils.degToRad(180.0);
+		zEulers = MathUtils.degToRad(0.0);
+		this._targetParentRotQuat = new Quaternion().setFromEuler(this._parentLookingToGridRot);
 
-		this._parentLookingToSunPos = new THREE.Vector3(0.0, 2.75, 0.0);
-		this._parentLookingToSunRot = new THREE.Euler(xEulers, yEulers, zEulers);
+		this._parentLookingToSunPos = new Vector3(0.0, 2.75, 0.0);
+		this._parentLookingToSunRot = new Euler(xEulers, yEulers, zEulers);
 
-		this._cameraParent = new THREE.Object3D();
+		this._cameraParent = new Object3D();
 		this._cameraParent.add(this._camera);
 		this._shouldBreathe = false;
 		this.setToLookingGridInstant();
@@ -120,11 +120,11 @@ export default class SynthwaveCamera {
 
 		const xRotOffset = !this._joined ? 90.0 : -5.0;
 
-		let yRot = THREE.MathUtils.lerp(MouseRotAmp, -MouseRotAmp, mouseX) + 180.0;
-		let xRot = THREE.MathUtils.lerp(-MouseRotAmp, MouseRotAmp, mouseY) + xRotOffset;
+		let yRot = MathUtils.lerp(MouseRotAmp, -MouseRotAmp, mouseX) + 180.0;
+		let xRot = MathUtils.lerp(-MouseRotAmp, MouseRotAmp, mouseY) + xRotOffset;
 
-		yRot = THREE.MathUtils.degToRad(yRot);
-		xRot = THREE.MathUtils.degToRad(xRot);
+		yRot = MathUtils.degToRad(yRot);
+		xRot = MathUtils.degToRad(xRot);
 
 		this._tempEulers.set(xRot, yRot, 0.0);
 		this._targetParentRotQuat.setFromEuler(this._tempEulers);
@@ -158,8 +158,8 @@ export default class SynthwaveCamera {
 		let xEulers = Simplex.noise((time + 64.0) * RotFreq, (time + 64.0) * RotFreq, 0.0) * RotAmp * intensity;
 		let yEulers = Simplex.noise((time + 192.0) * RotFreq, (time + 192.0) * RotFreq, 0.0) * RotAmp * intensity;
 
-		xEulers = THREE.MathUtils.degToRad(xEulers);
-		yEulers = THREE.MathUtils.degToRad(yEulers);
+		xEulers = MathUtils.degToRad(xEulers);
+		yEulers = MathUtils.degToRad(yEulers);
 
 		this._camera.position.set(x, y, 0.0);
 		this._camera.rotation.set(xEulers, yEulers, 0.0);
@@ -175,10 +175,10 @@ export default class SynthwaveCamera {
 		const aspectMinFov = 2.0;
 
 		let t = innerWidth / innerHeight;
-		t = THREE.MathUtils.clamp(t, aspectMaxFov, aspectMinFov);
-		t = THREE.MathUtils.inverseLerp(aspectMaxFov, aspectMinFov, t);
+		t = MathUtils.clamp(t, aspectMaxFov, aspectMinFov);
+		t = MathUtils.inverseLerp(aspectMaxFov, aspectMinFov, t);
 
-		const fov = THREE.MathUtils.lerp(maxFov, minFov, t);
+		const fov = MathUtils.lerp(maxFov, minFov, t);
 
 		const tanFOV = Math.tan(((Math.PI / 180) * 22.5 / 2));
 		const newFov = (360.0 / Math.PI) * Math.atan(tanFOV * (window.innerHeight / 720.0));

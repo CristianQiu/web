@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { UniformsUtils, ShaderMaterial } from 'three';
 import { Pass, FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass';
 import UberPostFxShader from './UberPostFxShader';
 
@@ -7,7 +7,7 @@ export default class UberPostFxPass extends Pass {
 	constructor(saturationIntensity, noiseWeight, scanlinesCount, scanlinesIntensity, vignetteFallOffIntensity, vignetteFocusIntensity, exposure, turnOnIntensity) {
 		super();
 		const shader = UberPostFxShader;
-		this._uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+		this._uniforms = UniformsUtils.clone(shader.uniforms);
 
 		if (saturationIntensity !== undefined)
 			this._uniforms.saturationIntensity.value = saturationIntensity;
@@ -26,7 +26,7 @@ export default class UberPostFxPass extends Pass {
 		if (turnOnIntensity !== undefined)
 			this._uniforms.turnOnIntensity.value = turnOnIntensity;
 
-		this._material = new THREE.ShaderMaterial({
+		this._material = new ShaderMaterial({
 			uniforms: this._uniforms,
 			vertexShader: shader.vertexShader,
 			fragmentShader: shader.fragmentShader

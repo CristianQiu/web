@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { AudioAnalyser } from 'three';
 import Maths from './Maths';
 
 const NumBands = 32;
@@ -14,7 +14,7 @@ const Bands = [
 	10000.0, 12500.0, 16000.0, 20000.0
 ];
 
-export default class AudioSpectrumAnalyzer extends THREE.AudioAnalyser {
+export default class AudioSpectrumAnalyzer extends AudioAnalyser {
 
 	constructor(audio, fftSize = 2048) {
 		super(audio, fftSize);

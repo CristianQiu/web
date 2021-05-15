@@ -1,19 +1,19 @@
-import * as THREE from 'three';
+import { Vector2, BufferGeometry, UniformsUtils, ShaderMaterial, Mesh, Vector3, Float32BufferAttribute } from 'three';
 import SynthwaveGridShader from './SynthwaveGridShader';
 import Maths from './Maths';
 
 export default class SynthwaveGrid {
 
 	constructor(vertexResX = 64, vertexResY = 64, quadSize = 1.0) {
-		this._vertexRes = new THREE.Vector2(vertexResX, vertexResY);
+		this._vertexRes = new Vector2(vertexResX, vertexResY);
 		this._quadSize = quadSize;
 		this._corridorWidth = 2.25 * 3.0;
 		this._mountainEdgeSmoothness = 2.25 * 2.0;
 		this._speed = 1.5;
 
-		this._geometry = new THREE.BufferGeometry();
-		const uniforms = THREE.UniformsUtils.clone(SynthwaveGridShader.uniforms);
-		this._material = new THREE.ShaderMaterial({
+		this._geometry = new BufferGeometry();
+		const uniforms = UniformsUtils.clone(SynthwaveGridShader.uniforms);
+		this._material = new ShaderMaterial({
 			uniforms: uniforms,
 			vertexShader: SynthwaveGridShader.vertexShader,
 			fragmentShader: SynthwaveGridShader.fragmentShader,
@@ -21,7 +21,7 @@ export default class SynthwaveGrid {
 				derivatives: true
 			}
 		});
-		this._mesh = new THREE.Mesh(this._geometry, this._material);
+		this._mesh = new Mesh(this._geometry, this._material);
 	}
 
 	getMesh() {
@@ -30,7 +30,7 @@ export default class SynthwaveGrid {
 
 	generate() {
 		const vertices = [];
-		const startPos = new THREE.Vector3(0.0, 0.0, 0.0);
+		const startPos = new Vector3(0.0, 0.0, 0.0);
 		const halfSizeX = (this._vertexRes.x - 1) / 2.0 * this._quadSize;
 
 		for (let i = 0; i < this._vertexRes.y; ++i) {
@@ -46,7 +46,7 @@ export default class SynthwaveGrid {
 		// Note: good readings on how the buffer attribute.
 		// https://threejsfundamentals.org/threejs/lessons/threejs-custom-buffergeometry.html
 		// https://threejs.org/docs/#api/en/core/BufferAttribute
-		this._positionsBuffer = new THREE.Float32BufferAttribute(vertices, 3);
+		this._positionsBuffer = new Float32BufferAttribute(vertices, 3);
 
 		const indices = [];
 		const quadsX = this._vertexRes.x - 1;

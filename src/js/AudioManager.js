@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { AudioLoader, AudioListener, Audio, MathUtils } from 'three';
 import TWEEN from '@tweenjs/tween.js';
 
 const onMusicLoaded = function (buffer) {
@@ -46,10 +46,10 @@ export default class AudioManager {
 	}
 
 	init() {
-		this._audioLoader = new THREE.AudioLoader();
-		this._audioListener = new THREE.AudioListener();
+		this._audioLoader = new AudioLoader();
+		this._audioListener = new AudioListener();
 		this._mainCameraListener.add(this._audioListener);
-		this._audioSource = new THREE.Audio(this._audioListener);
+		this._audioSource = new Audio(this._audioListener);
 		this._initialized = true;
 	}
 
@@ -63,7 +63,7 @@ export default class AudioManager {
 	}
 
 	setVolume(volume) {
-		const vol = THREE.MathUtils.clamp(volume, 0.0, 1.0);
+		const vol = MathUtils.clamp(volume, 0.0, 1.0);
 		this._audioSource.setVolume(vol);
 	}
 }
