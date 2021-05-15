@@ -39,6 +39,10 @@ const start = function () {
 	audioManager = new AudioManager(camera.getCamera());
 
 	document.getElementById('join').addEventListener('click', onClickJoin);
+	if (DeviceMotionEvent) {
+		addEventListener('devicemotion', onDeviceMotion);
+
+	}
 	addEventListener('pointermove', onPointerMove);
 	addEventListener('resize', onWindowResize); // false? opt
 
@@ -86,7 +90,7 @@ const onClickJoin = function () {
 	if (audioManager.isInitialized())
 		return;
 
-	const removables = document.body.getElementsByClassName("removable");
+	const removables = document.body.getElementsByClassName('removable');
 	setTimeout(() => {
 		for (let i = 0; i < removables.length; ++i) {
 			removables[i].remove();
@@ -94,19 +98,19 @@ const onClickJoin = function () {
 		}
 	}, 100);
 
-	const avHtml = document.getElementById("crt-av");
-	avHtml.innerHTML = "AV-2";
+	const avHtml = document.getElementById('crt-av');
+	avHtml.innerHTML = 'AV-2';
 	setTimeout(() => {
 		avHtml.parentElement.remove();
 	}, 5000);
 
-	const nameHeader = document.getElementById("name");
-	nameHeader.classList.add("fader");
+	const nameHeader = document.getElementById('name');
+	nameHeader.classList.add('fader');
 
 	// nameHeader.remove();
 
-	const infoBar = document.getElementById("info-bar");
-	infoBar.classList.add("fader-delayed");
+	const infoBar = document.getElementById('info-bar');
+	infoBar.classList.add('fader-delayed');
 
 	// infoBar.remove();
 
@@ -117,6 +121,11 @@ const onClickJoin = function () {
 	camera.setToLookingSun();
 	skybox.makeSunAppear();
 	renderer.turnOnCrt();
+};
+
+const onDeviceMotion = function (e) {
+	const debugMotion = document.getElementById("motionDebug");
+	debugMotion.innerHTML = e.acceleration;
 };
 
 const onPointerMove = function (e) {

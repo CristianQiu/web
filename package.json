@@ -5,7 +5,8 @@
 	"main": "dist\\app.js",
 	"scripts": {
 		"eslint": "eslint src\\js",
-		"webServer": "http-server -c-1",
+		"httpServer": "http-server -c-1",
+		"httpsServer": "http-server -c-1 -S -C C:\\SSL\\cert.pem -K C:\\SSL\\key.pem",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "webpack --config webpack.config.js"
 	},
