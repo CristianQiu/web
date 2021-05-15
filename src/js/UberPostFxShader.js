@@ -46,8 +46,7 @@ const UberPostFxShader = {
 		varying vec2 vUv;
 
 		// From https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
-		vec2 curveUv(vec2 uv)
-		{
+		vec2 curveUv(vec2 uv) {
 			vec2 delta = uv - 0.5;
 			float deltaSq = dot(delta, delta);
 			float deltaSqSq = deltaSq * deltaSq;
@@ -57,8 +56,7 @@ const UberPostFxShader = {
 		}
 
 		// From https://github.com/gkjohnson/threejs-sandbox/blob/beb92e4a84456304a800e27b26f6d521f8b8360e/lens-effects/src/LensDistortionShader.js
-		vec3 chromaticAberration(vec2 uv, sampler2D tDiffuse)
-		{
+		vec3 chromaticAberration(vec2 uv, sampler2D tDiffuse) {
 			const vec3 back = vec3(0.0, 0.0, -1.0);
 
 			vec3 normal = vec3((2.0 * uv - vec2(1.0)), 1.0);
@@ -80,8 +78,7 @@ const UberPostFxShader = {
 		}
 
 		// From https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Saturation-Node.html
-		vec3 saturation(vec3 mainTexColor, float intensity)
-		{
+		vec3 saturation(vec3 mainTexColor, float intensity) {
 			const vec3 dotWith = vec3(0.2126729, 0.7151522, 0.0721750);
 			float luma = dot(mainTexColor, dotWith);
 
@@ -121,8 +118,7 @@ const UberPostFxShader = {
 		}
 
 		// From https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
-		float vignette(vec2 uv)
-		{
+		float vignette(vec2 uv) {
 			uv *= 1.0 - uv.yx;
 			float vignette = uv.x * uv.y * vignetteFocusIntensity;
 			return pow(vignette, vignetteFallOffIntensity);
@@ -138,8 +134,7 @@ const UberPostFxShader = {
 		}
 
 		// From three.js source
-		vec3 noiseScanLines(vec2 uv, vec3 mainTexColor)
-		{
+		vec3 noiseScanLines(vec2 uv, vec3 mainTexColor) {
 			float oneMinusNoiseWeight = 1.0 - noiseWeight;
 			float noise = rand(uv + mod(time, 4.0)) + 1.0 * 0.5;
 			vec3 color = (mainTexColor * oneMinusNoiseWeight) + (mainTexColor * noise * noiseWeight);

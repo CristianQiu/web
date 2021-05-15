@@ -10,7 +10,7 @@ const SynthwaveGridShader = {
 		'gridSweepLineSpeed': { value: 25.0 },
 		'gridSweepLineMaxDist': { value: 200.0 },
 		'gridSweepLineWidth': { value: 5.0 },
-		'gridHeightFaded': { value: 1.0 },
+		'gridHeightFaded': { value: 0.5 },
 		'mountainHeightPeak': { value: 0.75 },
 		'gridSweepLineColor': { value: new Color(0.7, 2.0, 2.0) },
 		'gridColor': { value: new Color(2.0, 0.7, 2.0) },
@@ -23,8 +23,8 @@ const SynthwaveGridShader = {
 		'quadScale': { value: 0.75 },
 		'freq': { value: 0.07 },
 		'amp': { value: 3.0 },
-		'minH': { value: 1.0 },
-		'maxH': { value: 3.75 }
+		'minH': { value: 0.5 },
+		'maxH': { value: 3.0 }
 	},
 
 	vertexShader: /* glsl */`
@@ -42,52 +42,72 @@ const SynthwaveGridShader = {
 		varying vec3 objectPosition;
 		varying vec4 worldPosition;
 
-		vec3 permute(vec3 x)
-		{
-			return mod(((x * 34.0) + 1.0) * x, 289.0);
+		// From https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
+		vec3 random3(vec3 c) {
+			float j = 4096.0 * sin(dot(c, vec3(17.0, 59.4, 15.0)));
+
+			float x = fract(64.0 * j);
+			float y = fract(8.0 * j);
+			float z = fract(512.0 * j);
+
+			return vec3(x, y, z) - 0.5;
 		}
 
-		// From https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
-		float snoise(vec2 v)
-		{
-			const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-			vec2 i = floor(v + dot(v, C.yy));
-			vec2 x0 = v - i + dot(i, C.xx);
-			vec2 i1;
-			i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-			vec4 x12 = x0.xyxy + C.xxzz;
-			x12.xy -= i1;
-			i = mod(i, 289.0);
-			vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0));
-			vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-			m = m * m;
-			m = m * m;
-			vec3 x = 2.0 * fract(p * C.www) - 1.0;
-			vec3 h = abs(x) - 0.5;
-			vec3 ox = floor(x + 0.5);
-			vec3 a0 = x - ox;
-			m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
-			vec3 g;
-			g.x = a0.x * x0.x + h.x * x0.y;
-			g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-			return 130.0 * dot(m, g);
+		float snoise(vec3 p) {
+			const vec3 F3 = vec3(0.3333333);
+			const float G3 = 0.1666667;
+
+			vec3 s = floor(p + dot(p, F3));
+			vec3 x = p - s + dot(s, vec3(G3));
+
+			vec3 e = step(vec3(0.0), x - x.yzx);
+			vec3 i1 = e * (1.0 - e.zxy);
+			vec3 i2 = 1.0 - e.zxy * (1.0 - e);
+
+			vec3 x1 = x - i1 + G3;
+			vec3 x2 = x - i2 + 2.0 * G3;
+			vec3 x3 = x - 1.0 + 3.0 * G3;
+
+			vec4 w;
+			vec4 d;
+
+			w.x = dot(x, x);
+			w.y = dot(x1, x1);
+			w.z = dot(x2, x2);
+			w.w = dot(x3, x3);
+
+			w = max(0.6 - w, 0.0);
+
+			d.x = dot(random3(s), x);
+			d.y = dot(random3(s + i1), x1);
+			d.z = dot(random3(s + i2), x2);
+			d.w = dot(random3(s + 1.0), x3);
+
+			w *= w;
+			w *= w;
+			d *= w;
+
+			return dot(d, vec4(52.0));
 		}
 
 		void main() {
 			vec3 pos = position;
 
-			float xAbs = abs(pos.x);
-			float edgeCorridorSmoothness = mountainEdgeSmoothness * 0.5;
 			float halfResX = resolution.x * 0.5 * quadScale;
+			float xAbs = abs(pos.x);
+			float tz = pos.z / (resolution.y * quadScale);
 
-			float corridor = smoothstep(corridorWidth - edgeCorridorSmoothness, corridorWidth + edgeCorridorSmoothness, xAbs);
+			float endCorridorWidth = corridorWidth * 1.75;
+			float edgeCorridorSmoothness = mountainEdgeSmoothness * 0.5;
+
+			float mappedCorridorWidth = mix(corridorWidth, endCorridorWidth, tz * tz);
+
+			float corridor = smoothstep(mappedCorridorWidth - edgeCorridorSmoothness, mappedCorridorWidth + edgeCorridorSmoothness, xAbs);
 			float edge = 1.0 - smoothstep(halfResX - mountainEdgeSmoothness, halfResX, xAbs);
-
 			float corridorEdge = min(corridor, edge);
-			float t = pos.z / resolution.y;
 
-			float noise = (snoise(vec2(pos.x * freq, (pos.z + time) * freq)) * 0.5 + 0.5) * amp;
-			float power = mix(minH, maxH, t * t);
+			float noise = (snoise(vec3(pos.x * freq, (pos.z + time) * freq, audioAvgMean)) * 0.5 + 0.5) * amp;
+			float power = mix(minH, maxH, tz * tz);
 
 			pos.y = pow(noise, power) * corridorEdge * audioAvgMean;
 

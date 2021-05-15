@@ -12,6 +12,7 @@
 	<style>
 		@font-face {
 			font-family: 'VCR';
+			font-display: swap;
 			src: url(../../resources/VCR_OSD_MONO_1.001.ttf);
 		}
 
@@ -42,7 +43,7 @@
 		}
 
 		#name {
-			visibility: hidden;
+			visibility: visible;
 			position: relative;
 			font-family: 'Exo', sans-serif;
 			font-size: calc(1.5rem + 2.5vh + 1.25vw);
@@ -258,9 +259,6 @@
 		<p class="info-bar-subheader">Experience</p>
 	</div>
 
-	<div id="debug" style="position: fixed; bottom: 5rem; color: white; font-size:4rem">
-		DEBUG
-	</div>
 	<!-- <div id="dummy"></div> -->
 	<script src="../../dist/app.js"></script>
 </body>

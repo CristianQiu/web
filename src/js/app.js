@@ -40,7 +40,7 @@ const start = function () {
 
 	document.getElementById('join').addEventListener('click', onClickJoin);
 	addEventListener('pointermove', onPointerMove);
-	addEventListener('resize', onWindowResize, false);
+	addEventListener('resize', onWindowResize); // false? opt
 
 	renderer.fadeInCrt();
 };
@@ -69,8 +69,17 @@ const update = function () {
 
 	renderer.render();
 
-	const memory = performance.memory;
-	document.getElementById("debug").innerHTML = (memory.usedJSHeapSize / 1048576).toFixed(2);
+	// const canvas = document.getElementsByTagName("canvas");
+
+	// const w = innerWidth;
+	// const h = innerHeight;
+
+	// if (canvas.width != w || canvas.height != h) {
+	// 	camera.setAspect(w / h);
+	// 	camera.updateProjectionMatrix();
+
+	// 	renderer.setSize(w, h);
+	// }
 };
 
 const onClickJoin = function () {
@@ -94,8 +103,12 @@ const onClickJoin = function () {
 	const nameHeader = document.getElementById("name");
 	nameHeader.classList.add("fader");
 
+	// nameHeader.remove();
+
 	const infoBar = document.getElementById("info-bar");
 	infoBar.classList.add("fader-delayed");
+
+	// infoBar.remove();
 
 	audioManager.init();
 	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource());

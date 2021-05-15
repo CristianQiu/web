@@ -7,9 +7,9 @@ export default class SynthwaveGrid {
 	constructor(vertexResX = 64, vertexResY = 64, quadSize = 1.0) {
 		this._vertexRes = new THREE.Vector2(vertexResX, vertexResY);
 		this._quadSize = quadSize;
-		this._corridorWidth = 2.25 * 3.5;
+		this._corridorWidth = 2.25 * 3.0;
 		this._mountainEdgeSmoothness = 2.25 * 2.0;
-		this._speed = 2.0;
+		this._speed = 1.5;
 
 		this._geometry = new THREE.BufferGeometry();
 		const uniforms = THREE.UniformsUtils.clone(SynthwaveGridShader.uniforms);
@@ -22,7 +22,6 @@ export default class SynthwaveGrid {
 			}
 		});
 		this._mesh = new THREE.Mesh(this._geometry, this._material);
-		this._receivedWorkFromThread = true;
 	}
 
 	getMesh() {

@@ -167,19 +167,23 @@ export default class SynthwaveCamera {
 		// this.fovAdjustments();
 	}
 
-	// fovAdjustments() {
-	// 	const minFov = 40.0;
-	// 	const maxFov = 70.0;
+	fovAdjustments() {
+		const minFov = 20.0;
+		const maxFov = 90.0;
 
-	// 	const aspectMaxFov = 0.4;
-	// 	const aspectMinFov = 2.0;
+		const aspectMaxFov = 0.4;
+		const aspectMinFov = 2.0;
 
-	// 	let t = innerWidth / innerHeight;
-	// 	t = THREE.MathUtils.clamp(t, aspectMaxFov, aspectMinFov);
-	// 	t = THREE.MathUtils.inverseLerp(aspectMaxFov, aspectMinFov, t);
+		let t = innerWidth / innerHeight;
+		t = THREE.MathUtils.clamp(t, aspectMaxFov, aspectMinFov);
+		t = THREE.MathUtils.inverseLerp(aspectMaxFov, aspectMinFov, t);
 
-	// 	const fov = THREE.MathUtils.lerp(maxFov, minFov, t);
-	// 	this._camera.fov = fov;
-	// 	this._camera.updateProjectionMatrix();
-	// }
+		const fov = THREE.MathUtils.lerp(maxFov, minFov, t);
+
+		const tanFOV = Math.tan(((Math.PI / 180) * 22.5 / 2));
+		const newFov = (360.0 / Math.PI) * Math.atan(tanFOV * (window.innerHeight / 720.0));
+
+		this._camera.fov = newFov;
+		this._camera.updateProjectionMatrix();
+	}
 }
