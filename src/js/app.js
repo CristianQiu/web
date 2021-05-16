@@ -42,11 +42,11 @@ class App {
 	}
 
 	_addListeners() {
-		document.getElementById('join').addEventListener('click', this.onClickJoin.bind(this));
+		document.getElementById('join').addEventListener('click', this._onClickJoin.bind(this));
 		if (DeviceOrientationEvent)
-			addEventListener('deviceorientation', this.onDeviceOrientation.bind(this));
-		addEventListener('pointermove', this.onPointerMove.bind(this));
-		addEventListener('resize', this.onWindowResize.bind(this));
+			addEventListener('deviceorientation', this._onDeviceOrientation.bind(this));
+		addEventListener('pointermove', this._onPointerMove.bind(this));
+		addEventListener('resize', this._onWindowResize.bind(this));
 	}
 
 	update() {
