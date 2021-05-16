@@ -1,4 +1,4 @@
-import { Clock, Scene, } from 'three';
+import { Clock, Scene } from 'three';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import TWEEN from '@tweenjs/tween.js';
 import SynthwaveCamera from './SynthwaveCamera';
@@ -8,153 +8,138 @@ import SynthwaveGrid from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
 
-let stats;
-let clock, camera, renderer, skybox, grid, audioManager, audioSpectrumAnalyzer;
+class App {
+	constructor() {
+		const w = innerWidth;
+		const h = innerHeight;
+		const pixelRatio = Math.max(0.9, devicePixelRatio * 0.6);
 
-const start = function () {
-	stats = new Stats();
-	document.body.appendChild(stats.dom);
+		this._stats = new Stats();
+		this._clock = new Clock();
 
-	clock = new Clock();
-
-	const scene = new Scene();
-
-	const w = innerWidth;
-	const h = innerHeight;
-
-	camera = new SynthwaveCamera(150.0, w / h, 0.3, 250);
-	scene.add(camera.getCameraParent());
-
-	const pixelRatio = Math.max(0.9, devicePixelRatio * 0.6);
-	renderer = new SynthwaveRenderer(scene, camera.getCamera(), w, h, pixelRatio);
-	document.body.appendChild(renderer.getDomElement());
-
-	skybox = new SynthwaveSkybox();
-	scene.add(skybox.getMesh());
-
-	grid = new SynthwaveGrid(232, 232, 0.75);
-	grid.generate();
-	scene.add(grid.getMesh());
-
-	audioManager = new AudioManager(camera.getCamera());
-
-	document.getElementById('join').addEventListener('click', onClickJoin);
-	if (DeviceOrientationEvent) {
-		addEventListener('deviceorientation', onDeviceOrientation);
-	}
-	addEventListener('pointermove', onPointerMove);
-	addEventListener('resize', onWindowResize); // false? opt
-
-	renderer.fadeInCrt();
-};
-
-const update = function () {
-	requestAnimationFrame(update);
-
-	const dt = clock.getDelta();
-	const time = clock.getElapsedTime();
-
-	stats.update();
-	TWEEN.update();
-
-	skybox.update(dt);
-	camera.update(dt, time);
-
-	const validSpectrumAnalyzer = audioSpectrumAnalyzer !== undefined && audioSpectrumAnalyzer !== null;
-
-	if (validSpectrumAnalyzer) {
-		audioSpectrumAnalyzer.analyzeFrameMeans(dt, audioManager.getAudioListenerSampleRate());
-		grid.animate(time, audioSpectrumAnalyzer.getMeans(true));
-	}
-	else {
-		grid.animate(time);
+		this._scene = new Scene();
+		this._camera = new SynthwaveCamera(150.0, w / h, 0.3, 250);
+		this._renderer = new SynthwaveRenderer(this._scene, this._camera.getCamera(), w, h, pixelRatio);
+		this._skybox = new SynthwaveSkybox();
+		this._grid = new SynthwaveGrid(232, 232, 0.75);
+		this._audioManager = new AudioManager(this._camera.getCamera());
+		this._audioSpectrumAnalyzer = null;
+		this._updateCallback = this.update.bind(this);
 	}
 
-	renderer.render();
+	init() {
+		document.body.appendChild(this._stats.dom);
+		document.body.appendChild(this._renderer.getDomElement());
 
-	// const canvas = document.getElementsByTagName("canvas");
+		this._grid.generate();
+		this._scene.add(this._camera.getCameraParent());
+		this._scene.add(this._skybox.getMesh());
+		this._scene.add(this._grid.getMesh());
 
-	// const w = innerWidth;
-	// const h = innerHeight;
+		this._renderer.fadeInCrt();
 
-	// if (canvas.width != w || canvas.height != h) {
-	// 	camera.setAspect(w / h);
-	// 	camera.updateProjectionMatrix();
+		this._addListeners();
+	}
 
-	// 	renderer.setSize(w, h);
-	// }
-};
+	_addListeners() {
+		document.getElementById('join').addEventListener('click', this.onClickJoin.bind(this));
+		if (DeviceOrientationEvent)
+			addEventListener('deviceorientation', this.onDeviceOrientation.bind(this));
+		addEventListener('pointermove', this.onPointerMove.bind(this));
+		addEventListener('resize', this.onWindowResize.bind(this));
+	}
 
-const onClickJoin = function () {
-	if (audioManager.isInitialized())
-		return;
+	update() {
+		requestAnimationFrame(this._updateCallback);
 
-	const removables = document.body.getElementsByClassName('removable');
-	setTimeout(() => {
-		for (let i = 0; i < removables.length; ++i) {
-			removables[i].remove();
-			--i;
+		const dt = this._clock.getDelta();
+		const time = this._clock.getElapsedTime();
+
+		this._stats.update();
+		TWEEN.update();
+
+		this._skybox.update(dt);
+		this._camera.update(dt, time);
+
+		const validSpectrumAnalyzer = this._audioSpectrumAnalyzer !== undefined && this._audioSpectrumAnalyzer !== null;
+
+		if (validSpectrumAnalyzer) {
+			this._audioSpectrumAnalyzer.analyzeFrameMeans(dt, this._audioManager.getAudioListenerSampleRate());
+			this._grid.animate(time, this._audioSpectrumAnalyzer.getMeans(true));
 		}
-	}, 100);
+		else {
+			this._grid.animate(time);
+		}
 
-	const avHtml = document.getElementById('crt-av');
-	avHtml.innerHTML = 'AV-2';
-	setTimeout(() => {
-		avHtml.parentElement.remove();
-	}, 5000);
+		this._renderer.render();
+	}
 
-	const nameHeader = document.getElementById('name');
-	nameHeader.classList.add('fader');
+	_onClickJoin() {
+		if (this._audioManager.isInitialized())
+			return;
 
-	// nameHeader.remove();
+		const removables = document.body.getElementsByClassName('removable');
+		setTimeout(() => {
+			for (let i = 0; i < removables.length; ++i) {
+				removables[i].remove();
+				--i;
+			}
+		}, 100);
 
-	const infoBar = document.getElementById('info-bar');
-	infoBar.classList.add('fader-delayed');
+		const avHtml = document.getElementById('crt-av');
+		avHtml.innerHTML = 'AV-2';
+		setTimeout(() => {
+			avHtml.parentElement.remove();
+		}, 5000);
 
-	// infoBar.remove();
+		const nameHeader = document.getElementById('name');
+		nameHeader.classList.add('fader');
 
-	audioManager.init();
-	audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(audioManager.getAudioSource());
-	audioManager.loadAndPlayMusic();
+		const infoBar = document.getElementById('info-bar');
+		infoBar.classList.add('fader-delayed');
 
-	camera.setToLookingSun();
-	skybox.makeSunAppear();
-	renderer.turnOnCrt();
-};
+		this._audioManager.init();
+		this._audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(this._audioManager.getAudioSource());
+		this._audioManager.loadAndPlayMusic();
 
-const onDeviceOrientation = function (e) {
-	// const debugMotion = document.getElementById("motionDebug");
-	// debugMotion.innerHTML = "alpha " + e.alpha.toFixed(2) + " beta " + e.beta.toFixed(2) + " gamma" + e.gamma.toFixed(2);
+		this._camera.setToLookingSun();
+		this._skybox.makeSunAppear();
+		this._renderer.turnOnCrt();
+	}
 
-	// in vertical, BETA PITCH, GAMMA YAW, ALPHA ROLL
-};
+	_onDeviceOrientation(e) {
+		// const debugMotion = document.getElementById("motionDebug");
+		// debugMotion.innerHTML = "alpha " + e.alpha.toFixed(2) + " beta " + e.beta.toFixed(2) + " gamma" + e.gamma.toFixed(2);
 
-const onPointerMove = function (e) {
-	if (!audioManager.isInitialized())
-		return;
+		// in vertical, BETA PITCH, GAMMA YAW, ALPHA ROLL
+	}
 
-	const w = innerWidth;
-	const h = innerHeight;
+	_onPointerMove(e) {
+		if (!this._audioManager.isInitialized())
+			return;
 
-	let x = e.clientX / w;
-	let y = e.clientY / h;
+		const w = innerWidth;
+		const h = innerHeight;
 
-	// const debugMotion = document.getElementById("motionDebug");
-	// debugMotion.innerHTML = 'pointer moved';
+		let x = e.clientX / w;
+		let y = e.clientY / h;
 
-	camera.rotateAccordingToMouseWindowPos(x, y);
-	skybox.moveSunAccordingToMouseWindowPos(x, y);
-};
+		this._camera.rotateAccordingToMouseWindowPos(x, y);
+		this._skybox.moveSunAccordingToMouseWindowPos(x, y);
+	}
 
-const onWindowResize = function () {
-	const w = innerWidth;
-	const h = innerHeight;
+	_onWindowResize() {
+		const w = innerWidth;
+		const h = innerHeight;
 
-	camera.setAspect(w / h);
-	camera.updateProjectionMatrix();
+		this._camera.setAspect(w / h);
+		this._camera.updateProjectionMatrix();
 
-	renderer.setSize(w, h);
-};
+		this._renderer.setSize(w, h);
+	}
+}
 
-start();
-update();
+const app = new App();
+
+app.init();
+app.update();

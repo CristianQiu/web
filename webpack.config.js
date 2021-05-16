@@ -4,9 +4,9 @@ const TerserPlugin = require("terser-webpack-plugin");
 module.exports = {
 	watch: true,
 	mode: "development",
-	entry: "./src/js/app.js",
+	entry: "./src/js/App.js",
 	output: {
-		filename: "./app.js"
+		filename: "./App.js"
 	},
 	optimization: {
 		minimize: true,
