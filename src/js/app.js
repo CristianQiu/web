@@ -41,14 +41,6 @@ class App {
 		this._addListeners();
 	}
 
-	_addListeners() {
-		document.getElementById('join').addEventListener('click', this._onClickJoin.bind(this));
-		if (DeviceOrientationEvent)
-			addEventListener('deviceorientation', this._onDeviceOrientation.bind(this));
-		addEventListener('pointermove', this._onPointerMove.bind(this));
-		addEventListener('resize', this._onWindowResize.bind(this));
-	}
-
 	update() {
 		requestAnimationFrame(this._updateCallback);
 
@@ -72,6 +64,12 @@ class App {
 		}
 
 		this._renderer.render();
+	}
+
+	_addListeners() {
+		document.getElementById('join').addEventListener('click', this._onClickJoin.bind(this));
+		addEventListener('pointermove', this._onPointerMove.bind(this));
+		addEventListener('resize', this._onWindowResize.bind(this));
 	}
 
 	_onClickJoin() {
@@ -105,13 +103,6 @@ class App {
 		this._camera.setToLookingSun();
 		this._skybox.makeSunAppear();
 		this._renderer.turnOnCrt();
-	}
-
-	_onDeviceOrientation(e) {
-		// const debugMotion = document.getElementById("motionDebug");
-		// debugMotion.innerHTML = "alpha " + e.alpha.toFixed(2) + " beta " + e.beta.toFixed(2) + " gamma" + e.gamma.toFixed(2);
-
-		// in vertical, BETA PITCH, GAMMA YAW, ALPHA ROLL
 	}
 
 	_onPointerMove(e) {

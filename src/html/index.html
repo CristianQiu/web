@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Information, projects, and work experience of Cristian Qiu. Portfolio web.">
 	<title>Cristian Qiu</title>
 	<link rel="preconnect" href="https://fonts.gstatic.com">
@@ -43,10 +43,10 @@
 		}
 
 		#name {
-			visibility: visible;
+			visibility: hidden;
 			position: relative;
 			font-family: 'Exo', sans-serif;
-			font-size: calc(1.5rem + 2.5vh + 1.25vw);
+			font-size: calc(2.5vh + 1.25vw);
 			text-transform: uppercase;
 			text-align: center;
 			white-space: nowrap;
@@ -63,7 +63,7 @@
 			position: absolute;
 			display: block;
 			content: 'Game programmer';
-			font-size: calc(0.75rem + 1.5vh + 1.0vw);
+			font-size: calc(1.5vh + 1.0vw);
 			font-family: 'Mr Dafoe', cursive;
 			text-transform: capitalize;
 			font-weight: normal;
@@ -86,6 +86,7 @@
 			align-items: center;
 			width: 100%;
 			bottom: 2vh;
+			background-color: rgb(0.0, 0.0, 0.0, 0.5);
 		}
 
 		.info-bar-subheader {
@@ -120,6 +121,8 @@
 			}
 		}
 
+		/* ----------- */
+
 		.flex-container-center {
 			position: fixed;
 			display: flex;
@@ -127,10 +130,14 @@
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			background-color: rgba(82, 82, 253, 0.781);
 			transition:
 				width var(--responsiveTime) var(--responsiveEase),
 				height var(--responsiveTime) var(--responsiveEase);
+		}
+
+		#join {
+			background-color: rgba(82, 82, 253, 0.781);
+			border: none;
 		}
 
 		#join:hover {
@@ -143,14 +150,6 @@
 			cursor: pointer;
 		}
 
-		#join:hover::before {
-			width: 100%;
-		}
-
-		#join:active::before {
-			width: 100%;
-		}
-
 		#join::before {
 			position: absolute;
 			content: '';
@@ -161,6 +160,14 @@
 			left: 0;
 			top: 25%;
 			z-index: -1;
+		}
+
+		#join:hover::before {
+			width: 100%;
+		}
+
+		#join:active::before {
+			width: 100%;
 		}
 
 		.flex-horizontal-bar {
@@ -237,6 +244,33 @@
 				visibility: visible;
 			}
 		}
+
+		/* ----------- */
+
+		.project-container {
+			display: grid;
+			grid-template-columns: repeat(2, 600px);
+			grid-auto-rows: 337px;
+			grid-gap: 50px;
+			justify-content: center;
+			/* max-width: 800px; */
+		}
+
+		.project {
+			background-color: white;
+			transition: all 1s linear;
+		}
+
+		@media (max-width: 600px) {
+			.project-container {
+				display: grid;
+				grid-template-columns: repeat(1, 400px);
+				grid-auto-rows: 225px;
+				grid-gap: 50px;
+				justify-content: center;
+				/* max-width: 800px; */
+			}
+		}
 	</style>
 </head>
 
@@ -246,7 +280,7 @@
 		<span class="removable crt-text crt-text-blink-display-after">NO-SIGNAL</span>
 	</div>
 	<div class="removable flex-container-center display-after-time-slow">
-		<span id="join" class="crt-text">&nbspAV-2 WEB&nbsp</span>
+		<button id="join" class="crt-text">&nbspAV-2 WEB&nbsp</span>
 	</div>
 	<div class="removable flex-horizontal-bar display-after-time-slow" style="bottom: 0; justify-content: center;">
 		<span class="crt-text" style="font-size: calc(3vh + 0.75vw)">CRISTIAN QIU</span>
@@ -256,11 +290,23 @@
 	<div id="info-bar">
 		<p class="info-bar-subheader">About me</p>
 		<p class="info-bar-subheader">Projects</p>
-		<p class="info-bar-subheader">Experience</p>
 	</div>
 
-	<div id="motionDebug" style="position: fixed; font-size:2rem; bottom: 0; left:0; color: white">MOTION DEBUG</div>
-	<!-- <div id="dummy"></div> -->
+	<div class="project-container">
+		<div class="project">This is project 1</div>
+		<div class="project">This is project 2</div>
+		<div class="project">This is project 3</div>
+		<div class="project">This is project 4</div>
+		<div class="project">This is project 5</div>
+		<div class="project">This is project 6</div>
+		<div class="project">This is project 7</div>
+		<div class="project">This is project 8</div>
+		<div class="project">This is project 9</div>
+		<div class="project">This is project 10</div>
+		<div class="project">This is project 11</div>
+		<div class="project">This is project 12</div>
+	</div>
+
 	<script src="../../dist/App.js"></script>
 </body>
 
