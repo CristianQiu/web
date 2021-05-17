@@ -1,9 +1,13 @@
 export default class DOMController {
 
 	constructor() {
+		this._hamburgerDivBg = document.getElementById('hamburger-container');
+		this._hamburgerMenuButton = document.getElementById('hamburger-button');
+		this._hamburgerBefore = document.getElementById('hamburger-before');
+		this._hamburgerCenter = document.getElementById('hamburger-center');
+		this._hamburgerAfter = document.getElementById('hamburger-after');
+
 		this._addListeners();
-		this._hamburgerMenu = document.getElementsByClassName('hamburger-container')[0];
-		this._hamburgerMenuOpened = false;
 	}
 
 	appendBodyChild(child) {
@@ -37,11 +41,13 @@ export default class DOMController {
 	}
 
 	_addListeners() {
-		this._hamburgerMenu.addEventListener('click', this._onClickHamburguerMenu.bind(this));
+		this._hamburgerMenuButton.addEventListener('click', this._onClickHamburguerMenu.bind(this));
 	}
 
 	_onClickHamburguerMenu() {
-		this._hamburgerMenuOpened = !this._hamburgerMenuOpened;
-		this._hamburgerMenu.style.width = '100%';
+		this._hamburgerDivBg.classList.toggle('hamburger-unfolded');
+		this._hamburgerBefore.classList.toggle('hamburger-cross-left');
+		this._hamburgerCenter.classList.toggle('hamburger-cross-right');
+		this._hamburgerAfter.classList.toggle('hamburger-cross-left');
 	}
 }

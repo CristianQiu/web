@@ -252,30 +252,42 @@
 			}
 		}
 
-		/* ----------- */
+		/* ----- Hamburger menu ----- */
 
 		.hamburger-container {
-			--hamburguerWidth: 2.5rem;
-			--hamburguerHeight: 0.15rem;
-			--hamburguerColor: white;
-			--hamburguerTransition:
-				width 2s,
-				height 2s;
+			--hamburgerColor: white;
+			--hamburgerTransition: cubic-bezier(0.25, 1, 0.5, 1);
+			--hamburgerFoldedWidth: 5rem;
+			--hamburgerFoldedHeight: 4.5rem;
+			--hamburgerAnimationTime: 0.25s;
 
 			display: block;
 			position: fixed;
+			width: var(--hamburgerFoldedWidth);
+			height: var(--hamburgerFoldedHeight);
 			right: 0;
 			top: 0;
-			width: 5rem;
-			height: 4.5rem;
-			border-radius: 0 0 0 2rem;
-
-			background-color: rgb(0.0, 0.0, 0.0, 0.25);
-			transition: var(--hamburguerTransition);
+			-webkit-tap-highlight-color: transparent;
+			background-color: rgb(0.0, 0.0, 0.0, 0.9);
+			transition:
+				width var(--hamburgerAnimationTime) var(--hamburgerTransition),
+				height var(--hamburgerAnimationTime) var(--hamburgerTransition);
 		}
 
-		.hamburger-container:hover {
+		.hamburger-button {
+			display: block;
+			position: absolute;
+			width: var(--hamburgerFoldedWidth);
+			height: var(--hamburgerFoldedHeight);
+			right: 0;
+			border: none;
 			cursor: pointer;
+			background-color: transparent;
+		}
+
+		.hamburger-unfolded {
+			width: 100%;
+			height: 100%;
 		}
 
 		.hamburger {
@@ -284,28 +296,30 @@
 			top: 2.25rem;
 			right: 0;
 			transform: translate(-50%, -50%);
-			width: var(--hamburguerWidth);
-			height: var(--hamburguerHeight);
-			background-color: var(--hamburguerColor);
+			width: 2.5rem;
+			height: 0.125rem;
+			background-color: var(--hamburgerColor);
+			transition: all 0.4s var(--hamburgerTransition);
 		}
 
-		.hamburger::before {
-			position: absolute;
-			content: "";
-			width: var(--hamburguerWidth);
-			height: var(--hamburguerHeight);
-			bottom: 0.625rem;
-			background-color: var(--hamburguerColor);
+		.hamburger-before {
+			top: 1.5rem;
 		}
 
-		.hamburger::after {
-			position: absolute;
-			content: "";
-			width: var(--hamburguerWidth);
-			height: var(--hamburguerHeight);
-			top: 0.6225rem;
-			background-color: var(--hamburguerColor);
+		.hamburger-after {
+			top: 3rem;
 		}
+
+		.hamburger-cross-left {
+			top: 2.25rem;
+			transform: translate(-50%, -50%) rotate(45deg);
+		}
+
+		.hamburger-cross-right {
+			transform: translate(-50%, -50%) rotate(-45deg);
+		}
+
+		/* ----- ----- */
 	</style>
 </head>
 
@@ -323,9 +337,12 @@
 
 	<h1 id="name">Cristian Qiu</h1>
 
-
-	<div class="hamburger-container">
-		<span class="hamburger" />
+	<div id="hamburger-container" class="hamburger-container hamburger-folded">
+		<button id="hamburger-button" class="hamburger-button">
+			<span id="hamburger-before" class="hamburger hamburger-before"></span>
+			<span id="hamburger-center" class="hamburger" /></span>
+			<span id="hamburger-after" class="hamburger hamburger-after" /></span>
+		</button>
 	</div>
 
 	<!-- <div class="project-container">
