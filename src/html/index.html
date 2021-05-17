@@ -50,13 +50,14 @@
 			text-transform: uppercase;
 			text-align: center;
 			white-space: nowrap;
-			margin-top: calc(0.25rem + 3vh);
+			/* margin-top: calc(0.25rem + 3vh); */
+			margin-top: calc(4.25rem + 3vh);
 			margin-bottom: calc(0.25rem + 1vh);
 			transform: skew(-16deg);
 			color: rgb(187, 211, 251);
 			letter-spacing: 0.1rem;
 			text-shadow: 0 0 0.3rem #a0f1ff;
-			max-width: 100%;
+			max-width: 90%;
 		}
 
 		#name::after {
@@ -74,27 +75,6 @@
 			-webkit-text-stroke: 0;
 			text-shadow: 0 0 0.4rem #fe05e1, 0 0 0.3rem #fe05e1;
 			letter-spacing: normal;
-		}
-
-		#info-bar {
-			visibility: hidden;
-			position: fixed;
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			text-align: center;
-			align-items: center;
-			width: 100%;
-			bottom: 2vh;
-			background-color: rgb(0.0, 0.0, 0.0, 0.5);
-		}
-
-		.info-bar-subheader {
-			color: var(--almostWhite);
-			font-family: var(--contentFont);
-			font-size: calc(2.25vh + 1.25vw);
-			margin: auto 3.5vw auto 3.5vw;
-			white-space: nowrap;
 		}
 
 		.fader {
@@ -271,6 +251,61 @@
 				/* max-width: 800px; */
 			}
 		}
+
+		/* ----------- */
+
+		.hamburger-container {
+			--hamburguerWidth: 2.5rem;
+			--hamburguerHeight: 0.15rem;
+			--hamburguerColor: white;
+			--hamburguerTransition:
+				width 2s,
+				height 2s;
+
+			display: block;
+			position: fixed;
+			right: 0;
+			top: 0;
+			width: 5rem;
+			height: 4.5rem;
+			border-radius: 0 0 0 2rem;
+
+			background-color: rgb(0.0, 0.0, 0.0, 0.25);
+			transition: var(--hamburguerTransition);
+		}
+
+		.hamburger-container:hover {
+			cursor: pointer;
+		}
+
+		.hamburger {
+			display: block;
+			position: absolute;
+			top: 2.25rem;
+			right: 0;
+			transform: translate(-50%, -50%);
+			width: var(--hamburguerWidth);
+			height: var(--hamburguerHeight);
+			background-color: var(--hamburguerColor);
+		}
+
+		.hamburger::before {
+			position: absolute;
+			content: "";
+			width: var(--hamburguerWidth);
+			height: var(--hamburguerHeight);
+			bottom: 0.625rem;
+			background-color: var(--hamburguerColor);
+		}
+
+		.hamburger::after {
+			position: absolute;
+			content: "";
+			width: var(--hamburguerWidth);
+			height: var(--hamburguerHeight);
+			top: 0.6225rem;
+			background-color: var(--hamburguerColor);
+		}
 	</style>
 </head>
 
@@ -287,12 +322,13 @@
 	</div>
 
 	<h1 id="name">Cristian Qiu</h1>
-	<div id="info-bar">
-		<p class="info-bar-subheader">About me</p>
-		<p class="info-bar-subheader">Projects</p>
+
+
+	<div class="hamburger-container">
+		<span class="hamburger" />
 	</div>
 
-	<div class="project-container">
+	<!-- <div class="project-container">
 		<div class="project">This is project 1</div>
 		<div class="project">This is project 2</div>
 		<div class="project">This is project 3</div>
@@ -305,7 +341,7 @@
 		<div class="project">This is project 10</div>
 		<div class="project">This is project 11</div>
 		<div class="project">This is project 12</div>
-	</div>
+	</div> -->
 
 	<script src="../../dist/App.js"></script>
 </body>

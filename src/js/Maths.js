@@ -4,6 +4,7 @@ const i = new Int32Array(a);
 const f = new Float32Array(a);
 
 export default class Maths {
+
 	static fastFloor(x) {
 		return x >>> 0;
 	}

@@ -7,7 +7,7 @@ export default class SynthwaveGrid {
 	constructor(vertexResX = 64, vertexResY = 64, quadSize = 1.0) {
 		this._vertexRes = new Vector2(vertexResX, vertexResY);
 		this._quadSize = quadSize;
-		this._corridorWidth = 2.25 * 3.0;
+		this._corridorWidth = 2.25 * 3.5;
 		this._mountainEdgeSmoothness = 2.25 * 2.0;
 		this._speed = 1.5;
 

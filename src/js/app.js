@@ -7,8 +7,10 @@ import SynthwaveSkybox from './SynthwaveSkybox';
 import SynthwaveGrid from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
+import DOMController from './DOMController';
 
 class App {
+
 	constructor() {
 		const w = innerWidth;
 		const h = innerHeight;
@@ -25,11 +27,13 @@ class App {
 		this._audioManager = new AudioManager(this._camera.getCamera());
 		this._audioSpectrumAnalyzer = null;
 		this._updateCallback = this.update.bind(this);
+
+		this._domController = new DOMController();
 	}
 
 	init() {
-		document.body.appendChild(this._stats.dom);
-		document.body.appendChild(this._renderer.getDomElement());
+		this._domController.appendBodyChild(this._stats.dom);
+		this._domController.appendBodyChild(this._renderer.getDomElement());
 
 		this._grid.generate();
 		this._scene.add(this._camera.getCameraParent());
@@ -42,8 +46,6 @@ class App {
 	}
 
 	update() {
-		requestAnimationFrame(this._updateCallback);
-
 		const dt = this._clock.getDelta();
 		const time = this._clock.getElapsedTime();
 
@@ -64,6 +66,8 @@ class App {
 		}
 
 		this._renderer.render();
+
+		requestAnimationFrame(this._updateCallback);
 	}
 
 	_addListeners() {
@@ -76,25 +80,9 @@ class App {
 		if (this._audioManager.isInitialized())
 			return;
 
-		const removables = document.body.getElementsByClassName('removable');
-		setTimeout(() => {
-			for (let i = 0; i < removables.length; ++i) {
-				removables[i].remove();
-				--i;
-			}
-		}, 100);
-
-		const avHtml = document.getElementById('crt-av');
-		avHtml.innerHTML = 'AV-2';
-		setTimeout(() => {
-			avHtml.parentElement.remove();
-		}, 5000);
-
-		const nameHeader = document.getElementById('name');
-		nameHeader.classList.add('fader');
-
-		const infoBar = document.getElementById('info-bar');
-		infoBar.classList.add('fader-delayed');
+		this._domController.removeItemsAfterLogin(100);
+		this._domController.changeAvChannelAndRemoveAfter(5000);
+		this._domController.addFadeClassesAfterLogin();
 
 		this._audioManager.init();
 		this._audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(this._audioManager.getAudioSource());
