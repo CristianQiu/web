@@ -280,13 +280,14 @@
 			width: var(--hamburgerFoldedWidth);
 			height: var(--hamburgerFoldedHeight);
 			right: 0;
+			padding: 0;
 			border: none;
 			cursor: pointer;
 			background-color: transparent;
 		}
 
 		.hamburger-unfolded {
-			width: 100%;
+			width: 50%;
 			height: 100%;
 		}
 
@@ -319,7 +320,28 @@
 			transform: translate(-50%, -50%) rotate(-45deg);
 		}
 
-		/* ----- ----- */
+		/* ----- Navigation bar inside hamburger menu ----- */
+
+		nav {
+			font-size: 3rem;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+
+		nav ul {
+			display: flex;
+			flex-direction: column;
+			list-style-type: none;
+			justify-content: center;
+			align-items: center;
+			padding: 0;
+			margin: 0;
+			width: 100%;
+			height: 100%;
+		}
+
+		nav ul li {}
 	</style>
 </head>
 
@@ -338,11 +360,22 @@
 	<h1 id="name">Cristian Qiu</h1>
 
 	<div id="hamburger-container" class="hamburger-container hamburger-folded">
+
 		<button id="hamburger-button" class="hamburger-button">
 			<span id="hamburger-before" class="hamburger hamburger-before"></span>
 			<span id="hamburger-center" class="hamburger" /></span>
 			<span id="hamburger-after" class="hamburger hamburger-after" /></span>
 		</button>
+
+		<nav>
+			<ul>
+				<li><a href="#about">About me</a></li>
+				<li><a href="#projects">Projects</a></li>
+				<li><a href="#experience">Experience</a></li>
+				<li><a href="#contact">Contact</a></li>
+			</ul>
+		</nav>
+
 	</div>
 
 	<!-- <div class="project-container">

@@ -58,6 +58,6 @@ export default class Maths {
 		const l = array.length;
 		for (let i = 0; i < l; ++i)
 			avgMean += array[i];
-		return avgMean /= array.length;
+		return avgMean /= l;
 	}
 }
