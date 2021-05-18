@@ -6,6 +6,10 @@ export default class DOMController {
 		this._hamburgerBefore = document.getElementById('hamburger-before');
 		this._hamburgerCenter = document.getElementById('hamburger-center');
 		this._hamburgerAfter = document.getElementById('hamburger-after');
+		this._navBurgerElements = document.getElementsByClassName("navburger-item");
+
+		this._navBurgerElements[0].classList.toggle('selected-navburger-item');
+
 
 		this._addListeners();
 	}
@@ -41,13 +45,25 @@ export default class DOMController {
 	}
 
 	_addListeners() {
-		this._hamburgerMenuButton.addEventListener('click', this._onClickHamburguerMenu.bind(this));
+		addEventListener('hashchange', this._onLocationHashChanged.bind(this));
+		this._hamburgerMenuButton.addEventListener('click', this._onClickHamburgerMenu.bind(this));
 	}
 
-	_onClickHamburguerMenu() {
+	_toggleHamburgerMenu() {
 		this._hamburgerDivBg.classList.toggle('hamburger-unfolded');
 		this._hamburgerBefore.classList.toggle('hamburger-cross-left');
 		this._hamburgerCenter.classList.toggle('hamburger-cross-right');
 		this._hamburgerAfter.classList.toggle('hamburger-cross-left');
+
+		for (let i = 0; i < this._navBurgerElements.length; ++i)
+			this._navBurgerElements[i].classList.toggle('unfolded-navburger-item');
+	}
+
+	_onLocationHashChanged() {
+		this._toggleHamburgerMenu();
+	}
+
+	_onClickHamburgerMenu() {
+		this._toggleHamburgerMenu();
 	}
 }
