@@ -22,14 +22,17 @@ export default class SynthwaveSkybox {
 
 		const sunStripeFrom = { x: 1.33 };
 		const sunStripeTo = { x: 0.03 };
+		const sunStripeFadeTime = 3000;
+		const sunStripeEasing = TWEEN.Easing.Quartic.InOut;
+		const sunStripeFadeDelay = 3000;
 
 		const sunStripeWidths = new Vector4(sunStripeFrom.x, 0.04, 0.05, 0.06);
 		this._material.uniforms.sunStripeWidths.value = sunStripeWidths;
 
 		this._makeSunAppearTween = new TWEEN.Tween(sunStripeFrom)
-			.to(sunStripeTo, 3000)
-			.easing(TWEEN.Easing.Quartic.InOut)
-			.delay(3000)
+			.to(sunStripeTo, sunStripeFadeTime)
+			.easing(sunStripeEasing)
+			.delay(sunStripeFadeDelay)
 			.onUpdate(() => {
 				sunStripeWidths.setX(sunStripeFrom.x);
 			});

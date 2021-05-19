@@ -303,7 +303,7 @@
 		.hamburger {
 			display: block;
 			position: absolute;
-			top: 2rem;
+			top: 2.2rem;
 			right: 0.25rem;
 			transform: translate(-50%, -50%);
 			width: 2rem;
@@ -313,11 +313,11 @@
 		}
 
 		.hamburger-before {
-			top: 1.45rem;
+			top: 1.65rem;
 		}
 
 		.hamburger-after {
-			top: 2.55rem;
+			top: 2.75rem;
 		}
 
 		.hamburger-cross-left {
@@ -373,13 +373,14 @@
 		nav ul li a {
 			position: relative;
 			color: var(--hamburgerColor);
-			text-decoration: blink;
+			text-decoration: none;
 		}
 
-		/* nav ul li a::before{
+		/*
+		nav ul li a::before {
 			position: absolute;
 			display: block;
-			content: '_';
+			content: '>';
 			left: -2rem;
 			top: 0.5rem;
 			font-size: 75%;
@@ -411,6 +412,7 @@
 
 		.selected-navburger-item {
 			font-weight: bold;
+			text-decoration: underline;
 		}
 
 		@media only screen and (min-device-width : 481px) and (orientation: portrait),

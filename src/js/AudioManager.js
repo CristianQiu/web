@@ -1,5 +1,6 @@
-import { AudioLoader, AudioListener, Audio, MathUtils } from 'three';
+import { AudioLoader, AudioListener, Audio } from 'three';
 import TWEEN from '@tweenjs/tween.js';
+import Maths from './Maths';
 
 export default class AudioManager {
 
@@ -15,10 +16,11 @@ export default class AudioManager {
 
 		const fromVol = { x: 0.0 };
 		const toVol = { x: 0.5 };
+		const fadeTime = 4000;
 		const easing = TWEEN.Easing.Quintic.InOut;
 
 		this._fadeInVolTween = new TWEEN.Tween(fromVol)
-			.to(toVol, 4000)
+			.to(toVol, fadeTime)
 			.easing(easing)
 			.onUpdate(() => {
 				this.setVolume(fromVol.x);
@@ -55,7 +57,7 @@ export default class AudioManager {
 	}
 
 	setVolume(volume) {
-		const vol = MathUtils.clamp(volume, 0.0, 1.0);
+		const vol = Maths.fastClamp(volume, 0.0, 1.0);
 		this._audioSource.setVolume(vol);
 	}
 

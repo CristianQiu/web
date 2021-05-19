@@ -10,7 +10,6 @@ export default class DOMController {
 
 		this._navBurgerElements[0].classList.toggle('selected-navburger-item');
 
-
 		this._addListeners();
 	}
 
@@ -39,14 +38,19 @@ export default class DOMController {
 	addFadeClassesAfterLogin() {
 		const nameHeader = document.getElementById('name');
 		nameHeader.classList.add('fader');
-
-		// const infoBar = document.getElementById('info-bar');
-		// infoBar.classList.add('fader-delayed');
 	}
 
-	_addListeners() {
-		addEventListener('hashchange', this._onLocationHashChanged.bind(this));
-		this._hamburgerMenuButton.addEventListener('click', this._onClickHamburgerMenu.bind(this));
+	setLocationHash(locationHash) {
+		location.hash = locationHash;
+
+		switch (locationHash) {
+			case :
+
+				break;
+
+			default:
+				break;
+		}
 	}
 
 	_toggleHamburgerMenu() {
@@ -59,11 +63,16 @@ export default class DOMController {
 			this._navBurgerElements[i].classList.toggle('unfolded-navburger-item');
 	}
 
-	_onLocationHashChanged() {
-		this._toggleHamburgerMenu();
+	_addListeners() {
+		addEventListener('hashchange', this._onLocationHashChanged.bind(this));
+		this._hamburgerMenuButton.addEventListener('click', this._onClickHamburgerMenu.bind(this));
 	}
 
 	_onClickHamburgerMenu() {
+		this._toggleHamburgerMenu();
+	}
+
+	_onLocationHashChanged() {
 		this._toggleHamburgerMenu();
 	}
 }

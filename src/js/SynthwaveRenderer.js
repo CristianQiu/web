@@ -46,20 +46,24 @@ export default class SynthwaveRenderer {
 
 		const fromVig = { x: startVig, y: startVigFocus };
 		const toVig = { x: endVig, y: endVigFocus };
+		const vigFadeTime = 1250;
+		const vignetteEasing = TWEEN.Easing.Quartic.InOut;
 
 		this._fadeVignette = new TWEEN.Tween(fromVig)
-			.to(toVig, 1250)
-			.easing(TWEEN.Easing.Quartic.InOut)
+			.to(toVig, vigFadeTime)
+			.easing(vignetteEasing)
 			.onUpdate(() => {
 				this._uberPass.setVignetteFallOffFocusIntensity(fromVig.x, fromVig.y);
 			});
 
 		const fromTurnOn = { x: startTurnOn };
 		const toTurnOn = { x: endTurnOn };
+		const turnOnFadeTime = 2000;
+		const turnOnEasing = TWEEN.Easing.Quartic.InOut;
 
 		this._fadeTurnOn = new TWEEN.Tween(fromTurnOn)
-			.to(toTurnOn, 2000)
-			.easing(TWEEN.Easing.Quartic.InOut)
+			.to(toTurnOn, turnOnFadeTime)
+			.easing(turnOnEasing)
 			.onUpdate(() => {
 				this._uberPass.setTurnOnIntensity(fromTurnOn.x);
 			});
