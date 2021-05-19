@@ -80,9 +80,7 @@ class App {
 		if (this._audioManager.isInitialized())
 			return;
 
-		this._domController.removeItemsAfterLogin(100);
-		this._domController.changeAvChannelAndRemoveAfter(5000);
-		this._domController.addFadeClassesAfterLogin();
+		this._domController.joinWeb();
 
 		this._audioManager.init();
 		this._audioSpectrumAnalyzer = new AudioSpectrumAnalyzer(this._audioManager.getAudioSource());

@@ -53,6 +53,11 @@
 			-webkit-user-select: none;
 		}
 
+		.no-pointer-events {
+			pointer-events: none;
+			cursor: default;
+		}
+
 		/**/
 
 		#name {
@@ -376,16 +381,6 @@
 			text-decoration: none;
 		}
 
-		/*
-		nav ul li a::before {
-			position: absolute;
-			display: block;
-			content: '>';
-			left: -2rem;
-			top: 0.5rem;
-			font-size: 75%;
-		} */
-
 		nav ul li a::after {
 			position: absolute;
 			display: block;
@@ -412,7 +407,6 @@
 
 		.selected-navburger-item {
 			font-weight: bold;
-			text-decoration: underline;
 		}
 
 		@media only screen and (min-device-width : 481px) and (orientation: portrait),
@@ -449,10 +443,10 @@
 
 		<nav>
 			<ul>
-				<li class="navburger-item"><a href="#about">About me</a></li>
-				<li class="navburger-item"><a href="#projects">Projects</a></li>
-				<li class="navburger-item"><a href="#experience">Experience</a></li>
-				<li class="navburger-item"><a href="#contact">Contact</a></li>
+				<li class="navburger-item no-pointer-events"><a href="#about">About me</a></li>
+				<li class="navburger-item no-pointer-events"><a href="#projects">Projects</a></li>
+				<li class="navburger-item no-pointer-events"><a href="#experience">Experience</a></li>
+				<li class="navburger-item no-pointer-events"><a href="#contact">Contact</a></li>
 			</ul>
 		</nav>
 
