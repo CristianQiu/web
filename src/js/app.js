@@ -1,12 +1,12 @@
 import { Clock, Scene } from 'three';
 import Stats from 'three/examples/jsm/libs/stats.module';
-import SynthwaveCamera from './SynthwaveCamera';
+import { SynthwaveCamera } from './SynthwaveCamera';
 import { SynthwaveRenderer } from './SynthwaveRenderer';
 import { SynthwaveSkybox } from './SynthwaveSkybox';
 import { SynthwaveGrid } from './SynthwaveGrid';
-import AudioManager from './AudioManager';
-import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
-import DOMController from './DOMController';
+import { AudioManager } from './AudioManager';
+import { AudioSpectrumAnalyzer } from './AudioSpectrumAnalyzer';
+import { DOMController } from './DOMController';
 import TWEEN from '@tweenjs/tween.js';
 
 class App {
@@ -36,6 +36,7 @@ class App {
 		this._domController.appendBodyChild(this._renderer.getDomElement());
 
 		this._grid.generate();
+
 		this._scene.add(this._camera.getCameraParent());
 		this._scene.add(this._skybox.getMesh());
 		this._scene.add(this._grid.getMesh());

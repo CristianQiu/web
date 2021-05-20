@@ -15,7 +15,7 @@ const Easing = TWEEN.Easing.Quintic.InOut;
 
 const Simplex = new SimplexNoise();
 
-export default class SynthwaveCamera {
+export class SynthwaveCamera {
 
 	constructor(fov, aspect, near, far) {
 		this._tempEulers = new Euler(0.0, 0.0, 0.0);
