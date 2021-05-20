@@ -15,26 +15,17 @@ export class SynthwaveRenderer {
 		// this._renderer.toneMapping = THREE.NoToneMapping;
 		// this._renderer.toneMappingExposure = Math.pow(1.0, 4.0);
 
-		this._scanLinesCountNormal = 1024.0;
-		this._scanLinesCountLess = this._scanLinesCountNormal / 2.0;
-		this._scanLinesCountMinimal = this._scanLinesCountNormal / 4.0;
+		this._createSettings();
 
-		this._scanLineNormalThreshold = 300.0;
-		this._scanLinesLessThreshold = 150.0;
-
-		const startVig = 5.0;
-		const endVig = 0.15;
-
-		const startVigFocus = 5.0;
-		const endVigFocus = 15.0;
-
-		const startTurnOn = 0.0;
-		const endTurnOn = 1.0;
+		const scanLinesCount = this._scanLineSettings.countNormal;
+		const startVigFallOff = this._tweenSettings.startVignetteFallOff;
+		const startVigFocus = this._tweenSettings.startVignetteFocus;
+		const startTurnOnCrt = this._tweenSettings.startTurnOnCrt;
 
 		const res = new Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
-		this._uberPass = new UberPostFxPass(0.8, 0.33, this._scanLinesCountNormal, 0.0, startVig, startVigFocus, startTurnOn, 1.125);
+		this._uberPass = new UberPostFxPass(0.8, 0.33, scanLinesCount, 0.0, startVigFallOff, startVigFocus, startTurnOnCrt, 1.125);
 
 		this._composer = new EffectComposer(this._renderer);
 		this._composer.addPass(this._scenePass);
@@ -44,29 +35,7 @@ export class SynthwaveRenderer {
 		this.setPixelRatio(pixelRatio);
 		this.setSize(w, h);
 
-		const fromVig = { x: startVig, y: startVigFocus };
-		const toVig = { x: endVig, y: endVigFocus };
-		const vigFadeTime = 1250;
-		const vignetteEasing = TWEEN.Easing.Quartic.InOut;
-
-		this._fadeVignette = new TWEEN.Tween(fromVig)
-			.to(toVig, vigFadeTime)
-			.easing(vignetteEasing)
-			.onUpdate(() => {
-				this._uberPass.setVignetteFallOffFocusIntensity(fromVig.x, fromVig.y);
-			});
-
-		const fromTurnOn = { x: startTurnOn };
-		const toTurnOn = { x: endTurnOn };
-		const turnOnFadeTime = 2000;
-		const turnOnEasing = TWEEN.Easing.Quartic.InOut;
-
-		this._fadeTurnOn = new TWEEN.Tween(fromTurnOn)
-			.to(toTurnOn, turnOnFadeTime)
-			.easing(turnOnEasing)
-			.onUpdate(() => {
-				this._uberPass.setTurnOnIntensity(fromTurnOn.x);
-			});
+		this._createFadeTweens();
 	}
 
 	getDomElement() {
@@ -74,10 +43,7 @@ export class SynthwaveRenderer {
 	}
 
 	setSize(w, h) {
-		let scanLinesCount = h > this._scanLineNormalThreshold ? this._scanLinesCountNormal : this._scanLinesCountLess;
-		scanLinesCount = h > this._scanLinesLessThreshold ? scanLinesCount : this._scanLinesCountMinimal;
-
-		this._uberPass.setScanLineCountIntensity(scanLinesCount);
+		this._updateScanLines(h);
 		this._renderer.setSize(w, h);
 		this._composer.setSize(w, h);
 	}
@@ -99,5 +65,64 @@ export class SynthwaveRenderer {
 		this._fadeTurnOn.start();
 	}
 
-	
+	_createSettings() {
+		this._scanLineSettings =
+		{
+			countNormal: 1024.0,
+			countLess: 1024.0 / 2.0,
+			countMinimal: 1024.0 / 4.0,
+			normalThreshold: 300.0,
+			lessThreshold: 150.0
+		};
+
+		this._tweenSettings =
+		{
+			startVignetteFallOff: 5.0,
+			endVignetteFallOff: 0.15,
+			startVignetteFocus: 5.0,
+			endVignetteFocus: 15.0,
+			startTurnOnCrt: 0.0,
+			endTurnOnCrt: 1.0
+		};
+	}
+
+	_createFadeTweens() {
+		const fromVig = { x: this._tweenSettings.startVignetteFallOff, y: this._tweenSettings.startVignetteFocus };
+		const toVig = { x: this._tweenSettings.endVignetteFallOff, y: this._tweenSettings.endVignetteFocus };
+		const vigFadeTime = 1250;
+		const vignetteEasing = TWEEN.Easing.Quartic.InOut;
+
+		this._fadeVignette = new TWEEN.Tween(fromVig)
+			.to(toVig, vigFadeTime)
+			.easing(vignetteEasing)
+			.onUpdate(() => {
+				this._uberPass.setVignetteFallOffFocusIntensity(fromVig.x, fromVig.y);
+			});
+
+		const fromTurnOn = { x: this._tweenSettings.startTurnOnCrt };
+		const toTurnOn = { x: this._tweenSettings.endTurnOnCrt };
+		const turnOnFadeTime = 2000;
+		const turnOnEasing = TWEEN.Easing.Quartic.InOut;
+
+		this._fadeTurnOn = new TWEEN.Tween(fromTurnOn)
+			.to(toTurnOn, turnOnFadeTime)
+			.easing(turnOnEasing)
+			.onUpdate(() => {
+				this._uberPass.setTurnOnIntensity(fromTurnOn.x);
+			});
+	}
+
+	_updateScanLines(h) {
+		const normalThreshold = this._scanLineSettings.normalThreshold;
+		const lessThreshold = this._scanLineSettings.lessThreshold;
+
+		const countNormal = this._scanLineSettings.countNormal;
+		const countLess = this._scanLineSettings.countLess;
+		const countMin = this._scanLineSettings.countMinimal;
+
+		let lines = (h > normalThreshold) ? countNormal : countLess;
+		lines = (h > lessThreshold) ? lines : countMin;
+
+		this._uberPass.setScanLineCountIntensity(lines);
+	}
 }
