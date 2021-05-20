@@ -10,7 +10,33 @@
 	<link href="https://fonts.googleapis.com/css2?family=Exo:wght@900&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" rel="stylesheet">
 	<style>
-		/* Media queries reference: https://stackoverflow.com/questions/6370690/media-queries-how-to-target-desktop-tablet-and-mobile */
+		/* Media queries reference: https://stackoverflow.com/questions/6370690/media-queries-how-to-target-desktop-tablet-and-mobile
+
+		@media (min-width:320px) {
+			smartphones, iPhone, portrait 480x320 phones
+		}
+
+		@media (min-width:481px) {
+			portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide
+		}
+
+		@media (min-width:641px) {
+			portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones
+		}
+
+		@media (min-width:961px) {
+			tablet, landscape iPad, lo-res laptops ands desktops
+		}
+
+		@media (min-width:1025px) {
+			big landscape tablets, laptops, and desktops
+		}
+
+		@media (min-width:1281px) {
+			hi-res laptops and desktops
+		}
+
+		*/
 
 		@font-face {
 			font-family: 'VCR';
@@ -27,7 +53,6 @@
 			--crtAvColor: rgb(60, 241, 60);
 
 			--responsiveTime: 0.2s;
-			/* --responsiveEase: cubic-bezier(0.86, 0, 0.07, 1); */
 			--responsiveEase: ease-out;
 
 			--contentFont: 'Mr Dafoe', cursive;
@@ -48,9 +73,20 @@
 
 		/* ----- Commonalities ----- */
 
-		.non-selectable {
-			user-select: none;
-			-webkit-user-select: none;
+		.top {
+			top: 0;
+		}
+
+		.bottom {
+			bottom: 0;
+		}
+
+		.justify-center {
+			justify-content: center;
+		}
+
+		.justify-space-between {
+			justify-content: space-between;
 		}
 
 		.no-pointer-events {
@@ -58,65 +94,10 @@
 			cursor: default;
 		}
 
-		/**/
-
-		#name {
-			visibility: hidden;
-			position: relative;
-			font-family: 'Exo', sans-serif;
-			font-size: calc(2.5vh + 1.25vw);
-			text-transform: uppercase;
-			text-align: center;
-			white-space: nowrap;
-			/* margin-top: calc(0.25rem + 3vh); */
-			margin-top: calc(4.25rem + 3vh);
-			margin-bottom: calc(0.25rem + 1vh);
-			transform: skew(-16deg);
-			color: rgb(187, 211, 251);
-			letter-spacing: 0.1rem;
-			text-shadow: 0 0 0.3rem #a0f1ff;
-			max-width: 90%;
-		}
-
-		#name::after {
-			position: absolute;
-			display: block;
-			content: 'Game programmer';
-			font-size: calc(1.5vh + 1.0vw);
-			font-family: 'Mr Dafoe', cursive;
-			text-transform: capitalize;
-			font-weight: normal;
-			left: 50%;
-			top: 48%;
-			transform: translate(-50%, 0%) rotate(-3deg) skew(20deg);
-			-webkit-text-fill-color: white;
-			-webkit-text-stroke: 0;
-			text-shadow: 0 0 0.4rem #fe05e1, 0 0 0.3rem #fe05e1;
-			letter-spacing: normal;
-		}
-
-		.fader {
-			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
-		}
-
-		.fader-reverse {
-			animation: alphaFade 0.75s ease-in-out 0s 1 reverse forwards;
-		}
-
-		.fader-delayed {
-			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
-		}
-
-		@keyframes alphaFade {
-			from {
-				visibility: hidden;
-				opacity: 0;
-			}
-
-			to {
-				visibility: visible;
-				opacity: 1;
-			}
+		.non-selectable {
+			user-select: none;
+			-webkit-user-select: none;
+			-webkit-tap-highlight-color: transparent;
 		}
 
 		/* ----------- */
@@ -173,7 +154,6 @@
 			position: fixed;
 			flex-direction: row;
 			width: 100%;
-			justify-content: space-between;
 			align-items: center;
 		}
 
@@ -243,30 +223,77 @@
 			}
 		}
 
-		/* ----------- */
+		/* ----- Title name ----- */
 
-		.project-container {
-			display: grid;
-			grid-template-columns: repeat(2, 600px);
-			grid-auto-rows: 337px;
-			grid-gap: 50px;
-			justify-content: center;
-			/* max-width: 800px; */
+		.rotule {
+			--rotuleTransition: cubic-bezier(.75, 0, .25, 1);
+			--rotuleAnimationTime: 0.35s;
+			--rotuleShadowColor: rgb(160, 241, 255, 1);
+
+			font-family: 'Exo', sans-serif;
+			font-size: 2.25rem;
+			text-transform: uppercase;
+			white-space: nowrap;
+			margin: 3rem;
+			transform: skew(-16deg);
+			color: rgb(187, 211, 251, 1.0);
+			text-shadow: 0 0 0.1rem var(--rotuleShadowColor);
+			transition: all var(--rotuleAnimationTime) var(--rotuleAnimationTime);
 		}
 
-		.project {
-			background-color: white;
-			transition: all 1s linear;
+		.rotule::after {
+			position: absolute;
+			display: block;
+			content: 'Game programmer';
+			font-size: calc(1.5vh + 1.0vw);
+			font-family: 'Mr Dafoe', cursive;
+			text-transform: capitalize;
+			font-weight: normal;
+			left: 50%;
+			top: 48%;
+			transform: translate(-50%, 0%) rotate(-3deg) skew(20deg);
+			-webkit-text-fill-color: white;
+			-webkit-text-stroke: 0;
+			text-shadow: 0 0 0.4rem #fe05e1, 0 0 0.3rem #fe05e1;
+			letter-spacing: normal;
 		}
 
-		@media (max-width: 600px) {
-			.project-container {
-				display: grid;
-				grid-template-columns: repeat(1, 400px);
-				grid-auto-rows: 225px;
-				grid-gap: 50px;
-				justify-content: center;
-				/* max-width: 800px; */
+		.fader {
+			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
+		}
+
+		.fader-reverse {
+			animation: alphaFade 0.75s ease-in-out 0s 1 reverse forwards;
+		}
+
+		.fader-delayed {
+			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
+		}
+
+		@keyframes alphaFade {
+			from {
+				visibility: hidden;
+				opacity: 0;
+			}
+
+			to {
+				visibility: visible;
+				opacity: 1;
+			}
+		}
+
+		@media (min-width : 481px) and (orientation: portrait),
+		(min-height: 481px) and (orientation: landscape) {
+			.rotule {
+				font-size: 3.1rem;
+				text-shadow: 0 0 calc(3.1rem / 22.5) var(--rotuleShadowColor)
+			}
+		}
+
+		@media (min-width : 1281px) {
+			.rotule {
+				font-size: 4.1rem;
+				text-shadow: 0 0 calc(4.1rem / 22.5) var(--rotuleShadowColor)
 			}
 		}
 
@@ -284,7 +311,6 @@
 			top: 0;
 			right: 0;
 			transition: all var(--hamburgerAnimationTime) var(--hamburgerTransition);
-			-webkit-tap-highlight-color: transparent;
 		}
 
 		.hamburger-button {
@@ -302,7 +328,7 @@
 		.hamburger-unfolded {
 			width: 100%;
 			height: 100%;
-			background-color: rgb(0.0, 0.0, 0.0, 0.9);
+			background-color: rgb(0, 0, 0, 0.9);
 		}
 
 		.hamburger {
@@ -335,7 +361,7 @@
 			transform: translate(-50%, -50%) rotate(-45deg);
 		}
 
-		@media only screen and (min-width : 481px) and (orientation: portrait),
+		@media (min-width : 481px) and (orientation: portrait),
 		(min-height: 481px) and (orientation: landscape) {
 			.hamburger {
 				width: 2.5rem;
@@ -343,6 +369,12 @@
 
 			.hamburger-button {
 				width: 5.5rem;
+			}
+		}
+
+		@media (min-width : 1281px) {
+			.hamburger-unfolded {
+				width: 25rem;
 			}
 		}
 
@@ -357,7 +389,6 @@
 		nav ul {
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
 			align-items: center;
 			padding: 0;
 			margin: 0;
@@ -387,7 +418,7 @@
 			content: '';
 			width: 0;
 			height: 5%;
-			background-color: white;
+			background-color: var(--almostWhite);
 			left: 50%;
 			transform: translateX(-50%);
 			transition: width 0.25s var(--hamburgerTransition);
@@ -409,47 +440,80 @@
 			font-weight: bold;
 		}
 
-		@media only screen and (min-width : 481px) and (orientation: portrait),
+		@media (min-width : 481px) and (orientation: portrait),
 		(min-height: 481px) and (orientation: landscape) {
 			nav ul li {
 				font-size: 3rem;
 				padding: 1rem;
 			}
 		}
+
+		@media (min-width : 1281px) {
+			nav ul li {
+				font-size: 2rem;
+				padding: 0.75rem;
+			}
+		}
+
+		/* ----- Projects  ----- */
+
+		.project-container {
+			display: grid;
+			grid-template-columns: repeat(2, 600px);
+			grid-auto-rows: 337px;
+			grid-gap: 50px;
+			justify-content: center;
+			/* max-width: 800px; */
+		}
+
+		.project {
+			background-color: white;
+			transition: all 1s linear;
+		}
+
+		@media (max-width: 600px) {
+			.project-container {
+				display: grid;
+				grid-template-columns: repeat(1, 400px);
+				grid-auto-rows: 225px;
+				grid-gap: 50px;
+				justify-content: center;
+				/* max-width: 800px; */
+			}
+		}
 	</style>
 </head>
 
 <body>
-	<div class="flex-horizontal-bar" style="top: 0">
+	<div class="flex-horizontal-bar justify-space-between top">
 		<span id="crt-av" class="crt-text display-after-time-fast">AV-1</span>
 		<span class="removable crt-text crt-text-blink-display-after">NO-SIGNAL</span>
 	</div>
 	<div class="removable flex-container-center display-after-time-slow">
 		<button id="join" class="crt-text">&nbspAV-2 WEB&nbsp</span>
 	</div>
-	<div class="removable flex-horizontal-bar display-after-time-slow" style="bottom: 0; justify-content: center;">
+	<div class="removable flex-horizontal-bar justify-center display-after-time-slow bottom">
 		<span class="crt-text" style="font-size: calc(3vh + 0.75vw)">CRISTIAN QIU</span>
 	</div>
 
-	<h1 id="name">Cristian Qiu</h1>
+	<div class="flex-horizontal-bar justify-center top">
+		<h1 id="rotule" class="rotule">Cristian Qiu</h1>
+	</div>
 
 	<div id="hamburger-container" class="hamburger-container non-selectable">
-
-		<button id="hamburger-button" class="hamburger-button">
+		<button id="hamburger-button" class="hamburger-button" aria-label="Navigation menu">
 			<span id="hamburger-before" class="hamburger hamburger-before"></span>
 			<span id="hamburger-center" class="hamburger"></span>
 			<span id="hamburger-after" class="hamburger hamburger-after"></span>
 		</button>
-
 		<nav>
-			<ul>
+			<ul class="justify-center">
 				<li class="navburger-item no-pointer-events"><a href="#about">About me</a></li>
 				<li class="navburger-item no-pointer-events"><a href="#projects">Projects</a></li>
 				<li class="navburger-item no-pointer-events"><a href="#experience">Experience</a></li>
 				<li class="navburger-item no-pointer-events"><a href="#contact">Contact</a></li>
 			</ul>
 		</nav>
-
 	</div>
 
 	<!-- <div class="project-container">

@@ -41,8 +41,8 @@ export default class DOMController {
 			avHtml.parentElement.remove();
 		}, 5000);
 
-		const nameHeader = document.getElementById('name');
-		nameHeader.classList.add('fader');
+		// const nameHeader = document.getElementById('name');
+		// nameHeader.classList.add('fader');
 	}
 
 	_setLocationHash(locationHash) {
