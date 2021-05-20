@@ -241,7 +241,7 @@
 			transition: all var(--rotuleAnimationTime) var(--rotuleAnimationTime);
 		}
 
-		.rotule::after {
+		/* .rotule::after {
 			position: absolute;
 			display: block;
 			content: 'Game programmer';
@@ -256,7 +256,7 @@
 			-webkit-text-stroke: 0;
 			text-shadow: 0 0 0.4rem #fe05e1, 0 0 0.3rem #fe05e1;
 			letter-spacing: normal;
-		}
+		} */
 
 		.fader {
 			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
@@ -286,14 +286,15 @@
 		(min-height: 481px) and (orientation: landscape) {
 			.rotule {
 				font-size: 3.1rem;
-				text-shadow: 0 0 calc(3.1rem / 22.5) var(--rotuleShadowColor)
+				text-shadow: 0 0 calc(3.1rem / 22.5) var(--rotuleShadowColor);
 			}
 		}
 
 		@media (min-width : 1281px) {
 			.rotule {
 				font-size: 4.1rem;
-				text-shadow: 0 0 calc(4.1rem / 22.5) var(--rotuleShadowColor)
+				text-shadow: 0 0 calc(4.1rem / 22.5) var(--rotuleShadowColor);
+				/* transform: rotate(-90deg) skew(-16deg); */
 			}
 		}
 

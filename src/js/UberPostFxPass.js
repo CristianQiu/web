@@ -1,30 +1,21 @@
 import { UniformsUtils, ShaderMaterial } from 'three';
 import { Pass, FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass';
-import UberPostFxShader from './UberPostFxShader';
+import { UberPostFxShader } from './UberPostFxShader';
 
-export default class UberPostFxPass extends Pass {
+export class UberPostFxPass extends Pass {
 
-	constructor(saturationIntensity, noiseWeight, scanlinesCount, scanlinesIntensity, vignetteFallOffIntensity, vignetteFocusIntensity, exposure, turnOnIntensity) {
+	constructor(saturationIntensity, noiseWeight, scanlineCount, scanlineIntensity, vignetteFallOffIntensity, vignetteFocusIntensity, turnOnIntensity, exposure) {
 		super();
+
 		const shader = UberPostFxShader;
 		this._uniforms = UniformsUtils.clone(shader.uniforms);
 
-		if (saturationIntensity !== undefined)
-			this._uniforms.saturationIntensity.value = saturationIntensity;
-		if (noiseWeight !== undefined)
-			this._uniforms.noiseWeight.value = noiseWeight;
-		if (scanlinesCount !== undefined)
-			this._uniforms.scanLineCount.value = scanlinesCount;
-		if (scanlinesIntensity !== undefined)
-			this._uniforms.scanLineIntensity.value = scanlinesIntensity;
-		if (vignetteFallOffIntensity !== undefined)
-			this._uniforms.vignetteFallOffIntensity.value = vignetteFallOffIntensity;
-		if (vignetteFocusIntensity !== undefined)
-			this._uniforms.vignetteFocusIntensity.value = vignetteFocusIntensity;
-		if (exposure !== undefined)
-			this._uniforms.exposure.value = exposure;
-		if (turnOnIntensity !== undefined)
-			this._uniforms.turnOnIntensity.value = turnOnIntensity;
+		this.setSaturation(saturationIntensity);
+		this.setNoise(noiseWeight);
+		this.setScanLineCountIntensity(scanlineCount, scanlineIntensity);
+		this.setVignetteFallOffFocusIntensity(vignetteFallOffIntensity, vignetteFocusIntensity);
+		this.setTurnOnIntensity(turnOnIntensity);
+		this.setExposure(exposure);
 
 		this._material = new ShaderMaterial({
 			uniforms: this._uniforms,
@@ -33,6 +24,36 @@ export default class UberPostFxPass extends Pass {
 		});
 
 		this.fsQuad = new FullScreenQuad(this._material);
+	}
+
+	setSaturation(intensity) {
+		this._uniforms.saturationIntensity.value = intensity;
+	}
+
+	setNoise(weight) {
+		this._uniforms.noiseWeight.value = weight;
+	}
+
+	setScanLineCountIntensity(count = undefined, intensity = undefined) {
+		if (count !== undefined)
+			this._uniforms.scanLineCount.value = count;
+		if (intensity !== undefined)
+			this._uniforms.scanLineIntensity.value = intensity;
+	}
+
+	setVignetteFallOffFocusIntensity(fallOff = undefined, focus = undefined) {
+		if (fallOff !== undefined)
+			this._uniforms.vignetteFallOffIntensity.value = fallOff;
+		if (focus !== undefined)
+			this._uniforms.vignetteFocusIntensity.value = focus;
+	}
+
+	setTurnOnIntensity(intensity) {
+		this._uniforms.turnOnIntensity.value = intensity;
+	}
+
+	setExposure(value) {
+		this._uniforms.exposure.value = value;
 	}
 
 	render(renderer, writeBuffer, readBuffer, deltaTime) {
@@ -49,26 +70,5 @@ export default class UberPostFxPass extends Pass {
 		}
 
 		this.fsQuad.render(renderer);
-	}
-
-	setSaturation(intensity) {
-		this._uniforms.saturationIntensity.value = intensity;
-	}
-
-	setNoiseWeight(weight) {
-		this._uniforms.noiseWeight.value = weight;
-	}
-
-	setScanLinesCount(count) {
-		this._uniforms.scanLineCount.value = count;
-	}
-
-	setVignetteFallOffFocusIntensity(fallOff, focus) {
-		this._uniforms.vignetteFallOffIntensity.value = fallOff;
-		this._uniforms.vignetteFocusIntensity.value = focus;
-	}
-
-	setTurnOnIntensity(intensity) {
-		this._uniforms.turnOnIntensity.value = intensity;
 	}
 }

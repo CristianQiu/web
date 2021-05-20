@@ -1,6 +1,6 @@
 import { Vector3, Vector4, Color } from 'three';
 
-const SynthwaveSkyboxShader = {
+export const SynthwaveSkyboxShader = {
 
 	uniforms: {
 		'sunPosition': { value: new Vector3(0.0, 0.05, 1.0) },
@@ -109,5 +109,3 @@ const SynthwaveSkyboxShader = {
 			gl_FragColor = vec4(sunColor * vec3(sun) + skyColor * vec3(sky) + flareColor * vec3(flare), 1.0);
 	}`
 };
-
-export default SynthwaveSkyboxShader;

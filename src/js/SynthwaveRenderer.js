@@ -2,10 +2,10 @@ import { WebGLRenderer, Vector2, LinearEncoding } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
-import UberPostFxPass from './UberPostFxPass';
+import { UberPostFxPass } from './UberPostFxPass';
 import TWEEN from '@tweenjs/tween.js';
 
-export default class SynthwaveRenderer {
+export class SynthwaveRenderer {
 
 	constructor(scene, camera, w, h, pixelRatio) {
 		this._renderer = new WebGLRenderer();
@@ -34,7 +34,7 @@ export default class SynthwaveRenderer {
 		const res = new Vector2(w, h);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
-		this._uberPass = new UberPostFxPass(0.8, 0.33, this._scanLinesCountNormal, 0.0, startVig, startVigFocus, 1.125, startTurnOn);
+		this._uberPass = new UberPostFxPass(0.8, 0.33, this._scanLinesCountNormal, 0.0, startVig, startVigFocus, startTurnOn, 1.125);
 
 		this._composer = new EffectComposer(this._renderer);
 		this._composer.addPass(this._scenePass);
@@ -77,7 +77,7 @@ export default class SynthwaveRenderer {
 		let scanLinesCount = h > this._scanLineNormalThreshold ? this._scanLinesCountNormal : this._scanLinesCountLess;
 		scanLinesCount = h > this._scanLinesLessThreshold ? scanLinesCount : this._scanLinesCountMinimal;
 
-		this._uberPass.setScanLinesCount(scanLinesCount);
+		this._uberPass.setScanLineCountIntensity(scanLinesCount);
 		this._renderer.setSize(w, h);
 		this._composer.setSize(w, h);
 	}
@@ -98,4 +98,6 @@ export default class SynthwaveRenderer {
 	turnOnCrt() {
 		this._fadeTurnOn.start();
 	}
+
+	
 }

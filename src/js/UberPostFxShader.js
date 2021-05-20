@@ -1,4 +1,4 @@
-const UberPostFxShader = {
+export const UberPostFxShader = {
 
 	uniforms: {
 		'tDiffuse': { value: null },
@@ -9,8 +9,8 @@ const UberPostFxShader = {
 		'scanLineIntensity': { value: 0.1 },
 		'vignetteFallOffIntensity': { value: 0.15 },
 		'vignetteFocusIntensity': { value: 15.0 },
-		'exposure': { value: 1.25 },
 		'turnOnIntensity': { value: 1.0 },
+		'exposure': { value: 1.25 },
 		'warpIntensity': { value: 0.025 },
 		'bandOffset': { value: -0.00075 },
 		'baseIor': { value: 0.9 },
@@ -36,8 +36,8 @@ const UberPostFxShader = {
 		uniform float scanLineIntensity;
 		uniform float vignetteFallOffIntensity;
 		uniform float vignetteFocusIntensity;
-		uniform float exposure;
 		uniform float turnOnIntensity;
+		uniform float exposure;
 		uniform float warpIntensity;
 		uniform float bandOffset;
 		uniform float baseIor;
@@ -163,5 +163,3 @@ const UberPostFxShader = {
 			gl_FragColor = vec4(color * crtVig * vig, 1.0);
 		}`,
 };
-
-export default UberPostFxShader;
