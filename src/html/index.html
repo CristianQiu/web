@@ -81,6 +81,20 @@
 			bottom: 0;
 		}
 
+		.middle {
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		.flex-horizontal-bar {
+			display: flex;
+			position: fixed;
+			flex-direction: row;
+			width: 100%;
+			align-items: center;
+		}
+
 		.justify-center {
 			justify-content: center;
 		}
@@ -147,14 +161,6 @@
 
 		#join:active::before {
 			width: 100%;
-		}
-
-		.flex-horizontal-bar {
-			display: flex;
-			position: fixed;
-			flex-direction: row;
-			width: 100%;
-			align-items: center;
 		}
 
 		.crt-text {
@@ -228,7 +234,8 @@
 		.rotule {
 			--rotuleTransition: cubic-bezier(.75, 0, .25, 1);
 			--rotuleAnimationTime: 0.35s;
-			--rotuleShadowColor: rgb(160, 241, 255, 1);
+			--rotuleShadowColor: rgb(160, 241, 255, 1.0);
+			--subRotuleShadowColor: rgb(254, 5, 225, 1.0);
 
 			font-family: 'Exo', sans-serif;
 			font-size: 2.25rem;
@@ -238,25 +245,24 @@
 			transform: skew(-16deg);
 			color: rgb(187, 211, 251, 1.0);
 			text-shadow: 0 0 0.1rem var(--rotuleShadowColor);
-			transition: all var(--rotuleAnimationTime) var(--rotuleAnimationTime);
+			transition: all var(--rotuleAnimationTime) var(--rotuleTransition);
 		}
 
-		/* .rotule::after {
+		.rotule::after {
 			position: absolute;
 			display: block;
 			content: 'Game programmer';
-			font-size: calc(1.5vh + 1.0vw);
+			font-size: 1.4rem;
 			font-family: 'Mr Dafoe', cursive;
 			text-transform: capitalize;
 			font-weight: normal;
 			left: 50%;
-			top: 48%;
+			top: 50%;
 			transform: translate(-50%, 0%) rotate(-3deg) skew(20deg);
-			-webkit-text-fill-color: white;
-			-webkit-text-stroke: 0;
-			text-shadow: 0 0 0.4rem #fe05e1, 0 0 0.3rem #fe05e1;
-			letter-spacing: normal;
-		} */
+			text-shadow: 0 0 0.25rem var(--subRotuleShadowColor), 0 0 0.15rem var(--subRotuleShadowColor);
+			-webkit-text-fill-color: var(--almostWhite);
+			transition: all var(--rotuleAnimationTime) var(--rotuleTransition);
+		}
 
 		.fader {
 			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
@@ -288,13 +294,23 @@
 				font-size: 3.1rem;
 				text-shadow: 0 0 calc(3.1rem / 22.5) var(--rotuleShadowColor);
 			}
+
+			.rotule::after {
+				font-size: calc(1.4rem * 1.3777);
+				text-shadow: 0 0 0.3rem var(--subRotuleShadowColor), 0 0 0.2rem var(--subRotuleShadowColor);
+			}
 		}
 
 		@media (min-width : 1281px) {
 			.rotule {
 				font-size: 4.1rem;
 				text-shadow: 0 0 calc(4.1rem / 22.5) var(--rotuleShadowColor);
-				/* transform: rotate(-90deg) skew(-16deg); */
+				/* transform: rotate(-90deg) skew(-15deg); */
+			}
+
+			.rotule::after {
+				font-size: calc(1.4rem * 1.8222);
+				text-shadow: 0 0 0.3rem var(--subRotuleShadowColor), 0 0 0.2rem var(--subRotuleShadowColor);
 			}
 		}
 
@@ -486,7 +502,7 @@
 </head>
 
 <body>
-	<div class="flex-horizontal-bar justify-space-between top">
+	<div class="flex-horizontal-bar justify-space-between">
 		<span id="crt-av" class="crt-text display-after-time-fast">AV-1</span>
 		<span class="removable crt-text crt-text-blink-display-after">NO-SIGNAL</span>
 	</div>
@@ -497,7 +513,7 @@
 		<span class="crt-text" style="font-size: calc(3vh + 0.75vw)">CRISTIAN QIU</span>
 	</div>
 
-	<div class="flex-horizontal-bar justify-center top">
+	<div class="flex-horizontal-bar justify-center non-selectable no-pointer-events">
 		<h1 id="rotule" class="rotule">Cristian Qiu</h1>
 	</div>
 
