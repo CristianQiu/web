@@ -1,4 +1,4 @@
-export default class DOMController {
+export class DOMController {
 
 	constructor() {
 		this._setLocationHash('#main');

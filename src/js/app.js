@@ -1,13 +1,13 @@
 import { Clock, Scene } from 'three';
 import Stats from 'three/examples/jsm/libs/stats.module';
-import TWEEN from '@tweenjs/tween.js';
 import SynthwaveCamera from './SynthwaveCamera';
 import { SynthwaveRenderer } from './SynthwaveRenderer';
 import { SynthwaveSkybox } from './SynthwaveSkybox';
-import SynthwaveGrid from './SynthwaveGrid';
+import { SynthwaveGrid } from './SynthwaveGrid';
 import AudioManager from './AudioManager';
 import AudioSpectrumAnalyzer from './AudioSpectrumAnalyzer';
 import DOMController from './DOMController';
+import TWEEN from '@tweenjs/tween.js';
 
 class App {
 

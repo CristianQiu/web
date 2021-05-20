@@ -1,8 +1,8 @@
 import { Vector2, BufferGeometry, UniformsUtils, ShaderMaterial, Mesh, Vector3, Float32BufferAttribute } from 'three';
-import SynthwaveGridShader from './SynthwaveGridShader';
-import Maths from './Maths';
+import { SynthwaveGridShader } from './SynthwaveGridShader';
+import { Maths } from './Maths';
 
-export default class SynthwaveGrid {
+export class SynthwaveGrid {
 
 	constructor(vertexResX = 64, vertexResY = 64, quadSize = 1.0) {
 		this._vertexRes = new Vector2(vertexResX, vertexResY);
@@ -12,16 +12,17 @@ export default class SynthwaveGrid {
 		this._speed = 1.5;
 
 		this._geometry = new BufferGeometry();
-		const uniforms = UniformsUtils.clone(SynthwaveGridShader.uniforms);
-		this._material = new ShaderMaterial({
-			uniforms: uniforms,
-			vertexShader: SynthwaveGridShader.vertexShader,
-			fragmentShader: SynthwaveGridShader.fragmentShader,
+		const shader = SynthwaveGridShader;
+		this._uniforms = UniformsUtils.clone(shader.uniforms);
+		const material = new ShaderMaterial({
+			uniforms: this._uniforms,
+			vertexShader: shader.vertexShader,
+			fragmentShader: shader.fragmentShader,
 			extensions: {
 				derivatives: true
 			}
 		});
-		this._mesh = new Mesh(this._geometry, this._material);
+		this._mesh = new Mesh(this._geometry, material);
 	}
 
 	getMesh() {
@@ -72,16 +73,16 @@ export default class SynthwaveGrid {
 	animate(elapsedTime, audioMeans = undefined) {
 		elapsedTime *= this._speed;
 
-		this._material.uniforms.time.value = elapsedTime;
-		this._material.uniforms.resolution.value = this._vertexRes;
-		this._material.uniforms.corridorWidth.value = this._corridorWidth;
-		this._material.uniforms.mountainEdgeSmoothness.value = this._mountainEdgeSmoothness;
-		this._material.uniforms.quadScale.value = this._quadSize;
+		this._uniforms.time.value = elapsedTime;
+		this._uniforms.resolution.value = this._vertexRes;
+		this._uniforms.quadScale.value = this._quadSize;
+		this._uniforms.corridorWidth.value = this._corridorWidth;
+		this._uniforms.mountainEdgeSmoothness.value = this._mountainEdgeSmoothness;
 
 		if (audioMeans === undefined || audioMeans === null)
 			return;
 
 		const avgMean = Maths.calcArrayAvg(audioMeans) * 0.006;
-		this._material.uniforms.audioAvgMean.value = avgMean;
+		this._uniforms.audioAvgMean.value = avgMean;
 	}
 }

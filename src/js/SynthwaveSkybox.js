@@ -8,7 +8,7 @@ export class SynthwaveSkybox {
 		this._geometry = new BoxBufferGeometry(1, 1, 1, 1, 1, 1);
 		const shader = SynthwaveSkyboxShader;
 		this._uniforms = UniformsUtils.clone(shader.uniforms);
-		this._material = new ShaderMaterial({
+		const material = new ShaderMaterial({
 			side: BackSide,
 			depthWrite: false,
 			uniforms: this._uniforms,
@@ -18,7 +18,7 @@ export class SynthwaveSkybox {
 				derivatives: true
 			}
 		});
-		this._mesh = new Mesh(this._geometry, this._material);
+		this._mesh = new Mesh(this._geometry, material);
 		this._mesh.scale.setScalar(10000);
 
 		this._initSunRotationVars();

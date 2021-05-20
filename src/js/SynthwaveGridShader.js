@@ -1,6 +1,6 @@
 import { Color, Vector2 } from 'three';
 
-const SynthwaveGridShader = {
+export const SynthwaveGridShader = {
 
 	uniforms: {
 		'time': { value: 0.0 },
@@ -172,5 +172,3 @@ const SynthwaveGridShader = {
 			gl_FragColor = vec4(color, 1.0);
 		}`
 };
-
-export default SynthwaveGridShader;

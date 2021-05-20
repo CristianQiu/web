@@ -1,8 +1,8 @@
 import { AudioLoader, AudioListener, Audio } from 'three';
+import { Maths } from './Maths';
 import TWEEN from '@tweenjs/tween.js';
-import Maths from './Maths';
 
-export default class AudioManager {
+export class AudioManager {
 
 	constructor(mainCameraListener) {
 		this._musicFile = '../../resources/bgMusic.mp3';
@@ -14,17 +14,7 @@ export default class AudioManager {
 		this._mainCameraListener = mainCameraListener;
 		this._audioSource = null;
 
-		const fromVol = { x: 0.0 };
-		const toVol = { x: 0.5 };
-		const fadeTime = 4000;
-		const easing = TWEEN.Easing.Quintic.InOut;
-
-		this._fadeInVolTween = new TWEEN.Tween(fromVol)
-			.to(toVol, fadeTime)
-			.easing(easing)
-			.onUpdate(() => {
-				this.setVolume(fromVol.x);
-			});
+		this._createFadeTween();
 	}
 
 	getAudioSource() {
@@ -59,6 +49,20 @@ export default class AudioManager {
 	setVolume(volume) {
 		const vol = Maths.fastClamp(volume, 0.0, 1.0);
 		this._audioSource.setVolume(vol);
+	}
+
+	_createFadeTween() {
+		const fromVol = { x: 0.0 };
+		const toVol = { x: 0.5 };
+		const fadeTime = 4000;
+		const easing = TWEEN.Easing.Quintic.InOut;
+
+		this._fadeInVolTween = new TWEEN.Tween(fromVol)
+			.to(toVol, fadeTime)
+			.easing(easing)
+			.onUpdate(() => {
+				this.setVolume(fromVol.x);
+			});
 	}
 
 	_onMusicLoaded(buffer) {

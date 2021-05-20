@@ -17,13 +17,13 @@ export class UberPostFxPass extends Pass {
 		this.setTurnOnIntensity(turnOnIntensity);
 		this.setExposure(exposure);
 
-		this._material = new ShaderMaterial({
+		const material = new ShaderMaterial({
 			uniforms: this._uniforms,
 			vertexShader: shader.vertexShader,
 			fragmentShader: shader.fragmentShader
 		});
 
-		this.fsQuad = new FullScreenQuad(this._material);
+		this.fsQuad = new FullScreenQuad(material);
 	}
 
 	setSaturation(intensity) {
