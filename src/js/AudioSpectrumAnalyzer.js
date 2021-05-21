@@ -18,6 +18,7 @@ export class AudioSpectrumAnalyzer extends AudioAnalyser {
 
 	constructor(audio, fftSize = 2048) {
 		super(audio, fftSize);
+
 		this._rawMeans = new Array(NumBands).fill(0.0);
 		this._smoothedMeans = new Array(NumBands).fill(0.0);
 		this._decayRate = 75.0;
