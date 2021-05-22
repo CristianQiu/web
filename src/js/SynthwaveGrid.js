@@ -82,7 +82,7 @@ export class SynthwaveGrid {
 		if (audioMeans === undefined || audioMeans === null)
 			return;
 
-		const avgMean = Maths.calcArrayAvg(audioMeans) * 0.006;
+		const avgMean = Maths.calcArrayAvg(audioMeans);
 		this._uniforms.audioAvgMean.value = avgMean;
 	}
 }

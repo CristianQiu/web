@@ -92,6 +92,8 @@ export const SynthwaveGridShader = {
 
 		float gridHeight(vec3 pos)
 		{
+			float audioMean = audioAvgMean * 0.006;
+
 			float halfResX = resolution.x * 0.5 * quadScale;
 			float xAbs = abs(pos.x);
 			float tz = pos.z / (resolution.y * quadScale);
@@ -105,10 +107,10 @@ export const SynthwaveGridShader = {
 			float edge = 1.0 - smoothstep(halfResX - mountainEdgeSmoothness, halfResX, xAbs);
 			float corridorEdge = min(corridor, edge);
 
-			float noise = (snoise(vec3(pos.x * freq, (pos.z + time) * freq, audioAvgMean)) * 0.5 + 0.5) * amp;
+			float noise = (snoise(vec3(pos.x * freq, (pos.z + time) * freq, audioMean)) * 0.5 + 0.5) * amp;
 			float power = mix(minH, maxH, tz * tz);
 
-			return pow(noise, power) * corridorEdge * audioAvgMean;
+			return pow(noise, power) * corridorEdge * audioMean;
 		}
 
 		void main() {
