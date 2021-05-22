@@ -7,7 +7,7 @@ import TWEEN from '@tweenjs/tween.js';
 
 export class SynthwaveRenderer {
 
-	constructor(scene, camera, w, h, pixelRatio) {
+	constructor(scene, camera, width, height, pixelRatio) {
 		this._renderer = new WebGLRenderer();
 		this._renderer.outputEncoding = LinearEncoding;
 		// Note: this must be implemented in the postprocessing stack.
@@ -22,7 +22,7 @@ export class SynthwaveRenderer {
 		const startVigFocus = this._tweenSettings.startVignetteFocus;
 		const startTurnOnCrt = this._tweenSettings.startTurnOnCrt;
 
-		const res = new Vector2(w, h);
+		const res = new Vector2(width, height);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
 		this._uberPass = new UberPostFxPass(0.8, 0.33, scanLinesCount, 0.0, startVigFallOff, startVigFocus, startTurnOnCrt, 1.125);
@@ -33,7 +33,7 @@ export class SynthwaveRenderer {
 		this._composer.addPass(this._uberPass);
 
 		this.setPixelRatio(pixelRatio);
-		this.setSize(w, h);
+		this.setSize(width, height);
 
 		this._createFadeTweens();
 	}
@@ -42,10 +42,10 @@ export class SynthwaveRenderer {
 		return this._renderer.domElement;
 	}
 
-	setSize(w, h) {
-		this._updateScanLines(h);
-		this._renderer.setSize(w, h);
-		this._composer.setSize(w, h);
+	setSize(width, height) {
+		this._updateScanLines(height);
+		this._renderer.setSize(width, height);
+		this._composer.setSize(width, height);
 	}
 
 	setPixelRatio(pixelRatio) {
@@ -112,7 +112,7 @@ export class SynthwaveRenderer {
 			});
 	}
 
-	_updateScanLines(h) {
+	_updateScanLines(height) {
 		const normalThreshold = this._scanLineSettings.normalThreshold;
 		const lessThreshold = this._scanLineSettings.lessThreshold;
 
@@ -120,8 +120,8 @@ export class SynthwaveRenderer {
 		const countLess = this._scanLineSettings.countLess;
 		const countMin = this._scanLineSettings.countMinimal;
 
-		let lines = (h > normalThreshold) ? countNormal : countLess;
-		lines = (h > lessThreshold) ? lines : countMin;
+		let lines = (height > normalThreshold) ? countNormal : countLess;
+		lines = (height > lessThreshold) ? lines : countMin;
 
 		this._uberPass.setScanLineCountIntensity(lines);
 	}

@@ -57,13 +57,12 @@ export const SynthwaveSkyboxShader = {
 		float remap(float a, float b, float c, float d, float t) {
 			float s = (t - a) / (b - a);
 			s = clamp(s, 0.0, 1.0);
+
 			return mix(c, d, s);
 		}
 
-		void main() {
-			vec3 pos = normalize(objectPosition);
-
-			//sun
+		float sun(vec3 pos)
+		{
 			vec4 stripeHeightsNorm = mix(vec4(0.0), vec4(sunStripeHeights), vec4(sunDiscSize));
 			vec4 stripeDists = abs(vec4(pos.y) - stripeHeightsNorm - vec4(sunPosition.y));
 			vec4 stripeAntialias = fwidth(stripeDists) * sunAntialiasing;
@@ -75,6 +74,11 @@ export const SynthwaveSkyboxShader = {
 			float sun = 1.0 - smoothstep(sunDiscSize - sunAntialias, sunDiscSize, d);
 			sun *= stripeDists.x * stripeDists.y * stripeDists.z * stripeDists.w;
 
+			return sun;
+		}
+
+		vec3 sunColor(vec3 pos)
+		{
 			// [0, 1] sun bottom to sun top
 			float tSun = (((pos.y - sunPosition.y) / sunDiscSize) + 1.0) * 0.5;
 			tSun = clamp(tSun, 0.0, 1.0);
@@ -84,10 +88,12 @@ export const SynthwaveSkyboxShader = {
 			float tSunMidTop = remap(sunGradientMidPoint, 1.0, 0.0, 1.0, tSun);
 			vec3 sunMidTopColor = mix(sunMidColor, sunTopColor, tSunMidTop);
 
-			vec3 sunColor = mix(sunBottomMidColor, sunMidTopColor, step(sunGradientMidPoint, tSun));
+			return mix(sunBottomMidColor, sunMidTopColor, step(sunGradientMidPoint, tSun));
+		}
 
+		float skyColor(vec3 pos)
+		{
 			// [0, 1] sky nadir to sky zenith
-			float sky = 1.0 - sun;
 			float yPos01 = (pos.y + 1.0) * 0.5;
 
 			float tSkyNadirHorizon = remap(0.0, horizonHeight, 0.0, 1.0, yPos01);
@@ -95,17 +101,39 @@ export const SynthwaveSkyboxShader = {
 			float tSkyHorizonZenith = remap(horizonHeight, 1.0, 0.0, 1.0, yPos01);
 			vec3 horizonZenithColor = mix(horizonColor, zenithColor, tSkyHorizonZenith);
 
-			vec3 skyColor = mix(nadirHorizonColor, horizonZenithColor, smoothstep(0.0, 1.0, yPos01));
+			return mix(nadirHorizonColor, horizonZenithColor, smoothstep(0.0, 1.0, yPos01));
+		}
 
+		float flare(vec3 pos)
+		{
 			// static horizon flare line, which is slightly thickened towards the sides of the view
 			float yAbs = abs(pos.y - flarePosition);
 			float flareModifier = smoothstep(0.0, 1.0, abs(pos.x)) + 1.0;
-			float flare = smoothstep(flareModifier * flareWidth - flareFalloff, flareModifier * flareWidth, yAbs);
+
+			return smoothstep(flareModifier * flareWidth - flareFalloff, flareModifier * flareWidth, yAbs);
+		}
+
+		vec4 composeSkyboxColor(float sun, vec3 sunColor, float sky, vec3 skyColor, float flare, vec3 flareColor)
+		{
+			// make the sun be tinted by the sky behind
+			sunColor = mix(sunColor, sunColor * skyColor, smoothstep(0.0, 1.0, skyTintsSun));
+
+			return vec4(sunColor * vec3(sun) + skyColor * vec3(sky) + flareColor * vec3(flare), 1.0);
+		}
+
+		void main() {
+			vec3 pos = normalize(objectPosition);
+
+			float sun = sun(pos);
+			vec3 sunColor = sunColor(pos);
+
+			float sky = 1.0 - sun;
+			vec3 skyColor = skyColor(pos);
+
+			float flare = flare(pos);
 			sky = sky * flare;
 			flare = 1.0 - flare;
 
-			// make the sun be tinted by the sky behind
-			sunColor = mix(sunColor, sunColor * skyColor, smoothstep(0.0, 1.0, skyTintsSun));
-			gl_FragColor = vec4(sunColor * vec3(sun) + skyColor * vec3(sky) + flareColor * vec3(flare), 1.0);
+			gl_FragColor = composeSkyboxColor(sun, sunColor, sky, skyColor, flare, flareColor);
 	}`
 };

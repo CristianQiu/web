@@ -56,9 +56,9 @@ export class UberPostFxPass extends Pass {
 		this._uniforms.exposure.value = value;
 	}
 
-	render(renderer, writeBuffer, readBuffer, deltaTime) {
+	render(renderer, writeBuffer, readBuffer, dt) {
 		this._uniforms.tDiffuse.value = readBuffer.texture;
-		this._uniforms.time.value += deltaTime;
+		this._uniforms.time.value += dt;
 
 		if (this.renderToScreen) {
 			renderer.setRenderTarget(null);

@@ -48,6 +48,7 @@ export const UberPostFxShader = {
 		// From https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
 		vec2 curveUv(vec2 uv) {
 			vec2 delta = uv - 0.5;
+
 			float deltaSq = dot(delta, delta);
 			float deltaSqSq = deltaSq * deltaSq;
 			float offset = deltaSqSq * warpIntensity;
@@ -78,17 +79,19 @@ export const UberPostFxShader = {
 		}
 
 		// From https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Saturation-Node.html
-		vec3 saturation(vec3 mainTexColor, float intensity) {
+		vec3 saturation(vec3 inColor, float intensity) {
 			const vec3 dotWith = vec3(0.2126729, 0.7151522, 0.0721750);
-			float luma = dot(mainTexColor, dotWith);
 
-			return vec3(luma) + vec3(saturationIntensity) * (mainTexColor - vec3(luma));
+			float luma = dot(inColor, dotWith);
+
+			return vec3(luma) + vec3(saturationIntensity) * (inColor - vec3(luma));
 		}
 
-		// From three.js source
+		// From Three.js source
 		vec3 RRTAndODTFit(vec3 v) {
 			vec3 a = v * (v + 0.0245786) - 0.000090537;
 			vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081;
+
 			return a / b;
 		}
 
@@ -121,6 +124,7 @@ export const UberPostFxShader = {
 		float vignette(vec2 uv) {
 			uv *= 1.0 - uv.yx;
 			float vignette = uv.x * uv.y * vignetteFocusIntensity;
+
 			return pow(vignette, vignetteFallOffIntensity);
 		}
 
@@ -133,7 +137,7 @@ export const UberPostFxShader = {
 			return clamp(1.0 - square, 0.0, 1.0);
 		}
 
-		// From three.js source
+		// From Three.js source
 		vec3 noiseScanLines(vec2 uv, vec3 mainTexColor) {
 			float oneMinusNoiseWeight = 1.0 - noiseWeight;
 			float noise = rand(uv + mod(time, 4.0)) + 1.0 * 0.5;

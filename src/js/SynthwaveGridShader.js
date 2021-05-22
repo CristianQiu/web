@@ -155,7 +155,11 @@ export const SynthwaveGridShader = {
 			float tz = mod(time * gridSweepLineSpeed, gridSweepLineMaxDist + gridSweepLineWidth) - gridSweepLineWidth;
 			float sweepLine = abs(tz - z);
 
-			vec3 finalGridColor = mix(gridSweepLineColor, gridColor, step(gridSweepLineWidth, sweepLine));
+			float centerDist = abs(osPos.x);
+			float isGridMiddleLine = step(2.3, centerDist);
+
+			// vec3 finalGridColor = mix(gridSweepLineColor, gridColor, step(gridSweepLineWidth, sweepLine));
+			vec3 finalGridColor = mix(gridSweepLineColor, gridColor, isGridMiddleLine);
 
 			// make the grid be faded at a certain height and color floor and mountains where there's no grid
 			float gridHeightFade = smoothstep(0.0, gridHeightFaded, osPos.y);

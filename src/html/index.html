@@ -628,12 +628,36 @@
 		}
 
 		.synthwave-z {
-			background: linear-gradient(172deg, #8402DA 0%, #B744FE 24%, #8402DA 25%, #D24EFE 26%, #AB02BA 42%, #470001 43%, #FC794A 71%, #FDD049 72%, #FDB953 73%, #FEFCBA 100%);
+			background: linear-gradient(2deg, #8402DA 0%, #B744FE 24%, #8402DA 25%, #D24EFE 26%, #AB02BA 42%, #470001 43%, #FC794A 71%, #FDD049 72%, #FDB953 73%, #FEFCBA 100%);
 			/* border-width: 3px;
 			border-style: solid;
 			border-image: linear-gradient(172deg, #8402DA 0%, #B744FE 24%, #8402DA 25%, #D24EFE 26%, #AB02BA 42%, #470001 43%, #FC794A 71%, #FDD049 72%, #FDB953 73%, #FEFCBA 100%) 1; */
 			/* border-color: linear-gradient(172deg, #8402DA 0%, #B744FE 24%, #8402DA 25%, #D24EFE 26%, #AB02BA 42%, #470001 43%, #FC794A 71%, #FDD049 72%, #FDB953 73%, #FEFCBA 100%); */
 		}
+
+		.about-container-outer {
+			display: flex;
+			flex-direction: row;
+			position: fixed;
+			justify-content: center;
+			align-items: center;
+			left: 5%;
+			width: 90%;
+			background-color: rgb(0, 0, 0, 0.5);
+		}
+
+		.about-container-inner {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			/* padding: 10px; */
+			overflow: hidden;
+			text-align: center;
+			color: white;
+		}
+
+		.about-text {}
 	</style>
 </head>
 
@@ -665,7 +689,18 @@
 		</nav>
 	</div>
 
-	<div class="flex-horizontal-bar justify-center non-selectable no-pointer-events" style="top: 200px">
+	<div class="about-container-outer">
+		<div class="about-container-inner">
+			<h1 id="rotule" class="rotule">Cristian Qiu</h1>
+			<p class="about-text">
+				Hi! I'm Cristian, a Spanish programmer. I craft high quality digital experiences, with game
+				programming being my main area of expertise. I've got a keen interest in gameplay programming and
+				optimization. Oh, and I sometimes build tools and experiment with shaders too!
+			</p>
+		</div>
+	</div>
+
+	<!-- <div class="flex-horizontal-bar justify-center non-selectable no-pointer-events" style="top: 200px">
 		<div class="flex-horizontal-bar justify-center non-selectable no-pointer-events synthwave-z" style="width:80%;">
 			<p
 				style="margin-top: 1rem;font-family: 'Exo'; color: rgb(245, 245, 245); font-size: 1.5rem; font-weight: lighter;">
@@ -674,7 +709,7 @@
 			</p>
 		</div>
 		<h1 id="rotule" class="rotule">Cristian Qiu</h1>
-	</div>
+	</div> -->
 
 	<!-- <div class="flex-horizontal-bar justify-center bottom non-selectable no-pointer-events"
 		style="background-color: rgb(0, 0, 0, 0.9);">
