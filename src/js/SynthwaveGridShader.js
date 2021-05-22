@@ -9,7 +9,7 @@ export const SynthwaveGridShader = {
 		'gridAntialias': { value: 1.0 },
 		'gridSweepLineSpeed': { value: 25.0 },
 		'gridSweepLineMaxDist': { value: 200.0 },
-		'gridSweepLineWidth': { value: 5.0 },
+		'gridSweepLineWidth': { value: 100.0 },
 		'gridHeightFaded': { value: 0.5 },
 		'mountainHeightPeak': { value: 0.75 },
 		'gridSweepLineColor': { value: new Color(0.7, 2.0, 2.0) },
@@ -90,9 +90,8 @@ export const SynthwaveGridShader = {
 			return dot(d, vec4(52.0));
 		}
 
-		void main() {
-			vec3 pos = position;
-
+		float gridHeight(vec3 pos)
+		{
 			float halfResX = resolution.x * 0.5 * quadScale;
 			float xAbs = abs(pos.x);
 			float tz = pos.z / (resolution.y * quadScale);
@@ -109,7 +108,12 @@ export const SynthwaveGridShader = {
 			float noise = (snoise(vec3(pos.x * freq, (pos.z + time) * freq, audioAvgMean)) * 0.5 + 0.5) * amp;
 			float power = mix(minH, maxH, tz * tz);
 
-			pos.y = pow(noise, power) * corridorEdge * audioAvgMean;
+			return pow(noise, power) * corridorEdge * audioAvgMean;
+		}
+
+		void main() {
+			vec3 pos = position;
+			pos.y = gridHeight(pos);
 
 			objectPosition = pos;
 			worldPosition = modelMatrix * vec4(pos, 1.0);
@@ -137,41 +141,62 @@ export const SynthwaveGridShader = {
 		varying vec3 objectPosition;
 		varying vec4 worldPosition;
 
+		float grid(vec3 pos)
+		{
+			vec2 dist0 = fract(pos.xz / gridSize);
+			vec2 dist1 = 1.0 - dist0;
+			vec2 grid = min(dist0, dist1);
+
+			vec2 antialias = fwidth(pos.xz) * gridAntialias;
+			grid = smoothstep(vec2(0.0), vec2(lineWidth) * antialias, grid);
+
+			return 1.0 - min(grid.x, grid.y);
+		}
+
+		vec3 gridCol(vec3 pos)
+		{
+			const float initialOffset = 200.0;
+
+			// grid sweep line
+			float tz = mod(initialOffset + time * gridSweepLineSpeed, gridSweepLineMaxDist + gridSweepLineWidth) - gridSweepLineWidth;
+			float sweepLine = abs(tz - pos.z);
+
+			// middle section
+			const float epsilon = 0.05;
+			float centerDist = abs(pos.x);
+			float middleLine = step(gridSize + epsilon, centerDist);
+
+			sweepLine = step(gridSweepLineWidth, sweepLine);
+			float middleSweepLine = max(sweepLine, middleLine);
+
+			return mix(gridSweepLineColor, gridColor, middleSweepLine);
+		}
+
+		float tMountain(vec3 pos)
+		{
+			float tMountain = mix(0.0, mountainHeightPeak, sign(pos.y) * (pos.y * pos.y));
+
+			return clamp(tMountain, 0.0, 1.0);
+		}
+
 		void main() {
 			// move the grid
 			vec3 osPos = objectPosition;
 			float z = osPos.z;
 			osPos.z += time;
 
-			// calculate the grid
-			vec2 dist0 = fract(osPos.xz / gridSize);
-			vec2 dist1 = 1.0 - dist0;
-			vec2 grid = min(dist0, dist1);
-
-			vec2 antialias = fwidth(osPos.xz) * gridAntialias;
-			grid = smoothstep(vec2(0.0), vec2(lineWidth) * antialias, grid);
-
-			// grid sweep line
-			float tz = mod(time * gridSweepLineSpeed, gridSweepLineMaxDist + gridSweepLineWidth) - gridSweepLineWidth;
-			float sweepLine = abs(tz - z);
-
-			float centerDist = abs(osPos.x);
-			float isGridMiddleLine = step(2.3, centerDist);
-
-			// vec3 finalGridColor = mix(gridSweepLineColor, gridColor, step(gridSweepLineWidth, sweepLine));
-			vec3 finalGridColor = mix(gridSweepLineColor, gridColor, isGridMiddleLine);
+			float grid = grid(osPos);
+			vec3 gridCol = gridCol(osPos);
 
 			// make the grid be faded at a certain height and color floor and mountains where there's no grid
-			float gridHeightFade = smoothstep(0.0, gridHeightFaded, osPos.y);
-			float gridIntensity = (1.0 - min(grid.x, grid.y)) * (1.0 - gridHeightFade);
-
-			float tMountain = mix(0.0, mountainHeightPeak, sign(osPos.y) * pow(osPos.y, 2.0));
-			tMountain = clamp(tMountain, 0.0, 1.0);
+			float gridHeightFade = 1.0 - smoothstep(0.0, gridHeightFaded, osPos.y);
+			float gridIntensity = grid * gridHeightFade;
 
 			vec3 mountainColorDistFadeIn = mix(floorColor, mountainColor, z / (resolution.y * quadScale));
+			float tMountain = tMountain(osPos);
 
 			vec3 mountainOrFloorColor = mix(floorColor, mountainColorDistFadeIn, tMountain);
-			vec3 color = mix(mountainOrFloorColor, finalGridColor, gridIntensity);
+			vec3 color = mix(mountainOrFloorColor, gridCol, gridIntensity);
 
 			gl_FragColor = vec4(color, 1.0);
 		}`
