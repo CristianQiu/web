@@ -14,8 +14,7 @@ export class DOMController {
 		this._navBurgerItemsHashIndexPairs = [];
 		this._navBurgerItemsHashIndexPairs['#about'] = 0;
 		this._navBurgerItemsHashIndexPairs['#projects'] = 1;
-		this._navBurgerItemsHashIndexPairs['#experience'] = 2;
-		this._navBurgerItemsHashIndexPairs['#contact'] = 3;
+		this._navBurgerItemsHashIndexPairs['#contact'] = 2;
 
 		this._addListeners();
 	}

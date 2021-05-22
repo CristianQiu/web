@@ -32,7 +32,7 @@ class App {
 	}
 
 	init() {
-		this._domController.appendBodyChild(this._stats.dom);
+		// this._domController.appendBodyChild(this._stats.dom);
 		this._domController.appendBodyChild(this._renderer.getDomElement());
 
 		this._grid.generate();
