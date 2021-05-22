@@ -160,11 +160,11 @@ export const SynthwaveGridShader = {
 			const float initialOffset = 200.0;
 
 			// grid sweep line
-			float tz = mod(initialOffset + time * gridSweepLineSpeed, gridSweepLineMaxDist + gridSweepLineWidth) - gridSweepLineWidth;
+			float tz = mod(initialOffset + time * gridSweepLineSpeed, initialOffset + gridSweepLineMaxDist + gridSweepLineWidth) - gridSweepLineWidth;
 			float sweepLine = abs(tz - pos.z);
 
 			// middle section
-			const float epsilon = 0.05;
+			const float epsilon = 0.025;
 			float centerDist = abs(pos.x);
 			float middleLine = step(gridSize + epsilon, centerDist);
 
