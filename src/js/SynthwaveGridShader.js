@@ -155,20 +155,20 @@ export const SynthwaveGridShader = {
 			return 1.0 - min(grid.x, grid.y);
 		}
 
-		vec3 gridCol(vec3 pos)
+		vec3 gridCol(float posx, float posz)
 		{
 			const float initialOffset = 200.0;
 
-			// grid sweep line
-			float tz = mod(initialOffset + time * gridSweepLineSpeed, initialOffset + gridSweepLineMaxDist + gridSweepLineWidth) - gridSweepLineWidth;
-			float sweepLine = abs(tz - pos.z);
+			// sweep line
+			float tz = mod(initialOffset + time * gridSweepLineSpeed, gridSweepLineMaxDist + gridSweepLineWidth) - gridSweepLineWidth;
+			float sweepLine = abs(tz - posz);
+			sweepLine = step(gridSweepLineWidth, sweepLine);
 
-			// middle section
+			// middle line
 			const float epsilon = 0.025;
-			float centerDist = abs(pos.x);
+			float centerDist = abs(posx);
 			float middleLine = step(gridSize + epsilon, centerDist);
 
-			sweepLine = step(gridSweepLineWidth, sweepLine);
 			float middleSweepLine = max(sweepLine, middleLine);
 
 			return mix(gridSweepLineColor, gridColor, middleSweepLine);
@@ -188,7 +188,7 @@ export const SynthwaveGridShader = {
 			osPos.z += time;
 
 			float grid = grid(osPos);
-			vec3 gridCol = gridCol(osPos);
+			vec3 gridCol = gridCol(osPos.x, z);
 
 			// make the grid be faded at a certain height and color floor and mountains where there's no grid
 			float gridHeightFade = 1.0 - smoothstep(0.0, gridHeightFaded, osPos.y);
