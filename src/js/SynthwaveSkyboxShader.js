@@ -91,7 +91,7 @@ export const SynthwaveSkyboxShader = {
 			return mix(sunBottomMidColor, sunMidTopColor, step(sunGradientMidPoint, tSun));
 		}
 
-		float skyColor(vec3 pos)
+		vec3 skyColor(vec3 pos)
 		{
 			// [0, 1] sky nadir to sky zenith
 			float yPos01 = (pos.y + 1.0) * 0.5;
