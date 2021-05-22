@@ -8,8 +8,8 @@ export const SynthwaveGridShader = {
 		'lineWidth': { value: 0.5 },
 		'gridAntialias': { value: 1.0 },
 		'gridSweepLineSpeed': { value: 25.0 },
-		'gridSweepLineMaxDist': { value: 200.0 },
-		'gridSweepLineWidth': { value: 100.0 },
+		'gridSweepLineMaxDist': { value: 300.0 },
+		'gridSweepLineWidth': { value: 75.0 },
 		'gridHeightFaded': { value: 0.5 },
 		'mountainHeightPeak': { value: 0.75 },
 		'gridSweepLineColor': { value: new Color(0.7, 2.0, 2.0) },
@@ -157,7 +157,7 @@ export const SynthwaveGridShader = {
 
 		vec3 gridCol(float posx, float posz)
 		{
-			const float initialOffset = 200.0;
+			const float initialOffset = 150.0;
 
 			// sweep line
 			float tz = mod(initialOffset + time * gridSweepLineSpeed, gridSweepLineMaxDist + gridSweepLineWidth) - gridSweepLineWidth;
