@@ -10,6 +10,30 @@
 	<link href="https://fonts.googleapis.com/css2?family=Exo:wght@300;900&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" rel="stylesheet">
 	<style>
+		/* .fader {
+			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
+		}
+
+		.fader-reverse {
+			animation: alphaFade 0.75s ease-in-out 0s 1 reverse forwards;
+		}
+
+		.fader-delayed {
+			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
+		} */
+
+		/* @keyframes alphaFade {
+			from {
+				visibility: hidden;
+				opacity: 0;
+			}
+
+			to {
+				visibility: visible;
+				opacity: 1;
+			}
+		} */
+
 		/* Media queries breakpoints reference: https://stackoverflow.com/questions/6370690/media-queries-how-to-target-desktop-tablet-and-mobile
 
 		@media (min-width:320px) {
@@ -225,8 +249,8 @@
 		}
 
 		.non-selectable {
-			user-select: none;
 			-webkit-user-select: none;
+			user-select: none;
 			-webkit-tap-highlight-color: transparent;
 		}
 
@@ -503,6 +527,137 @@
 			}
 		}
 
+		/* ----- Rotule & About ----- */
+
+		.rotule-container {
+			--rotuleTransition: cubic-bezier(.75, 0, .25, 1);
+			--rotuleAnimationTime: 0.35s;
+			--subRotuleShadowColor: rgb(254, 5, 225, 1.0);
+
+			display: block;
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			transition: margin var(--rotuleAnimationTime) var(--rotuleTransition);
+			margin: 3vh 0 6vh 0;
+		}
+
+		.rotule {
+			font-weight: 900;
+			font-size: 2.25rem;
+			text-transform: uppercase;
+			white-space: nowrap;
+			transform: skew(-16deg);
+			margin: 0;
+			color: rgb(187, 211, 251, 1.0);
+			transition: all var(--rotuleAnimationTime) var(--rotuleTransition);
+		}
+
+		.rotule::after {
+			position: absolute;
+			display: block;
+			content: 'Game programmer';
+			font-size: 1.4rem;
+			font-family: 'Mr Dafoe', cursive;
+			text-transform: capitalize;
+			font-weight: normal;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, 0%) rotate(-3deg) skew(20deg);
+			text-shadow: 0 0 0.25rem var(--subRotuleShadowColor), 0 0 0.15rem var(--subRotuleShadowColor);
+			color: var(--almostWhite);
+			transition: all var(--rotuleAnimationTime) var(--rotuleTransition);
+		}
+
+		.about-container {
+			--aboutContainerMargin: 0rem;
+			--borderWidth: 2px;
+
+			--aboutTransition: cubic-bezier(.75, 0, .25, 1);
+			--aboutAnimationTime: 0.35s;
+
+			position: absolute;
+			display: flex;
+			margin: var(--aboutContainerMargin);
+			bottom: 0;
+			font-size: 0.9rem;
+			color: var(--almostWhite);
+			background-color: rgb(0, 0, 0, 0.5);
+			justify-content: center;
+			flex-direction: row;
+			text-align: center;
+			align-items: center;
+			width: calc(100% - calc(var(--aboutContainerMargin) * 2.0));
+			transition: font-size var(--aboutAnimationTime) var(--aboutTransition);
+
+			overflow: hidden;
+			/* text-overflow: ellipsis; */
+		}
+
+		.about-container p {
+			margin: 0;
+			padding: 0.4rem;
+		}
+
+		@media (orientation: landscape) {
+			.rotule-container {
+				bottom: 0;
+				left: 0;
+				transform: initial;
+				margin: 3vh 0 6vh 4vw;
+			}
+
+			.about-container {
+				bottom: initial;
+				right: 0;
+				width: 12rem;
+				height: calc(100% - var(--aboutContainerMargin) * 2.0);
+				align-items: flex-end;
+				text-align: left;
+			}
+
+			.about-container p {
+				padding-left: 0.6rem;
+			}
+		}
+
+		@media (min-width : 481px) and (orientation: portrait),
+		(min-height: 481px) and (orientation: landscape) {
+			.rotule {
+				font-size: 3.1rem;
+			}
+
+			.rotule::after {
+				font-size: calc(1.4rem * 1.3777);
+				text-shadow: 0 0 0.3rem var(--subRotuleShadowColor), 0 0 0.2rem var(--subRotuleShadowColor);
+			}
+
+			.about-container {
+				--aboutContainerMargin: 0.75rem;
+				font-size: 1.25rem;
+				border-radius: 10px;
+			}
+		}
+
+		@media (min-height: 481px) and (orientation: landscape) {
+			.about-container {
+				height: 50%;
+				width: 16rem;
+			}
+		}
+
+		@media (min-width:961px) and (orientation: portrait),
+		(min-height: 961px) and (orientation: landscape) {
+			.rotule {
+				font-size: 4.1rem;
+			}
+
+			.rotule::after {
+				font-size: calc(1.4rem * 1.8222);
+				text-shadow: 0 0 0.3rem var(--subRotuleShadowColor), 0 0 0.2rem var(--subRotuleShadowColor);
+			}
+		}
+
 		/* ----- Projects  ----- */
 
 		/* .project-container {
@@ -553,152 +708,6 @@
 			background-color: white;
 			margin: auto 1rem auto 1rem
 		} */
-
-		/* ----- About section ----- */
-
-		.flex-hor-ver {
-			display: flex;
-			position: fixed;
-			flex-direction: row;
-			width: 100%;
-			justify-content: center;
-
-			transition: all 1s linear;
-		}
-
-		/* .about-container-outer {
-			position: fixed;
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			width: 100%;
-			height: 100%;
-		}
-
-		.about-container-inner {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			align-items: center;
-			overflow: hidden;
-			text-align: center;
-		}
-
-		.about-text {
-			color: var(--almostWhite);
-			font-weight: 300;
-
-			margin: 10px;
-			padding: 10px;
-			font-size: 1rem;
-			background-color: rgb(0, 0, 0, 0.5);
-			max-width: 42.5rem;
-			border-radius: 10px;
-		} */
-
-		.rotule-container {
-			--rotuleTransition: cubic-bezier(.75, 0, .25, 1);
-			--rotuleAnimationTime: 0.35s;
-			--rotuleShadowColor: rgb(160, 241, 255, 1.0);
-			--subRotuleShadowColor: rgb(254, 5, 225, 1.0);
-
-			display: block;
-			position: absolute;
-			left: 50%;
-			transform: translateX(-50%);
-			transition: all var(--rotuleAnimationTime) var(--rotuleTransition);
-		}
-
-		.rotule {
-			/* position: absolute; */
-			font-weight: 900;
-			font-size: 2.25rem;
-			text-transform: uppercase;
-			white-space: nowrap;
-			transform: skew(-16deg);
-			color: rgb(187, 211, 251, 1.0);
-			transition: all var(--rotuleAnimationTime) var(--rotuleTransition);
-			/* margin: 3vh 0 0 0; */
-		}
-
-		.rotule::after {
-			position: absolute;
-			display: block;
-			content: 'Game programmer';
-			font-size: 1.4rem;
-			font-family: 'Mr Dafoe', cursive;
-			text-transform: capitalize;
-			font-weight: normal;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, 0%) rotate(-3deg) skew(20deg);
-			text-shadow: 0 0 0.25rem var(--subRotuleShadowColor), 0 0 0.15rem var(--subRotuleShadowColor);
-			-webkit-text-fill-color: var(--almostWhite);
-			transition: all var(--rotuleAnimationTime) var(--rotuleTransition);
-		}
-
-		.fader {
-			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
-		}
-
-		.fader-reverse {
-			animation: alphaFade 0.75s ease-in-out 0s 1 reverse forwards;
-		}
-
-		.fader-delayed {
-			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
-		}
-
-		@keyframes alphaFade {
-			from {
-				visibility: hidden;
-				opacity: 0;
-			}
-
-			to {
-				visibility: visible;
-				opacity: 1;
-			}
-		}
-
-		@media(max-height : 481px) and (orientation: landscape) {
-			.rotule-container {
-				bottom: 0;
-				left: 10vh;
-				transform: initial;
-			}
-
-			.rotule {}
-
-			.flex-hor-ver {
-				flex-direction: column;
-				height: 100%;
-				width: initial;
-			}
-		}
-
-		@media (min-width : 481px) and (orientation: portrait),
-		(min-height: 481px) and (orientation: landscape) {
-			.rotule {
-				font-size: 3.1rem;
-			}
-
-			.rotule::after {
-				font-size: calc(1.4rem * 1.3777);
-				text-shadow: 0 0 0.3rem var(--subRotuleShadowColor), 0 0 0.2rem var(--subRotuleShadowColor);
-			}
-		}
-
-		@media (min-width : 1281px) {
-			.rotule {
-				font-size: 4.1rem;
-			}
-
-			.rotule::after {
-				font-size: calc(1.4rem * 1.8222);
-				text-shadow: 0 0 0.3rem var(--subRotuleShadowColor), 0 0 0.2rem var(--subRotuleShadowColor);
-			}
-		}
 	</style>
 </head>
 
@@ -729,27 +738,23 @@
 		</nav>
 	</div>
 
-	<div class="fullscreen non-selectable no-pointer-events">
-		<div class="rotule-container">
-			<h1 id="rotule" class="rotule">Cristian Qiu</h1>
-		</div>
+	<div class="rotule-container non-selectable no-pointer-events">
+		<h1 id="rotule" class="rotule">Cristian Qiu</h1>
 	</div>
-
-	<!-- <div class="about-container-outer non-selectable no-pointer-events">
-		<div class="about-container-inner">
-			<h1 id="rotule" class="rotule">Cristian Qiu</h1>
-			<section class="about-text">
-				<p style="margin: 0;">
-					Hi! I'm Cristian, a Spanish programmer. I craft <b>high quality</b> digital experiences, with
-					<b>game programming</b> being my main area of expertise.
-				</p>
-				<p style="margin-bottom: 0;">
-					I've got a keen interest in <b>gameplay</b> programming and
-					<b>optimization</b>, although I also like to build <b>tools</b> and experiment with <b>shaders</b>.
-				</p>
-			</section>
-		</div>
-	</div> -->
+	<div class="about-container non-selectable no-pointer-events">
+		<section>
+			<p>
+				Hi! I'm Cristian, a Spanish programmer. I craft <strong>high quality</strong> digital experiences,
+				with
+				<strong>game programming</strong> being my main area of expertise.
+			</p>
+			<p>
+				I've got a keen interest in <strong>gameplay</strong> programming and
+				<strong>optimization</strong>, although I also like to build <strong>tools</strong> and
+				experiment with <strong>shaders</strong>.
+			</p>
+		</section>
+	</div>
 
 	<!-- <div class="project-container">
 		<div class="project">This is project 1</div>

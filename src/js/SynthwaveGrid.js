@@ -44,7 +44,7 @@ export class SynthwaveGrid {
 			}
 		}
 
-		// Note: good readings on how the buffer attribute.
+		// Note: good readings on how the buffer attribute works.
 		// https://threejsfundamentals.org/threejs/lessons/threejs-custom-buffergeometry.html
 		// https://threejs.org/docs/#api/en/core/BufferAttribute
 		this._positionsBuffer = new Float32BufferAttribute(vertices, 3);
