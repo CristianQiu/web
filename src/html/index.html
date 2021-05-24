@@ -445,6 +445,17 @@
 			}
 		}
 
+		@media (min-width : 641px) and (orientation: portrait),
+		(min-height: 641px) and (orientation: landscape) {
+			.hamburger {
+				width: 2.5rem;
+			}
+
+			.hamburger-button {
+				width: 5.5rem;
+			}
+		}
+
 		@media (min-width : 1281px) {
 			.hamburger-unfolded {
 				width: 25rem;
@@ -589,9 +600,6 @@
 			align-items: center;
 			width: calc(100% - calc(var(--aboutContainerMargin) * 2.0));
 			transition: font-size var(--aboutAnimationTime) var(--aboutTransition);
-
-			overflow: hidden;
-			/* text-overflow: ellipsis; */
 		}
 
 		.about-container p {
@@ -634,15 +642,21 @@
 
 			.about-container {
 				--aboutContainerMargin: 0.75rem;
-				font-size: 1.25rem;
+				font-size: 1.2rem;
 				border-radius: 10px;
 			}
 		}
 
 		@media (min-height: 481px) and (orientation: landscape) {
 			.about-container {
-				height: 50%;
-				width: 16rem;
+				flex-direction: column;
+				max-height: 25rem;
+				width: 15rem;
+				justify-content: flex-end;
+			}
+
+			.about-container p {
+				padding: 0.75rem;
 			}
 		}
 
