@@ -550,7 +550,7 @@
 			--subRotuleShadowColor: rgb(254, 5, 225, 1.0);
 
 			display: block;
-			position: absolute;
+			position: fixed;
 			left: 50%;
 			transform: translateX(-50%);
 			transition: margin var(--rotuleAnimationTime) var(--rotuleTransition);
@@ -591,7 +591,7 @@
 			--aboutTransition: cubic-bezier(.75, 0, .25, 1);
 			--aboutAnimationTime: 0.35s;
 
-			position: absolute;
+			position: fixed;
 			display: flex;
 			margin: var(--aboutContainerMargin);
 			bottom: 0;
@@ -687,14 +687,14 @@
 
 		/* ----- Projects  ----- */
 
-		/* .project-container {
+		.project-container {
 			display: grid;
 			grid-template-columns: repeat(2, 600px);
 			grid-auto-rows: 337px;
 			grid-gap: 50px;
 			justify-content: center;
 
-			max-width: 800px;
+			/* max-width: 800px; */
 		}
 
 		.project {
@@ -712,7 +712,7 @@
 				max-width: 800px;
 				display: grid;
 			}
-		} */
+		}
 
 		/* .project-container {
 			position: absolute;
@@ -778,7 +778,7 @@
 		</section>
 	</div>
 
-	<!-- <div class="project-container">
+	<div class="project-container">
 		<div class="project">This is project 1</div>
 		<div class="project">This is project 2</div>
 		<div class="project">This is project 3</div>
@@ -788,7 +788,7 @@
 		<div class="project">This is project 7</div>
 		<div class="project">This is project 8</div>
 		<div class="project">This is project 9</div>
-	</div> -->
+	</div>
 
 	<script src="../../dist/App.js"></script>
 </body>
