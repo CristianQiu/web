@@ -434,25 +434,23 @@
 			transform: translate(-50%, -50%) rotate(-45deg);
 		}
 
-		@media (min-width : 481px) and (orientation: portrait),
-		(min-height: 481px) and (orientation: landscape) {
+		@media (min-width : 481px) and (min-height: 481px) {
 			.hamburger {
-				width: 2.5rem;
+				width: 2.35rem;
 			}
 
 			.hamburger-button {
-				width: 5.5rem;
+				width: 5rem;
 			}
 		}
 
-		@media (min-width : 641px) and (orientation: portrait),
-		(min-height: 641px) and (orientation: landscape) {
+		@media (min-width : 641px) and (min-height: 641px) {
 			.hamburger {
 				width: 2.5rem;
 			}
 
 			.hamburger-button {
-				width: 5.5rem;
+				width: 5.1rem;
 			}
 		}
 
@@ -523,10 +521,16 @@
 			font-weight: 900;
 		}
 
-		@media (min-width : 481px) and (orientation: portrait),
-		(min-height: 481px) and (orientation: landscape) {
+		@media (min-width : 481px) and (min-height: 481px) {
 			nav ul li {
-				font-size: 3rem;
+				font-size: 2.4rem;
+				padding: 0.875rem;
+			}
+		}
+
+		@media (min-width : 641px) and (min-height: 641px) {
+			nav ul li {
+				font-size: 2.8rem;
 				padding: 1rem;
 			}
 		}
@@ -629,8 +633,16 @@
 			}
 		}
 
-		@media (min-width : 481px) and (orientation: portrait),
-		(min-height: 481px) and (orientation: landscape) {
+		@media (min-width : 481px) and (min-height: 481px) {
+			.about-container {
+				--aboutContainerMargin: 0rem;
+				font-size: 1rem;
+				border-radius: 0px;
+				max-height: 25rem;
+			}
+		}
+
+		@media (min-width : 641px) and (min-height: 641px) {
 			.rotule {
 				font-size: 3.1rem;
 			}
@@ -641,27 +653,28 @@
 			}
 
 			.about-container {
-				--aboutContainerMargin: 0.75rem;
+				--aboutContainerMargin: 0.9rem;
+				font-size: 1.05rem;
+				border-radius: 10px;
+				max-height: 28rem;
+			}
+		}
+
+		@media (min-width : 961px) and (min-height: 961px) and (orientation: landscape) {
+			.about-container {
 				font-size: 1.2rem;
 				border-radius: 10px;
+				max-height: 22rem;
+				width: 18rem;
+			}
+
+			.about-container section {
+				padding-left: 0.4rem;
+				padding-bottom: 0.4rem;
 			}
 		}
 
-		@media (min-height: 481px) and (orientation: landscape) {
-			.about-container {
-				flex-direction: column;
-				max-height: 25rem;
-				width: 15rem;
-				justify-content: flex-end;
-			}
-
-			.about-container p {
-				padding: 0.75rem;
-			}
-		}
-
-		@media (min-width:961px) and (orientation: portrait),
-		(min-height: 961px) and (orientation: landscape) {
+		@media (min-width:1025px) and (min-height: 1025px) {
 			.rotule {
 				font-size: 4.1rem;
 			}
@@ -757,16 +770,11 @@
 	</div>
 	<div class="about-container non-selectable no-pointer-events">
 		<section>
-			<p>
-				Hi! I'm Cristian, a Spanish programmer. I craft <strong>high quality</strong> digital experiences,
-				with
-				<strong>game programming</strong> being my main area of expertise.
-			</p>
-			<p>
-				I've got a keen interest in <strong>gameplay</strong> programming and
-				<strong>optimization</strong>, although I also like to build <strong>tools</strong> and
-				experiment with <strong>shaders</strong>.
-			</p>
+			<p>Hi! I'm Cristian, a Spanish programmer. I craft <strong>high quality</strong> digital experiences,
+				with <strong>game programming</strong> being my main area of expertise.</p>
+			<p>I've got a keen interest in <strong>gameplay</strong> programming and <strong>optimization</strong>,
+				although I also like to build <strong>tools</strong> and
+				experiment with <strong>shaders</strong>.</p>
 		</section>
 	</div>
 
