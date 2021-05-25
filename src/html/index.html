@@ -10,30 +10,6 @@
 	<link href="https://fonts.googleapis.com/css2?family=Exo:wght@300;900&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" rel="stylesheet">
 	<style>
-		/* .fader {
-			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
-		}
-
-		.fader-reverse {
-			animation: alphaFade 0.75s ease-in-out 0s 1 reverse forwards;
-		}
-
-		.fader-delayed {
-			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 3s 1 normal forwards;
-		} */
-
-		/* @keyframes alphaFade {
-			from {
-				visibility: hidden;
-				opacity: 0;
-			}
-
-			to {
-				visibility: visible;
-				opacity: 1;
-			}
-		} */
-
 		/* Media queries breakpoints reference: https://stackoverflow.com/questions/6370690/media-queries-how-to-target-desktop-tablet-and-mobile
 
 		@media (min-width:320px) {
@@ -78,7 +54,7 @@
 			--responsiveEase: ease-out;
 
 			--btnFadeSpeed: 0.35s;
-			--fadeInTime: 3.5s;
+			--fadeInTime: 3.0s;
 
 			font-family: 'Exo', sans-serif;
 			font-weight: 300;
@@ -92,6 +68,49 @@
 			position: fixed;
 			top: 0;
 			z-index: -10;
+		}
+
+		/* ----- Animations ----- */
+
+		.fader {
+			animation: alphaFade var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
+		}
+
+		.fader-hamburger {
+			animation: alphaFadeWithPointerEvents var(--fadeInTime) cubic-bezier(0.77, 0, 0.175, 1) 2s 1 normal forwards;
+		}
+
+		@keyframes alphaFade {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
+		@keyframes alphaFadeWithPointerEvents {
+			0% {
+				visibility: hidden;
+				pointer-events: none;
+				opacity: 0;
+			}
+
+			1% {
+				visibility: visible;
+			}
+
+			99% {
+				visibility: visible;
+				pointer-events: none;
+			}
+
+			100% {
+				visibility: visible;
+				pointer-events: initial;
+				opacity: 1;
+			}
 		}
 
 		/* ----- Commonalities ----- */
@@ -274,7 +293,7 @@
 			--hamburgerTransition: cubic-bezier(.75, 0, .25, 1);
 			--hamburgerAnimationTime: 0.5s;
 
-			display: block;
+			visibility: hidden;
 			position: fixed;
 			width: 0;
 			height: 100%;
@@ -282,6 +301,9 @@
 			right: 0;
 			transition: all var(--hamburgerAnimationTime) var(--hamburgerTransition);
 			z-index: 100;
+
+			pointer-events: none;
+			opacity: 0;
 		}
 
 		.hamburger-button {
@@ -447,12 +469,12 @@
 			--rotuleAnimationTime: 0.35s;
 			--subRotuleShadowColor: rgb(254, 5, 225, 1.0);
 
-			display: block;
 			position: fixed;
 			left: 50%;
 			transform: translateX(-50%);
 			transition: margin var(--rotuleAnimationTime) var(--rotuleTransition);
 			margin: 3vh 0 6vh 0;
+			opacity: 0;
 		}
 
 		.rotule {
@@ -501,6 +523,7 @@
 			text-align: center;
 			align-items: center;
 			width: calc(100% - calc(var(--aboutContainerMargin) * 2.0));
+			opacity: 0;
 			transition: font-size var(--aboutAnimationTime) var(--aboutTransition);
 		}
 
@@ -630,14 +653,15 @@
 </head>
 
 <body>
-	<div class="flex-horizontal-bar justify-space-between top uppercase">
+	<div class="flex-horizontal-bar justify-space-between top uppercase non-selectable no-pointer-events">
 		<span id="crt-av" class="crt-text display-after-time-fast">Av-1</span>
 		<span class="removable crt-text crt-text-blink-display-after">No-signal</span>
 	</div>
-	<div class="removable flex-container-center display-after-time-slow">
+	<div class="removable flex-container-center display-after-time-slow non-selectable">
 		<button id="join" class="crt-text uppercase">&nbspAv-2 WEB&nbsp</span>
 	</div>
-	<div class="removable flex-horizontal-bar justify-center display-after-time-slow bottom">
+	<div
+		class="removable flex-horizontal-bar justify-center display-after-time-slow bottom non-selectable no-pointer-events">
 		<span id="crt-cristianqiu" class="crt-text uppercase">Cristian Qiu</span>
 	</div>
 
@@ -656,7 +680,7 @@
 		</nav>
 	</div>
 
-	<!--<div class="rotule-container non-selectable no-pointer-events">
+	<div class="rotule-container non-selectable no-pointer-events">
 		<h1 id="rotule" class="rotule">Cristian Qiu</h1>
 	</div>
 	<div class="about-container non-selectable no-pointer-events">
@@ -667,9 +691,9 @@
 				although I also like to build <strong>tools</strong> and
 				experiment with <strong>shaders</strong>.</p>
 		</section>
-	</div>-->
+	</div>
 
-	<div class="project-container non-selectable no-pointer-events">
+	<!-- <div class="project-container non-selectable no-pointer-events">
 		<div class="project">This is project 1</div>
 		<div class="project">This is project 2</div>
 		<div class="project">This is project 3</div>
@@ -679,7 +703,7 @@
 		<div class="project">This is project 7</div>
 		<div class="project">This is project 8</div>
 		<div class="project">This is project 9</div>
-	</div>
+	</div> -->
 
 	<script src="../../dist/App.js"></script>
 </body>

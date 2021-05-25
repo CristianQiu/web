@@ -72,7 +72,7 @@ class App {
 	}
 
 	_addListeners() {
-		document.getElementById('join').addEventListener('click', this._onClickJoin.bind(this));
+		document.querySelector('#join').addEventListener('click', this._onClickJoin.bind(this));
 		addEventListener('pointermove', this._onPointerMove.bind(this));
 		addEventListener('resize', this._onWindowResize.bind(this));
 	}

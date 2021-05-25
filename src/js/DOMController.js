@@ -3,13 +3,13 @@ export class DOMController {
 	constructor() {
 		this._setLocationHash('#main');
 
-		this._hamburgerDivBg = document.getElementById('hamburger-container');
-		this._hamburgerMenuButton = document.getElementById('hamburger-button');
-		this._hamburgerBefore = document.getElementById('hamburger-before');
-		this._hamburgerCenter = document.getElementById('hamburger-center');
-		this._hamburgerAfter = document.getElementById('hamburger-after');
+		this._hamburgerDivBg = document.querySelector('#hamburger-container');
+		this._hamburgerMenuButton = document.querySelector('#hamburger-button');
+		this._hamburgerBefore = document.querySelector('#hamburger-before');
+		this._hamburgerCenter = document.querySelector('#hamburger-center');
+		this._hamburgerAfter = document.querySelector('#hamburger-after');
 
-		this._navBurgerItems = document.getElementsByClassName("navburger-item");
+		this._navBurgerItems = document.querySelectorAll('.navburger-item');
 		this._currSelectedNavBurgerItem = -1;
 		this._navBurgerItemsHashIndexPairs = [];
 		this._navBurgerItemsHashIndexPairs['#about'] = 0;
@@ -26,22 +26,27 @@ export class DOMController {
 	joinWeb() {
 		this._setLocationHash('#about');
 
-		const removables = document.body.getElementsByClassName('removable');
+		const removables = document.querySelectorAll('.removable');
 		setTimeout(() => {
 			for (let i = 0; i < removables.length; ++i) {
 				removables[i].remove();
-				--i;
 			}
 		}, 100);
 
-		const avHtml = document.getElementById('crt-av');
+		const avHtml = document.querySelector('#crt-av');
 		avHtml.innerHTML = 'AV-2';
 		setTimeout(() => {
 			avHtml.parentElement.remove();
 		}, 5000);
 
-		// const nameHeader = document.getElementById('name');
-		// nameHeader.classList.add('fader');
+		const rotuleContainer = document.querySelector('.rotule-container');
+		rotuleContainer.classList.add('fader');
+
+		const aboutContainer = document.querySelector('.about-container');
+		aboutContainer.classList.add('fader');
+
+		const hamburgerContainer = document.querySelector('.hamburger-container');
+		hamburgerContainer.classList.add('fader-hamburger');
 	}
 
 	_setLocationHash(locationHash) {
