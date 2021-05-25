@@ -17,6 +17,8 @@ export class DOMController {
 		this._navBurgerItemsHashIndexPairs['#contact'] = 2;
 
 		this._addListeners();
+
+		this._initialJoinAnimationFinished = false;
 	}
 
 	appendBodyChild(child) {
@@ -47,6 +49,11 @@ export class DOMController {
 
 		const hamburgerContainer = document.querySelector('.hamburger-container');
 		hamburgerContainer.classList.add('fader-hamburger');
+
+		// Note: workaround for Safari, because it is unable to animate the pointer events attribute and glitches out
+		hamburgerContainer.addEventListener('animationend', () => {
+			this._initialJoinAnimationFinished = true;
+		});
 	}
 
 	_setLocationHash(locationHash) {
@@ -93,6 +100,9 @@ export class DOMController {
 	}
 
 	_onClickHamburgerMenu() {
+		if (!this._initialJoinAnimationFinished)
+			return;
+
 		this._toggleHamburgerMenu();
 		this._toggleNavBurgerPointerEvents();
 	}
