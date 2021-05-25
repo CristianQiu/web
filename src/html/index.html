@@ -206,6 +206,10 @@
 
 		/* ----- Commonalities ----- */
 
+		.uppercase {
+			text-transform: uppercase;
+		}
+
 		.top {
 			top: 0;
 		}
@@ -321,6 +325,10 @@
 			font-size: calc(3vh + 1vw);
 		}
 
+		#crt-cristianqiu {
+			font-size: calc(3vh + 0.75vw);
+		}
+
 		.crt-text-blink-display-after {
 			animation:
 				alphaBlink 2s steps(1, start) infinite,
@@ -388,7 +396,7 @@
 
 		.hamburger-button {
 			display: block;
-			position: absolute;
+			position: fixed;
 			width: 4.5rem;
 			height: 4.5rem;
 			right: 0;
@@ -688,66 +696,57 @@
 		/* ----- Projects  ----- */
 
 		.project-container {
-			display: grid;
-			grid-template-columns: repeat(2, 600px);
-			grid-auto-rows: 337px;
-			grid-gap: 50px;
-			justify-content: center;
+			--projectDivWidth: min(90vw, 440px);
+			--projectAnimationTime: 1.35s;
+			--projectTransition: cubic-bezier(.75, 0, .25, 1);
 
-			/* max-width: 800px; */
+			position: absolute;
+			display: grid;
+			grid-template-columns: repeat(1, var(--projectDivWidth));
+			grid-auto-rows: calc(var(--projectDivWidth) * (9.0 / 16.0));
+			grid-row-gap: 10vh;
+			grid-column-gap: 5vw;
+			justify-content: center;
+			margin-top: 10vh;
+			margin-bottom: 10vh;
+			left: 50%;
+			transform: translateX(-50%);
 		}
 
 		.project {
 			background-color: white;
-			transition: all 0.5s linear;
+			transition: all var(--projectAnimationTime) var(--projectTransition);
+			border: solid 1px black;
+
+			border-radius: 10px;
+			width: 100%;
+			height: 100%;
 		}
 
-		@media (max-width: 600px) {
+		@media (min-width: 961px) {
 			.project-container {
-				grid-template-columns: repeat(1, 400px);
-				grid-auto-rows: 225px;
-				grid-gap: 50px;
-
-				justify-content: center;
-				max-width: 800px;
-				display: grid;
+				grid-template-columns: repeat(2, var(--projectDivWidth));
 			}
 		}
 
-		/* .project-container {
-			position: absolute;
-			display: flex;
-			flex-direction: row;
-			width: auto;
-			height: 40rem;
-			background-color: blue;
-			align-items: center;
-			overflow-x: scroll;
-			justify-content: flex-start;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
+		@media (min-width: 1400px) {
+			.project-container {
+				--projectDivWidth: min(90vw, 560px);
+			}
 		}
-
-		.project {
-			height: 16.8rem;
-			min-width: 30rem;
-			background-color: white;
-			margin: auto 1rem auto 1rem
-		} */
 	</style>
 </head>
 
 <body>
-	<div class="flex-horizontal-bar justify-space-between">
-		<span id="crt-av" class="crt-text display-after-time-fast">AV-1</span>
-		<span class="removable crt-text crt-text-blink-display-after">NO-SIGNAL</span>
+	<div class="flex-horizontal-bar justify-space-between top uppercase">
+		<span id="crt-av" class="crt-text display-after-time-fast">Av-1</span>
+		<span class="removable crt-text crt-text-blink-display-after">No-signal</span>
 	</div>
 	<div class="removable flex-container-center display-after-time-slow">
-		<button id="join" class="crt-text">&nbspAV-2 WEB&nbsp</span>
+		<button id="join" class="crt-text uppercase">&nbspAv-2 WEB&nbsp</span>
 	</div>
 	<div class="removable flex-horizontal-bar justify-center display-after-time-slow bottom">
-		<span class="crt-text" style="font-size: calc(3vh + 0.75vw)">CRISTIAN QIU</span>
+		<span id="crt-cristianqiu" class="crt-text uppercase">Cristian Qiu</span>
 	</div>
 
 	<div id="hamburger-container" class="hamburger-container non-selectable">
@@ -765,7 +764,7 @@
 		</nav>
 	</div>
 
-	<div class="rotule-container non-selectable no-pointer-events">
+	<!--<div class="rotule-container non-selectable no-pointer-events">
 		<h1 id="rotule" class="rotule">Cristian Qiu</h1>
 	</div>
 	<div class="about-container non-selectable no-pointer-events">
@@ -776,21 +775,28 @@
 				although I also like to build <strong>tools</strong> and
 				experiment with <strong>shaders</strong>.</p>
 		</section>
-	</div>
+	</div>-->
 
-	<div class="project-container">
-		<div class="project">This is project 1</div>
-		<div class="project">This is project 2</div>
-		<div class="project">This is project 3</div>
-		<div class="project">This is project 4</div>
-		<div class="project">This is project 5</div>
-		<div class="project">This is project 6</div>
-		<div class="project">This is project 7</div>
-		<div class="project">This is project 8</div>
-		<div class="project">This is project 9</div>
+	<div class="project-container non-selectable no-pointer-events">
+		<div class="project synthwave-a">This is project 1</div>
+		<div class="project synthwave-b">This is project 2</div>
+		<div class="project synthwave-c">This is project 3</div>
+		<div class="project synthwave-d" style="transform: scale(0.5)">This is project 4</div>
+		<div class="project synthwave-e">This is project 5</div>
+		<div class="project synthwave-f">This is project 6</div>
+		<div class="project synthwave-g">This is project 7</div>
+		<div class="project synthwave-h">This is project 8</div>
+		<div class="project synthwave-i">This is project 9</div>
 	</div>
 
 	<script src="../../dist/App.js"></script>
+
+	<script src="https://unpkg.com/animate-css-grid@latest"></script>
+	<script>
+		const grid = document.querySelector(".project-container");
+		console.log(grid);
+		animateCSSGrid.wrapGrid(grid, { duration: 600 });
+	</script>
 </body>
 
 </html>
