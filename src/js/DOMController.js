@@ -78,6 +78,10 @@ export class DOMController {
 	}
 
 	_addListeners() {
+		this._addAllHamburgerListeners();
+	}
+
+	_addAllHamburgerListeners() {
 		this._hamburgerMenuButton.addEventListener('click', this._onClickHamburgerMenu.bind(this));
 		for (let i = 0; i < this._navBurgerItems.length; ++i)
 			this._navBurgerItems[i].addEventListener('click', this._onClickNavBurgerItem.bind(this, i));
