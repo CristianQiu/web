@@ -18,6 +18,7 @@ export class SynthwaveRenderer {
 		this._createSettings();
 
 		const scanLinesCount = this._scanLineSettings.countNormal;
+		const scanLinesIntensity = this._tweenSettings.startScanLinesIntensity;
 		const startVigFallOff = this._tweenSettings.startVignetteFallOff;
 		const startVigFocus = this._tweenSettings.startVignetteFocus;
 		const startTurnOnCrt = this._tweenSettings.startTurnOnCrt;
@@ -25,7 +26,7 @@ export class SynthwaveRenderer {
 		const res = new Vector2(width, height);
 		this._scenePass = new RenderPass(scene, camera);
 		this._bloomPass = new UnrealBloomPass(res, 1.0, 0.7, 0.59825);
-		this._uberPass = new UberPostFxPass(0.8, 0.33, scanLinesCount, 0.0, startVigFallOff, startVigFocus, startTurnOnCrt, 1.125);
+		this._uberPass = new UberPostFxPass(0.8, 0.33, scanLinesCount, scanLinesIntensity, startVigFallOff, startVigFocus, startTurnOnCrt, 1.125);
 
 		this._composer = new EffectComposer(this._renderer);
 		this._composer.addPass(this._scenePass);
@@ -77,6 +78,8 @@ export class SynthwaveRenderer {
 
 		this._tweenSettings =
 		{
+			startScanLinesIntensity: 0.2,
+			endScanLinesIntensity: 0.05,
 			startVignetteFallOff: 5.0,
 			endVignetteFallOff: 0.15,
 			startVignetteFocus: 5.0,
@@ -99,8 +102,8 @@ export class SynthwaveRenderer {
 				this._uberPass.setVignetteFallOffFocusIntensity(fromVig.x, fromVig.y);
 			});
 
-		const fromTurnOn = { x: this._tweenSettings.startTurnOnCrt };
-		const toTurnOn = { x: this._tweenSettings.endTurnOnCrt };
+		const fromTurnOn = { x: this._tweenSettings.startScanLinesIntensity, y: this._tweenSettings.startTurnOnCrt };
+		const toTurnOn = { x: this._tweenSettings.endScanLinesIntensity, y: this._tweenSettings.endTurnOnCrt };
 		const turnOnFadeTime = 2000;
 		const turnOnEasing = TWEEN.Easing.Quartic.InOut;
 
@@ -108,7 +111,8 @@ export class SynthwaveRenderer {
 			.to(toTurnOn, turnOnFadeTime)
 			.easing(turnOnEasing)
 			.onUpdate(() => {
-				this._uberPass.setTurnOnIntensity(fromTurnOn.x);
+				this._uberPass.setScanLineCountIntensity(undefined, fromTurnOn.x);
+				this._uberPass.setTurnOnIntensity(fromTurnOn.y);
 			});
 	}
 
