@@ -586,28 +586,53 @@
 			grid-row-gap: 10vh;
 			grid-column-gap: 5vw;
 			justify-content: center;
-			margin-top: 10vh;
-			margin-bottom: 10vh;
+			padding-top: 10vh;
+			padding-bottom: 10vh;
 			left: 50%;
 			transform: translateX(-50%);
-
 			transition: all var(--projectAnimationTime) var(--projectTransition);
+			overflow: hidden;
+			width: 100%;
 		}
 
 		.project {
 			background-color: var(--almostWhite);
 			transition: all var(--projectAnimationTime) var(--projectTransition);
-			border: solid 1px black;
 			position: relative;
-			border-radius: 10px;
 			width: 100%;
 			height: 100%;
+			pointer-events: initial;
+			cursor: pointer;
+			border: 1px solid var(--almostBlack);
 		}
 
-		.project-name {
-			background-color: black;
+		.project:hover {
+			transform: scale(1.1);
+		}
+
+		.project:active {
+			transform: scale(1.1);
+		}
+
+		.project-title-container {
+			background-color: rgba(0, 0, 0, 0.815);
 			position: absolute;
+			width: 100%;
 			bottom: 0;
+			height: 3.25rem;
+		}
+
+		.project-title {
+			color: white;
+			padding-left: 1rem;
+			font-size: 1.1rem;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		.hide-project {
+			left: -50%;
 		}
 
 		@media (min-width: 961px) {
@@ -619,6 +644,14 @@
 		@media (min-width: 1400px) {
 			.project-container {
 				--projectDivWidth: min(90vw, 560px);
+			}
+
+			.project-title-container {
+				height: 4rem;
+			}
+
+			.project-title {
+				font-size: 1.4rem;
 			}
 		}
 	</style>
@@ -667,20 +700,43 @@
 
 	<div class="project-container non-selectable no-pointer-events">
 		<div class="project">
-			<div class="project-name">
-				This is a project
+			<div class="project-title-container">
+				<p class="project-title">Turn based game (WiP). Unity.</p>
 			</div>
 		</div>
-
 		<div class="project">
-			<div class="project-name">
-				This is a project
+			<div class="project-title-container">
+				<p class="project-title">Personal web. Three.js.</p>
 			</div>
 		</div>
-
+		<div class="project" onclick="window.open('https://github.com/CristianQiu/Unity-AudioSpectrum-Synthwave')">
+			<div class="project-title-container">
+				<p class="project-title">Audio visualizer. Unity.</p>
+			</div>
+		</div>
 		<div class="project">
-			<div class="project-name">
-				This is a project
+			<div class="project-title-container">
+				<p class="project-title">Multithreaded A*. Unity.</p>
+			</div>
+		</div>
+		<div class="project">
+			<div class="project-title-container">
+				<p class="project-title">Flocking behaviours. Unity.</p>
+			</div>
+		</div>
+		<div class="project">
+			<div class="project-title-container">
+				<p class="project-title">Perlin noise tool. Unity.</p>
+			</div>
+		</div>
+		<div class="project">
+			<div class="project-title-container">
+				<p class="project-title">Serious game. Unity.</p>
+			</div>
+		</div>
+		<div class="project">
+			<div class="project-title-container">
+				<p class="project-title">Tower defense game. GameMaker 1.</p>
 			</div>
 		</div>
 	</div>
