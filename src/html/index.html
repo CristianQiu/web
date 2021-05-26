@@ -367,7 +367,8 @@
 		nav ul li {
 			font-size: 2rem;
 			white-space: nowrap;
-			padding: 0.75rem;
+			padding: 0 !important;
+			margin: 1rem;
 			opacity: 0;
 			transition: all var(--hamburgerAnimationTime) var(--hamburgerTransition);
 		}
@@ -597,10 +598,16 @@
 			background-color: var(--almostWhite);
 			transition: all var(--projectAnimationTime) var(--projectTransition);
 			border: solid 1px black;
-
+			position: relative;
 			border-radius: 10px;
 			width: 100%;
 			height: 100%;
+		}
+
+		.project-name {
+			background-color: black;
+			position: absolute;
+			bottom: 0;
 		}
 
 		@media (min-width: 961px) {
@@ -658,17 +665,25 @@
 		</section>
 	</div>
 
-	<!-- <div class="project-container non-selectable no-pointer-events">
-		<div class="project">This is project 1</div>
-		<div class="project">This is project 2</div>
-		<div class="project">This is project 3</div>
-		<div class="project" style="transform: scale(0.5)">This is project 4</div>
-		<div class="project">This is project 5</div>
-		<div class="project">This is project 6</div>
-		<div class="project">This is project 7</div>
-		<div class="project">This is project 8</div>
-		<div class="project">This is project 9</div>
-	</div> -->
+	<div class="project-container non-selectable no-pointer-events">
+		<div class="project">
+			<div class="project-name">
+				This is a project
+			</div>
+		</div>
+
+		<div class="project">
+			<div class="project-name">
+				This is a project
+			</div>
+		</div>
+
+		<div class="project">
+			<div class="project-name">
+				This is a project
+			</div>
+		</div>
+	</div>
 
 	<script src="../../dist/App.js"></script>
 </body>
