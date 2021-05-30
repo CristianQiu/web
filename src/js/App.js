@@ -34,6 +34,12 @@ class App {
 	init() {
 		// this._domController.appendBodyChild(this._stats.dom);
 		this._domController.appendBodyChild(this._renderer.getDomElement());
+		this._domController.addOnShowProjectsListener(() => {
+			this._grid.closeCorridor();
+		});
+		this._domController.addOnHideProjectsListener(() => {
+			this._grid.openCorridor();
+		});
 
 		this._grid.generate();
 
@@ -60,10 +66,10 @@ class App {
 
 		if (validSpectrumAnalyzer) {
 			this._audioSpectrumAnalyzer.analyzeFrameMeans(dt, this._audioManager.getAudioListenerSampleRate());
-			this._grid.animate(time, this._audioSpectrumAnalyzer.getMeans(true));
+			this._grid.animate(dt, time, this._audioSpectrumAnalyzer.getMeans(true));
 		}
 		else {
-			this._grid.animate(time);
+			this._grid.animate(dt, time);
 		}
 
 		this._renderer.render();

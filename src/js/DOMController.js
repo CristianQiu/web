@@ -23,6 +23,9 @@ export class DOMController {
 		this._addListeners();
 
 		this._initialJoinAnimationFinished = false;
+
+		this._onShowProjectsListeners = [];
+		this._onHideProjectsListeners = [];
 	}
 
 	appendBodyChild(child) {
@@ -58,6 +61,14 @@ export class DOMController {
 		hamburgerContainer.addEventListener('animationend', () => {
 			this._initialJoinAnimationFinished = true;
 		});
+	}
+
+	addOnShowProjectsListener(callback) {
+		this._onShowProjectsListeners.push(callback);
+	}
+
+	addOnHideProjectsListener(callback) {
+		this._onHideProjectsListeners.push(callback);
 	}
 
 	_setLocationHash(locationHash) {
@@ -112,6 +123,10 @@ export class DOMController {
 		for (let i = 0; i < this._projects.length; ++i) {
 			this._projects[i].classList.remove('hide-project');
 		}
+
+		for (let i = 0; i < this._onShowProjectsListeners.length; ++i) {
+			this._onShowProjectsListeners[i]();
+		}
 	}
 
 	_hideProjects() {
@@ -120,13 +135,13 @@ export class DOMController {
 		for (let i = 0; i < this._projects.length; ++i) {
 			this._projects[i].classList.add('hide-project');
 		}
+
+		for (let i = 0; i < this._onHideProjectsListeners.length; ++i) {
+			this._onHideProjectsListeners[i]();
+		}
 	}
 
 	_addListeners() {
-		this._addAllHamburgerListeners();
-	}
-
-	_addAllHamburgerListeners() {
 		this._hamburgerMenuButton.addEventListener('click', this._onClickHamburgerMenu.bind(this));
 		for (let i = 0; i < this._navBurgerItems.length; ++i)
 			this._navBurgerItems[i].addEventListener('click', this._onClickNavBurgerItem.bind(this, i));

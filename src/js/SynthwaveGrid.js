@@ -1,4 +1,4 @@
-import { Vector2, BufferGeometry, UniformsUtils, ShaderMaterial, Mesh, Vector3, Float32BufferAttribute } from 'three';
+import { Vector2, BufferGeometry, UniformsUtils, ShaderMaterial, Mesh, Vector3, Float32BufferAttribute, MathUtils } from 'three';
 import { SynthwaveGridShader } from './SynthwaveGridShader';
 import { Maths } from './Maths';
 
@@ -10,6 +10,7 @@ export class SynthwaveGrid {
 		this._openedCorridorWidth = 2.25 * 3.5;
 		this._closedCorridorWidth = -2.25;
 		this._targetCorridorWidth = this._openedCorridorWidth;
+		this._corridorOpenCloseSmoothness = 2.0;
 		this._mountainEdgeSmoothness = 2.25 * 2.0;
 		this._speed = 1.5;
 
@@ -80,13 +81,15 @@ export class SynthwaveGrid {
 		this._targetCorridorWidth = this._closedCorridorWidth;
 	}
 
-	animate(elapsedTime, audioMeans = undefined) {
+	animate(dt, elapsedTime, audioMeans = undefined) {
 		elapsedTime *= this._speed;
 
 		this._uniforms.time.value = elapsedTime;
 		this._uniforms.resolution.value = this._vertexRes;
 		this._uniforms.quadScale.value = this._quadSize;
-		this._uniforms.corridorWidth.value = this._targetCorridorWidth;
+
+		const corridorWidth = MathUtils.damp(this._uniforms.corridorWidth.value, this._targetCorridorWidth, this._corridorOpenCloseSmoothness, dt);
+		this._uniforms.corridorWidth.value = corridorWidth;
 		this._uniforms.mountainEdgeSmoothness.value = this._mountainEdgeSmoothness;
 
 		if (audioMeans === undefined || audioMeans === null)
