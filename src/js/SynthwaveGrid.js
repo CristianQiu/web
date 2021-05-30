@@ -7,7 +7,9 @@ export class SynthwaveGrid {
 	constructor(vertexResX = 64, vertexResY = 64, quadSize = 1.0) {
 		this._vertexRes = new Vector2(vertexResX, vertexResY);
 		this._quadSize = quadSize;
-		this._corridorWidth = 2.25 * 3.5;
+		this._openedCorridorWidth = 2.25 * 3.5;
+		this._closedCorridorWidth = -2.25;
+		this._targetCorridorWidth = this._openedCorridorWidth;
 		this._mountainEdgeSmoothness = 2.25 * 2.0;
 		this._speed = 1.5;
 
@@ -70,13 +72,21 @@ export class SynthwaveGrid {
 		this._geometry.setAttribute('position', this._positionsBuffer);
 	}
 
+	openCorridor() {
+		this._targetCorridorWidth = this._openedCorridorWidth;
+	}
+
+	closeCorridor() {
+		this._targetCorridorWidth = this._closedCorridorWidth;
+	}
+
 	animate(elapsedTime, audioMeans = undefined) {
 		elapsedTime *= this._speed;
 
 		this._uniforms.time.value = elapsedTime;
 		this._uniforms.resolution.value = this._vertexRes;
 		this._uniforms.quadScale.value = this._quadSize;
-		this._uniforms.corridorWidth.value = this._corridorWidth;
+		this._uniforms.corridorWidth.value = this._targetCorridorWidth;
 		this._uniforms.mountainEdgeSmoothness.value = this._mountainEdgeSmoothness;
 
 		if (audioMeans === undefined || audioMeans === null)

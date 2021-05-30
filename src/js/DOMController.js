@@ -10,6 +10,10 @@ export class DOMController {
 		this._hamburgerAfter = document.querySelector('#hamburger-after');
 
 		this._navBurgerItems = document.querySelectorAll('.navburger-item');
+
+		this._projectContainer = document.querySelector('.project-container');
+		this._projects = document.querySelectorAll('.project-container > .project');
+
 		this._currSelectedNavBurgerItem = -1;
 		this._navBurgerItemsHashIndexPairs = [];
 		this._navBurgerItemsHashIndexPairs['#about'] = 0;
@@ -57,14 +61,27 @@ export class DOMController {
 	}
 
 	_setLocationHash(locationHash) {
+		if (locationHash === location.hash)
+			return;
+
 		location.hash = locationHash;
 		if (locationHash === '#main')
 			return;
 
 		let navBurgerItemIndex = -1;
 
-		if (this._currSelectedNavBurgerItem >= 0)
+		if (this._currSelectedNavBurgerItem >= 0) {
 			this._navBurgerItems[this._currSelectedNavBurgerItem].classList.toggle('selected-navburger-item');
+
+			switch (locationHash) {
+				case ('#projects'):
+					this._showProjects();
+					break;
+				default:
+					this._hideProjects();
+					break;
+			}
+		}
 
 		navBurgerItemIndex = this._navBurgerItemsHashIndexPairs[locationHash];
 
@@ -87,6 +104,22 @@ export class DOMController {
 	_toggleNavBurgerPointerEvents() {
 		for (let i = 0; i < this._navBurgerItems.length; ++i)
 			this._navBurgerItems[i].classList.toggle('no-pointer-events');
+	}
+
+	_showProjects() {
+		this._projectContainer.classList.remove('hide-project-container');
+
+		for (let i = 0; i < this._projects.length; ++i) {
+			this._projects[i].classList.remove('hide-project');
+		}
+	}
+
+	_hideProjects() {
+		this._projectContainer.classList.add('hide-project-container');
+
+		for (let i = 0; i < this._projects.length; ++i) {
+			this._projects[i].classList.add('hide-project');
+		}
 	}
 
 	_addListeners() {

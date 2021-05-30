@@ -34,12 +34,26 @@
 
 		body {
 			margin: 0;
+			overflow-x: hidden;
 		}
 
 		canvas {
 			position: fixed;
 			top: 0;
 			z-index: -10;
+		}
+
+		.scrollbar::-webkit-scrollbar-track {
+			background-color: var(--almostWhite);
+		}
+
+		.scrollbar::-webkit-scrollbar {
+			width: 8px;
+			background-color: var(--almostWhite);
+		}
+
+		.scrollbar::-webkit-scrollbar-thumb {
+			background-color: rgb(128, 128, 128);
 		}
 
 		/* ----- Animations ----- */
@@ -585,14 +599,13 @@
 			grid-auto-rows: calc(var(--projectDivWidth) * (9.0 / 16.0));
 			grid-row-gap: 10vh;
 			grid-column-gap: 5vw;
-			justify-content: center;
+			justify-content: centººer;
 			padding-top: 10vh;
 			padding-bottom: 10vh;
 			left: 50%;
 			transform: translateX(-50%);
-			transition: all var(--projectAnimationTime) var(--projectTransition);
-			overflow: hidden;
-			width: 100%;
+			transition: all 0.75s var(--projectTransition);
+			pointer-events: none;
 		}
 
 		.project {
@@ -611,7 +624,7 @@
 		}
 
 		.project:active {
-			transform: scale(1.1);
+			transform: scale(1.075);
 		}
 
 		.project-title-container {
@@ -631,8 +644,14 @@
 			text-overflow: ellipsis;
 		}
 
+		.hide-project-container {
+			transform: translateX(-50%) translateY(200rem) scale(0);
+			opacity: 0;
+		}
+
 		.hide-project {
-			left: -50%;
+			transform: scaleX(0.0);
+			pointer-events: none !important;
 		}
 
 		@media (min-width: 961px) {
@@ -643,7 +662,7 @@
 
 		@media (min-width: 1400px) {
 			.project-container {
-				--projectDivWidth: min(90vw, 560px);
+				--projectDivWidth: min(89vw, 560px);
 			}
 
 			.project-title-container {
@@ -657,7 +676,7 @@
 	</style>
 </head>
 
-<body>
+<body class="scrollbar">
 	<div class="flex-horizontal-bar justify-space-between top uppercase non-selectable no-pointer-events">
 		<span id="crt-av" class="crt-text display-after-time-fast">Av-1</span>
 		<span class="removable crt-text crt-text-blink-display-after">No-signal</span>
@@ -698,43 +717,44 @@
 		</section>
 	</div>
 
-	<div class="project-container non-selectable no-pointer-events">
-		<div class="project">
+	<div class="project-container hide-project-container non-selectable no-pointer-events">
+		<div class="project hide-project">
 			<div class="project-title-container">
 				<p class="project-title">Turn based game (WiP). Unity.</p>
 			</div>
 		</div>
-		<div class="project">
+		<div class="project hide-project">
 			<div class="project-title-container">
 				<p class="project-title">Personal web. Three.js.</p>
 			</div>
 		</div>
-		<div class="project" onclick="window.open('https://github.com/CristianQiu/Unity-AudioSpectrum-Synthwave')">
+		<div class="project hide-project"
+			onclick="window.open('https://github.com/CristianQiu/Unity-AudioSpectrum-Synthwave')">
 			<div class="project-title-container">
 				<p class="project-title">Audio visualizer. Unity.</p>
 			</div>
 		</div>
-		<div class="project">
+		<div class="project hide-project">
 			<div class="project-title-container">
 				<p class="project-title">Multithreaded A*. Unity.</p>
 			</div>
 		</div>
-		<div class="project">
+		<div class="project hide-project">
 			<div class="project-title-container">
 				<p class="project-title">Flocking behaviours. Unity.</p>
 			</div>
 		</div>
-		<div class="project">
+		<div class="project hide-project">
 			<div class="project-title-container">
 				<p class="project-title">Perlin noise tool. Unity.</p>
 			</div>
 		</div>
-		<div class="project">
+		<div class="project hide-project">
 			<div class="project-title-container">
 				<p class="project-title">Serious game. Unity.</p>
 			</div>
 		</div>
-		<div class="project">
+		<div class="project hide-project">
 			<div class="project-title-container">
 				<p class="project-title">Tower defense game. GameMaker 1.</p>
 			</div>
