@@ -24,12 +24,31 @@ export class DOMController {
 
 		this._initialJoinAnimationFinished = false;
 
-		this._onShowProjectsListeners = [];
-		this._onHideProjectsListeners = [];
+		this._onShowProjectsCallback = null;
+		this._onHideProjectsCallback = null;
+
+		this._onShowContactCallback = null;
+		this._onHideContactCallback = null;
 	}
 
 	appendBodyChild(child) {
 		document.body.appendChild(child);
+	}
+
+	setOnShowProjectsCallback(callback) {
+		this._onShowProjectsCallback = callback;
+	}
+
+	setOnHideProjectsCallback(callback) {
+		this._onHideProjectsCallback = callback;
+	}
+
+	setOnShowContactCallback(callback) {
+		this._onShowContactCallback = callback;
+	}
+
+	setOnHideContactCallback(callback) {
+		this._onHideContactCallback = callback;
 	}
 
 	joinWeb() {
@@ -63,14 +82,6 @@ export class DOMController {
 		});
 	}
 
-	addOnShowProjectsListener(callback) {
-		this._onShowProjectsListeners.push(callback);
-	}
-
-	addOnHideProjectsListener(callback) {
-		this._onHideProjectsListeners.push(callback);
-	}
-
 	_setLocationHash(locationHash) {
 		if (locationHash === location.hash)
 			return;
@@ -85,11 +96,16 @@ export class DOMController {
 			this._navBurgerItems[this._currSelectedNavBurgerItem].classList.toggle('selected-navburger-item');
 
 			switch (locationHash) {
+				case ('#about'):
+					this._hideProjects();
+					break;
 				case ('#projects'):
 					this._showProjects();
 					break;
-				default:
+				case ('#contact'):
 					this._hideProjects();
+					break;
+				default:
 					break;
 			}
 		}
@@ -124,9 +140,9 @@ export class DOMController {
 			this._projects[i].classList.remove('hide-project');
 		}
 
-		for (let i = 0; i < this._onShowProjectsListeners.length; ++i) {
-			this._onShowProjectsListeners[i]();
-		}
+		this._onShowProjectsCallback();
+
+		document.body.classList.add('overflow-y-scroll');
 	}
 
 	_hideProjects() {
@@ -136,9 +152,9 @@ export class DOMController {
 			this._projects[i].classList.add('hide-project');
 		}
 
-		for (let i = 0; i < this._onHideProjectsListeners.length; ++i) {
-			this._onHideProjectsListeners[i]();
-		}
+		this._onHideProjectsCallback();
+
+		document.body.classList.remove('overflow-y-scroll');
 	}
 
 	_addListeners() {

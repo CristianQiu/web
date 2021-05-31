@@ -34,11 +34,20 @@ class App {
 	init() {
 		// this._domController.appendBodyChild(this._stats.dom);
 		this._domController.appendBodyChild(this._renderer.getDomElement());
-		this._domController.addOnShowProjectsListener(() => {
+
+		this._domController.setOnShowProjectsCallback(() => {
 			this._grid.closeCorridor();
+			scrollTo(0.0, 0.0);
 		});
-		this._domController.addOnHideProjectsListener(() => {
+		this._domController.setOnHideProjectsCallback(() => {
 			this._grid.openCorridor();
+		});
+
+		this._domController.setOnShowContactCallback(() => {
+			this._skybox.sunrise();
+		});
+		this._domController.setOnHideContactCallback(() => {
+			this._skybox.sunset();
 		});
 
 		this._grid.generate();

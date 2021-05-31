@@ -33,17 +33,27 @@ export class SynthwaveSkybox {
 		this._makeSunAppearTween.start();
 	}
 
+	sunset() {
+		this._targetBasePhi = this._basePhiSunset;
+	}
+
+	sunrise() {
+		this._targetBasePhi = this._basePhiSunrise;
+	}
+
 	moveSunAccordingToMouseWindowPos(mouseX, mouseY) {
 		let phi = MathUtils.lerp(-this._sunPhiOffsetAmp, this._sunPhiOffsetAmp, mouseY);
 		let theta = MathUtils.lerp(-this._sunThetaAmp, this._sunThetaAmp, mouseX);
 
-		phi = MathUtils.degToRad(phi + 87.5);
+		phi = MathUtils.degToRad(phi + this._currentBasePhi);
 		theta = MathUtils.degToRad(theta);
 
 		this._sunTargetPosSpherical.setFromSphericalCoords(1.0, phi, theta);
 	}
 
 	update(dt) {
+		const s = MathUtils.damp(this._currentBasePhi, this._targetBasePhi, this._sunsetSunriseSmoothness, dt);
+
 		const t = 1.0 - Math.pow(this._sunMovementSmoothness, dt);
 		this._uniforms.sunPosition.value.lerp(this._sunTargetPosSpherical, t);
 	}
@@ -53,6 +63,11 @@ export class SynthwaveSkybox {
 	}
 
 	_initSunRotationVars() {
+		this._basePhiSunset = 87.5;
+		this._basePhiSunrise = 81.0;
+		this._targetBasePhi = this._basePhiSunset;
+		this._currentBasePhi = this._basePhiSunset;
+		this._sunsetSunriseSmoothness = 2.0;
 		this._sunPhiOffsetAmp = 0.4;
 		this._sunThetaAmp = 1.0;
 		this._sunMovementSmoothness = 0.25;

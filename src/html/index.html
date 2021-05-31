@@ -26,7 +26,7 @@
 			--responsiveEase: ease-out;
 
 			--btnFadeSpeed: 0.35s;
-			--fadeInTime: 3.0s;
+			--fadeInTime: 3s;
 
 			font-family: 'Exo', sans-serif;
 			font-weight: 300;
@@ -35,6 +35,7 @@
 		body {
 			margin: 0;
 			overflow-x: hidden;
+			overflow-y: hidden;
 		}
 
 		canvas {
@@ -44,16 +45,27 @@
 		}
 
 		.scrollbar::-webkit-scrollbar-track {
-			background-color: var(--almostWhite);
+			background-color: var(--almostBlack);
 		}
 
 		.scrollbar::-webkit-scrollbar {
-			width: 8px;
-			background-color: var(--almostWhite);
+			width: 12px;
+			background-color: var(--almostBlack);
 		}
 
 		.scrollbar::-webkit-scrollbar-thumb {
-			background-color: rgb(128, 128, 128);
+			background-color: var(--almostWhite);
+			border-radius: 5px;
+		}
+
+		.scrollbar::-webkit-scrollbar-thumb:horizontal {
+			border-top: 2px solid var(--almostBlack);
+			border-bottom: 2px solid var(--almostBlack);
+		}
+
+		.scrollbar::-webkit-scrollbar-thumb:vertical {
+			border-left: 2px solid var(--almostBlack);
+			border-right: 2px solid var(--almostBlack);
 		}
 
 		/* ----- Animations ----- */
@@ -146,6 +158,10 @@
 			-webkit-user-select: none;
 			user-select: none;
 			-webkit-tap-highlight-color: transparent;
+		}
+
+		.overflow-y-scroll {
+			overflow-y: scroll;
 		}
 
 		/* ----- Initial screen ----- */
@@ -645,12 +661,11 @@
 		}
 
 		.hide-project-container {
-			transform: translateX(-50%) translateY(200rem) scale(0);
 			opacity: 0;
 		}
 
 		.hide-project {
-			transform: scaleX(0.0);
+			transform: translateX(-75vw) scaleX(0);
 			pointer-events: none !important;
 		}
 
