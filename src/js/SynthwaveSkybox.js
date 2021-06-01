@@ -42,17 +42,20 @@ export class SynthwaveSkybox {
 	}
 
 	moveSunAccordingToMouseWindowPos(mouseX, mouseY) {
-		let phi = MathUtils.lerp(-this._sunPhiOffsetAmp, this._sunPhiOffsetAmp, mouseY);
-		let theta = MathUtils.lerp(-this._sunThetaAmp, this._sunThetaAmp, mouseX);
+		this._currMouseWindowX = mouseX;
+		this._currMouseWindowY = mouseY;
+	}
+
+	update(dt) {
+		this._currentBasePhi = MathUtils.damp(this._currentBasePhi, this._targetBasePhi, this._sunsetSunriseSmoothness, dt);
+
+		let phi = MathUtils.lerp(-this._sunPhiOffsetAmp, this._sunPhiOffsetAmp, this._currMouseWindowY);
+		let theta = MathUtils.lerp(-this._sunThetaAmp, this._sunThetaAmp, this._currMouseWindowX);
 
 		phi = MathUtils.degToRad(phi + this._currentBasePhi);
 		theta = MathUtils.degToRad(theta);
 
 		this._sunTargetPosSpherical.setFromSphericalCoords(1.0, phi, theta);
-	}
-
-	update(dt) {
-		const s = MathUtils.damp(this._currentBasePhi, this._targetBasePhi, this._sunsetSunriseSmoothness, dt);
 
 		const t = 1.0 - Math.pow(this._sunMovementSmoothness, dt);
 		this._uniforms.sunPosition.value.lerp(this._sunTargetPosSpherical, t);
@@ -72,6 +75,9 @@ export class SynthwaveSkybox {
 		this._sunThetaAmp = 1.0;
 		this._sunMovementSmoothness = 0.25;
 		this._sunTargetPosSpherical = new Vector3().copy(this._uniforms.sunPosition.value);
+
+		this._currMouseWindowX = 0.5;
+		this._currMouseWindowY = 0.5;
 	}
 
 	_createMakeSunAppearTween() {

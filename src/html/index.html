@@ -164,6 +164,10 @@
 			overflow-y: scroll;
 		}
 
+		.hide-opacity {
+			opacity: 0 !important;
+		}
+
 		/* ----- Initial screen ----- */
 
 		.flex-container-center {
@@ -468,9 +472,9 @@
 			position: fixed;
 			left: 50%;
 			transform: translateX(-50%);
-			transition: margin var(--rotuleAnimationTime) var(--rotuleTransition);
 			margin: 3vh 0 6vh 0;
 			opacity: 0;
+			transition: margin var(--rotuleAnimationTime) var(--rotuleTransition);
 		}
 
 		.rotule {
@@ -585,7 +589,7 @@
 				width: 18rem;
 			}
 
-			.about-container section {
+			.about-container-inner section {
 				padding-left: 0.4rem;
 				padding-bottom: 0.4rem;
 			}
@@ -606,7 +610,7 @@
 
 		.project-container {
 			--projectDivWidth: min(90vw, 440px);
-			--projectAnimationTime: 0.5s;
+			--projectAnimationTime: 0.75s;
 			--projectTransition: cubic-bezier(.75, 0, .25, 1);
 
 			position: absolute;
@@ -665,7 +669,7 @@
 		}
 
 		.hide-project {
-			transform: translateX(-75vw) scaleX(0);
+			transform: translateX(-70vw) scaleX(0);
 			pointer-events: none !important;
 		}
 

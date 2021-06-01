@@ -11,6 +11,9 @@ export class DOMController {
 
 		this._navBurgerItems = document.querySelectorAll('.navburger-item');
 
+		this._aboutContainer = document.querySelector('.about-container');
+		this._rotuleContainer = document.querySelector('.rotule');
+
 		this._projectContainer = document.querySelector('.project-container');
 		this._projects = document.querySelectorAll('.project-container > .project');
 
@@ -98,12 +101,18 @@ export class DOMController {
 			switch (locationHash) {
 				case ('#about'):
 					this._hideProjects();
+					this._hideContact();
+					this._showAbout();
 					break;
 				case ('#projects'):
+					this._hideContact();
+					this._hideAbout();
 					this._showProjects();
 					break;
 				case ('#contact'):
 					this._hideProjects();
+					this._hideAbout();
+					this._showContact();
 					break;
 				default:
 					break;
@@ -133,6 +142,16 @@ export class DOMController {
 			this._navBurgerItems[i].classList.toggle('no-pointer-events');
 	}
 
+	_showAbout() {
+		this._rotuleContainer.classList.remove('hide-opacity');
+		this._aboutContainer.classList.remove('hide-opacity');
+	}
+
+	_hideAbout() {
+		this._rotuleContainer.classList.add('hide-opacity');
+		this._aboutContainer.classList.add('hide-opacity');
+	}
+
 	_showProjects() {
 		this._projectContainer.classList.remove('hide-project-container');
 
@@ -155,6 +174,14 @@ export class DOMController {
 		this._onHideProjectsCallback();
 
 		document.body.classList.remove('overflow-y-scroll');
+	}
+
+	_showContact() {
+		this._onShowContactCallback();
+	}
+
+	_hideContact() {
+		this._onHideContactCallback();
 	}
 
 	_addListeners() {
