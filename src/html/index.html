@@ -54,7 +54,7 @@
 		}
 
 		.scrollbar::-webkit-scrollbar-thumb {
-			background-color: var(--almostWhite);
+			background-color: rgb(208, 208, 208);
 			border-radius: 5px;
 		}
 
@@ -166,6 +166,10 @@
 
 		.hide-opacity {
 			opacity: 0 !important;
+		}
+
+		.visibility-hidden {
+			visibility: hidden;
 		}
 
 		/* ----- Initial screen ----- */
@@ -629,7 +633,7 @@
 		}
 
 		.project {
-			background-color: var(--almostWhite);
+			background-color: rgb(64, 64, 64);
 			transition: all var(--projectAnimationTime) var(--projectTransition);
 			position: relative;
 			width: 100%;
@@ -669,7 +673,8 @@
 		}
 
 		.hide-project {
-			transform: translateX(-70vw) scaleX(0);
+			/* Note: skew(90deg) is cool but safari glitches! */
+			transform: translateX(-80vw) scaleX(0);
 			pointer-events: none !important;
 		}
 
@@ -690,6 +695,47 @@
 
 			.project-title {
 				font-size: 1.4rem;
+			}
+		}
+
+		/* ----- Contact ----- */
+
+		.contact-container {
+			--contactIconAnimationTime: 0.5s;
+			--contactIconTransition: cubic-bezier(.75, 0, .25, 1);
+
+			position: fixed;
+			display: flex;
+			flex-direction: row;
+			left: 50%;
+			transform: translateX(-50%) scale(0);
+			bottom: 10vh;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			pointer-events: none;
+			transition: all var(--contactIconAnimationTime) var(--contactIconTransition);
+			z-index: -1;
+		}
+
+		.contact-icon {
+			width: 52px;
+			height: 52px;
+			padding: 0 20px 0 20px;
+			transition: all var(--contactIconAnimationTime) var(--contactIconTransition);
+		}
+
+		.show-contact {
+			opacity: 1;
+			pointer-events: initial;
+			transform: translateX(-50%) scale(1);
+		}
+
+		@media (min-width : 481px) and (min-height: 481px) {
+			.contact-icon {
+				width: 78px;
+				height: 78px;
+				padding: 0 30px 0 30px;
 			}
 		}
 	</style>
@@ -778,6 +824,15 @@
 				<p class="project-title">Tower defense game. GameMaker 1.</p>
 			</div>
 		</div>
+	</div>
+
+	<div class="contact-container non-selectable">
+		<img class="contact-icon" loading="lazy" src="../../resources/github.svg" alt="Github link icon"
+			title="Github profile" />
+		<img class="contact-icon" loading="lazy" src="../../resources/linkedin.svg" alt="Linkedin link icon"
+			title="Linkedin profile" />
+		<img class="contact-icon" loading="lazy" src="../../resources/mail.svg" alt="Send mail icon"
+			title="Send mail" />
 	</div>
 
 	<script src="../../dist/App.js"></script>

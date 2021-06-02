@@ -11,27 +11,29 @@ export class DOMController {
 
 		this._navBurgerItems = document.querySelectorAll('.navburger-item');
 
-		this._aboutContainer = document.querySelector('.about-container');
-		this._rotuleContainer = document.querySelector('.rotule');
-
-		this._projectContainer = document.querySelector('.project-container');
-		this._projects = document.querySelectorAll('.project-container > .project');
-
 		this._currSelectedNavBurgerItem = -1;
 		this._navBurgerItemsHashIndexPairs = [];
 		this._navBurgerItemsHashIndexPairs['#about'] = 0;
 		this._navBurgerItemsHashIndexPairs['#projects'] = 1;
 		this._navBurgerItemsHashIndexPairs['#contact'] = 2;
 
-		this._addListeners();
+		this._aboutContainer = document.querySelector('.about-container');
+		this._rotuleContainer = document.querySelector('.rotule');
 
-		this._initialJoinAnimationFinished = false;
+		this._projectContainer = document.querySelector('.project-container');
+		this._projects = document.querySelectorAll('.project-container > .project');
+
+		this._contactContainer = document.querySelector('.contact-container');
+
+		this._addListeners();
 
 		this._onShowProjectsCallback = null;
 		this._onHideProjectsCallback = null;
 
 		this._onShowContactCallback = null;
 		this._onHideContactCallback = null;
+
+		this._initialJoinAnimationFinished = false;
 	}
 
 	appendBodyChild(child) {
@@ -143,13 +145,15 @@ export class DOMController {
 	}
 
 	_showAbout() {
+		// Note: for some odd reason safari glitches with opacity, so just go with hidden.
+		// Note that it is the same effect as opacity is not being animated in "aboutContainer"
 		this._rotuleContainer.classList.remove('hide-opacity');
-		this._aboutContainer.classList.remove('hide-opacity');
+		this._aboutContainer.classList.remove('visibility-hidden');
 	}
 
 	_hideAbout() {
 		this._rotuleContainer.classList.add('hide-opacity');
-		this._aboutContainer.classList.add('hide-opacity');
+		this._aboutContainer.classList.add('visibility-hidden');
 	}
 
 	_showProjects() {
@@ -177,10 +181,14 @@ export class DOMController {
 	}
 
 	_showContact() {
+		this._contactContainer.classList.add('show-contact');
+
 		this._onShowContactCallback();
 	}
 
 	_hideContact() {
+		this._contactContainer.classList.remove('show-contact');
+
 		this._onHideContactCallback();
 	}
 
