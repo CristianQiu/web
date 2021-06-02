@@ -1,3 +1,5 @@
+import { MathUtils } from "three";
+
 // From https://gist.github.com/imbcmdth/6338194
 const a = new ArrayBuffer(4);
 const i = new Int32Array(a);
@@ -59,5 +61,12 @@ export class Maths {
 		for (let i = 0; i < l; ++i)
 			avgMean += array[i];
 		return avgMean /= l;
+	}
+
+	static applyColorLerpDamp(from, to, smoothness, dt) {
+		const r = MathUtils.damp(from.r, to.r, smoothness, dt);
+		const g = MathUtils.damp(from.g, to.g, smoothness, dt);
+		const b = MathUtils.damp(from.b, to.b, smoothness, dt);
+		from.setRGB(r, g, b);
 	}
 }

@@ -1,5 +1,6 @@
-import { BoxBufferGeometry, UniformsUtils, ShaderMaterial, BackSide, Mesh, Vector3, MathUtils } from 'three';
+import { BoxBufferGeometry, UniformsUtils, ShaderMaterial, BackSide, Mesh, MathUtils, Color } from 'three';
 import { SynthwaveSkyboxShader } from './SynthwaveSkyboxShader';
+import { Maths } from './Maths';
 import TWEEN from '@tweenjs/tween.js';
 
 export class SynthwaveSkybox {
@@ -23,6 +24,8 @@ export class SynthwaveSkybox {
 
 		this._initSunRotationVars();
 		this._createMakeSunAppearTween();
+
+		this._initSkyColorVars();
 	}
 
 	getMesh() {
@@ -35,10 +38,14 @@ export class SynthwaveSkybox {
 
 	sunset() {
 		this._targetBasePhi = this._basePhiSunset;
+		this._targetHorizonColor = this._primaryHorizonColor;
+		this._targetZenithColor = this._primaryZenithColor;
 	}
 
 	sunrise() {
 		this._targetBasePhi = this._basePhiSunrise;
+		this._targetHorizonColor = this._secondaryHorizonColor;
+		this._targetZenithColor = this._secondaryZenithColor;
 	}
 
 	moveSunAccordingToMouseWindowPos(mouseX, mouseY) {
@@ -59,6 +66,12 @@ export class SynthwaveSkybox {
 
 		const t = 1.0 - Math.pow(this._sunMovementSmoothness, dt);
 		this._uniforms.sunPosition.value.lerp(this._sunTargetPosSpherical, t);
+
+		Maths.applyColorLerpDamp(this._currHorizonColor, this._targetHorizonColor, this._skyColorSmoothness, dt);
+		Maths.applyColorLerpDamp(this._currZenithColor, this._targetZenithColor, this._skyColorSmoothness, dt);
+
+		this._uniforms.horizonColor.value.copy(this._currHorizonColor);
+		this._uniforms.zenithColor.value.copy(this._currZenithColor);
 	}
 
 	_setSunStripeWidthX(x) {
@@ -74,7 +87,7 @@ export class SynthwaveSkybox {
 		this._sunPhiOffsetAmp = 0.4;
 		this._sunThetaAmp = 1.0;
 		this._sunMovementSmoothness = 0.25;
-		this._sunTargetPosSpherical = new Vector3().copy(this._uniforms.sunPosition.value);
+		this._sunTargetPosSpherical = this._uniforms.sunPosition.value.clone();
 
 		this._currMouseWindowX = 0.5;
 		this._currMouseWindowY = 0.5;
@@ -96,5 +109,19 @@ export class SynthwaveSkybox {
 			.onUpdate(() => {
 				this._setSunStripeWidthX(from.x);
 			});
+	}
+
+	_initSkyColorVars() {
+		this._primaryHorizonColor = this._uniforms.horizonColor.value.clone();
+		this._secondaryHorizonColor = new Color(0.6, 0.1, 0.0);
+		this._currHorizonColor = this._primaryHorizonColor.clone();
+		this._targetHorizonColor = this._primaryHorizonColor;
+
+		this._primaryZenithColor = this._uniforms.zenithColor.value.clone();
+		this._secondaryZenithColor = new Color(0.0, 0.2, 1.0);
+		this._currZenithColor = this._primaryZenithColor.clone();
+		this._targetZenithColor = this._primaryZenithColor;
+
+		this._skyColorSmoothness = 1.0;
 	}
 }
