@@ -714,13 +714,14 @@
 			justify-content: center;
 			z-index: -1;
 			pointer-events: none;
+			transition: all var(--contactIconAnimationTime) var(--contactIconTransition);
 		}
 
 		.contact-icon {
 			width: 52px;
 			height: 52px;
-			margin: 0 min(5vw, 50px) 0 min(5vw, 50px);
 			padding: 0 !important;
+			margin: 0 min(4vw, 40px) 0 min(4vw, 40px);
 			opacity: 0;
 			transition: all var(--contactIconAnimationTime) var(--contactIconTransition);
 		}
@@ -734,6 +735,7 @@
 			.contact-icon {
 				width: 78px;
 				height: 78px;
+				margin: 0 min(5vw, 50px) 0 min(5vw, 50px);
 			}
 		}
 	</style>

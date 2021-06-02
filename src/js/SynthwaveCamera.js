@@ -2,19 +2,6 @@ import { Euler, PerspectiveCamera, Vector3, Quaternion, Object3D, MathUtils } fr
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import TWEEN from '@tweenjs/tween.js';
 
-const PosFreq = 0.15;
-const PosAmp = 0.15;
-
-const RotFreq = 0.15;
-const RotAmp = 0.5;
-
-const MouseRotAmp = 2.0;
-const MouseRotSmoothness = 0.25;
-
-const Easing = TWEEN.Easing.Quintic.InOut;
-
-const Simplex = new SimplexNoise();
-
 export class SynthwaveCamera {
 
 	constructor(fov, aspect, near, far) {
@@ -41,31 +28,16 @@ export class SynthwaveCamera {
 		this._shouldBreathe = false;
 		this.setToLookingGridInstant();
 
-		this._breathingTimer = 0.0;
 		this._transitionTimeMs = 4000;
-
-		const fromPos = { x: this._parentLookingToGridPos.x, y: this._parentLookingToGridPos.y, z: this._parentLookingToGridPos.z };
-		const toPos = { x: this._parentLookingToSunPos.x, y: this._parentLookingToSunPos.y, z: this._parentLookingToSunPos.z };
-
-		this._tweenToLookSunPos = new TWEEN.Tween(fromPos)
-			.to(toPos, this._transitionTimeMs)
-			.easing(Easing)
-			.onUpdate(() => {
-				this._cameraParent.position.set(fromPos.x, fromPos.y, fromPos.z);
-			});
-
-		const fromFov = { x: fov };
-		const toFov = { x: 52.5 };
-		this._tweenToLookSunFov = new TWEEN.Tween(fromFov)
-			.to(toFov, this._transitionTimeMs)
-			.easing(Easing)
-			.onUpdate(() => {
-				this._camera.fov = fromFov.x;
-				this._camera.updateProjectionMatrix();
-			});
+		this._easing = TWEEN.Easing.Quintic.InOut;
+		this._createTweens();
 
 		this._joined = false;
 		this._isTransitioning = false;
+
+		this._initBreathingNoiseSettings();
+		this._mouseRotAmp = 2.0;
+		this._mouseRotSmoothness = 0.25;
 	}
 
 	getCamera() {
@@ -99,7 +71,7 @@ export class SynthwaveCamera {
 
 		this._tweenToLookSunRot = new TWEEN.Tween(tweenObj)
 			.to({ x: 1.0 }, this._transitionTimeMs)
-			.easing(Easing)
+			.easing(this._easing)
 			.onStart(() => {
 				this._joined = true;
 				this._isTransitioning = true;
@@ -120,8 +92,8 @@ export class SynthwaveCamera {
 
 		const xRotOffset = !this._joined ? 90.0 : -5.0;
 
-		let yRot = MathUtils.lerp(MouseRotAmp, -MouseRotAmp, mouseX) + 180.0;
-		let xRot = MathUtils.lerp(-MouseRotAmp, MouseRotAmp, mouseY) + xRotOffset;
+		let yRot = MathUtils.lerp(this._mouseRotAmp, -this._mouseRotAmp, mouseX) + 180.0;
+		let xRot = MathUtils.lerp(-this._mouseRotAmp, this._mouseRotAmp, mouseY) + xRotOffset;
 
 		yRot = MathUtils.degToRad(yRot);
 		xRot = MathUtils.degToRad(xRot);
@@ -130,44 +102,84 @@ export class SynthwaveCamera {
 		this._targetParentRotQuat.setFromEuler(this._tempEulers);
 	}
 
-	updateRotation(dt) {
+	update(dt, time) {
+		this._updateParentRotation(dt);
+		// this._adjustFovDependingOnAspectRatio();
+
+		if (!this._shouldBreathe)
+			return;
+
+		this._updateCameraBreathingNoise(dt, time);
+	}
+
+	_initBreathingNoiseSettings() {
+		this._simplex = new SimplexNoise();
+		this._breathingTimer = 0.0;
+
+		this._posFreq = 0.15;
+		this._posAmp = 0.15;
+
+		this._rotFreq = 0.15;
+		this._rotAmp = 0.5;
+	}
+
+	_createTweens() {
+		const fromPos = { x: this._parentLookingToGridPos.x, y: this._parentLookingToGridPos.y, z: this._parentLookingToGridPos.z };
+		const toPos = { x: this._parentLookingToSunPos.x, y: this._parentLookingToSunPos.y, z: this._parentLookingToSunPos.z };
+
+		this._tweenToLookSunPos = new TWEEN.Tween(fromPos)
+			.to(toPos, this._transitionTimeMs)
+			.easing(this._easing)
+			.onUpdate(() => {
+				this._cameraParent.position.set(fromPos.x, fromPos.y, fromPos.z);
+			});
+
+		const fromFov = { x: this._camera.fov };
+		const toFov = { x: 52.5 };
+		this._tweenToLookSunFov = new TWEEN.Tween(fromFov)
+			.to(toFov, this._transitionTimeMs)
+			.easing(this._easing)
+			.onUpdate(() => {
+				this._camera.fov = fromFov.x;
+				this._camera.updateProjectionMatrix();
+			});
+	}
+
+	_updateParentRotation(dt) {
 		if (this._isTransitioning)
 			return;
 
 		const currQuat = this._cameraParent.quaternion;
-		currQuat.slerp(this._targetParentRotQuat, 1.0 - Math.pow(MouseRotSmoothness, dt));
+		currQuat.slerp(this._targetParentRotQuat, 1.0 - Math.pow(this._mouseRotSmoothness, dt));
 	}
 
-	update(dt, time) {
-		this.updateRotation(dt);
-		let intensity = 0.0;
+	_updateCameraBreathingNoise(dt, time) {
+		this._breathingTimer += dt;
+		const transitionSec = this._transitionTimeMs / 1000.0;
+		this._breathingTimer = Math.min(this._breathingTimer, transitionSec);
+		const intensity = this._shouldBreathe ? (this._breathingTimer / transitionSec) : 0.0;
 
-		if (this._shouldBreathe) {
-			this._breathingTimer += dt;
-			const transitionSec = this._transitionTimeMs / 1000.0;
-			this._breathingTimer = Math.min(this._breathingTimer, transitionSec);
-			intensity = this._breathingTimer / transitionSec;
-		}
-		else {
-			return;
-		}
+		const simplex = this._simplex;
+		const posFreq = this._posFreq;
+		const posAmp = this._posAmp;
 
-		const x = Simplex.noise(time * PosFreq, time * PosFreq, 0.0) * PosAmp * intensity;
-		const y = Simplex.noise((time + 128.0) * PosFreq, (time + 128.0) * PosFreq, 0.0) * PosAmp * intensity;
+		const rotFreq = this._rotFreq;
+		const rotAmp = this._rotAmp;
 
-		let xEulers = Simplex.noise((time + 64.0) * RotFreq, (time + 64.0) * RotFreq, 0.0) * RotAmp * intensity;
-		let yEulers = Simplex.noise((time + 192.0) * RotFreq, (time + 192.0) * RotFreq, 0.0) * RotAmp * intensity;
+		const x = simplex.noise(time * posFreq, time * posFreq, 0.0) * posAmp * intensity;
+		const y = simplex.noise((time + 128.0) * posFreq, (time + 128.0) * posFreq, 0.0) * posAmp * intensity;
+
+		let xEulers = simplex.noise((time + 64.0) * rotFreq, (time + 64.0) * rotFreq, 0.0) * rotAmp * intensity;
+		let yEulers = simplex.noise((time + 192.0) * rotFreq, (time + 192.0) * rotFreq, 0.0) * rotAmp * intensity;
 
 		xEulers = MathUtils.degToRad(xEulers);
 		yEulers = MathUtils.degToRad(yEulers);
 
 		this._camera.position.set(x, y, 0.0);
 		this._camera.rotation.set(xEulers, yEulers, 0.0);
-
-		// this.fovAdjustments();
 	}
 
-	fovAdjustments() {
+	_adjustFovDependingOnAspectRatio() {
 		const minFov = 20.0;
 		const maxFov = 90.0;
 
