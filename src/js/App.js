@@ -68,8 +68,11 @@ class App {
 		this._stats.update();
 		TWEEN.update();
 
+		const w = innerWidth;
+		const h = innerHeight;
+
 		this._skybox.update(dt);
-		this._camera.update(dt, time);
+		this._camera.update(dt, time, w, h);
 
 		const validSpectrumAnalyzer = this._audioSpectrumAnalyzer !== undefined && this._audioSpectrumAnalyzer !== null;
 

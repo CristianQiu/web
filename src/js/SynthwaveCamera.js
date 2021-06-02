@@ -1,4 +1,4 @@
-import { Euler, PerspectiveCamera, Vector3, Quaternion, Object3D, MathUtils } from 'three';
+import { Euler, PerspectiveCamera, Vector3, Quaternion, Object3D, MathUtils, Camera } from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import TWEEN from '@tweenjs/tween.js';
 
@@ -38,6 +38,8 @@ export class SynthwaveCamera {
 		this._initBreathingNoiseSettings();
 		this._mouseRotAmp = 2.0;
 		this._mouseRotSmoothness = 0.25;
+
+		this._initFovAspectRatioSettings();
 	}
 
 	getCamera() {
@@ -102,9 +104,9 @@ export class SynthwaveCamera {
 		this._targetParentRotQuat.setFromEuler(this._tempEulers);
 	}
 
-	update(dt, time) {
+	update(dt, time, windowWidth, windowHeight) {
 		this._updateParentRotation(dt);
-		// this._adjustFovDependingOnAspectRatio();
+		this._adjustFovDependingOnAspectRatio(dt, windowWidth, windowHeight);
 
 		if (!this._shouldBreathe)
 			return;
@@ -135,14 +137,26 @@ export class SynthwaveCamera {
 			});
 
 		const fromFov = { x: this._camera.fov };
-		const toFov = { x: 52.5 };
+		this._tweenToFov = { x: 52.5 };
 		this._tweenToLookSunFov = new TWEEN.Tween(fromFov)
-			.to(toFov, this._transitionTimeMs)
+			.to(this._tweenToFov, this._transitionTimeMs)
 			.easing(this._easing)
 			.onUpdate(() => {
 				this._camera.fov = fromFov.x;
 				this._camera.updateProjectionMatrix();
 			});
+	}
+
+	_initFovAspectRatioSettings() {
+		this._aspectToConsiderZoomIn = 16.0 / 9.0;
+		this._aspectToConsiderZoomOut = 9.0 / 16.0;
+
+		this._minWindowWidthOrHeightToConsiderZoom = 641.0;
+		this._fovSmoothness = 5.0;
+
+		this._minFov = 40.0;
+		this._normalFov = 52.5;
+		this._maxFov = 65.0;
 	}
 
 	_updateParentRotation(dt) {
@@ -179,23 +193,29 @@ export class SynthwaveCamera {
 		this._camera.rotation.set(xEulers, yEulers, 0.0);
 	}
 
-	_adjustFovDependingOnAspectRatio() {
-		const minFov = 20.0;
-		const maxFov = 90.0;
+	_adjustFovDependingOnAspectRatio(dt, w, h) {
+		const aspect = w / h;
 
-		const aspectMaxFov = 0.4;
-		const aspectMinFov = 2.0;
+		const considerZoom = w <= this._minWindowWidthOrHeightToConsiderZoom || h <= this._minWindowWidthOrHeightToConsiderZoom;
+		const zoomIn = aspect >= this._aspectToConsiderZoomIn;
+		const zoomOut = aspect <= this._aspectToConsiderZoomOut;
 
-		let t = innerWidth / innerHeight;
-		t = MathUtils.clamp(t, aspectMaxFov, aspectMinFov);
-		t = MathUtils.inverseLerp(aspectMaxFov, aspectMinFov, t);
+		let targetFov = this._normalFov;
 
-		const fov = MathUtils.lerp(maxFov, minFov, t);
+		if (considerZoom && zoomIn) {
+			targetFov = this._minFov;
+		}
+		else if (considerZoom && zoomOut) {
+			targetFov = this._maxFov;
+		}
 
-		const tanFOV = Math.tan(((Math.PI / 180) * 22.5 / 2));
-		const newFov = (360.0 / Math.PI) * Math.atan(tanFOV * (window.innerHeight / 720.0));
+		const currFov = MathUtils.damp(this._camera.fov, targetFov, this._fovSmoothness, dt);
 
-		this._camera.fov = newFov;
+		if (this._isTransitioning)
+			this._tweenToFov.x = targetFov;
+		else
+			this._camera.fov = currFov;
+
 		this._camera.updateProjectionMatrix();
 	}
 }
