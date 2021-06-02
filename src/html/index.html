@@ -470,7 +470,7 @@
 
 		.rotule-container {
 			--rotuleTransition: cubic-bezier(.75, 0, .25, 1);
-			--rotuleAnimationTime: 0.35s;
+			--rotuleAnimationTime: 0.75s;
 			--subRotuleShadowColor: rgb(254, 5, 225, 1.0);
 
 			position: fixed;
@@ -701,41 +701,39 @@
 		/* ----- Contact ----- */
 
 		.contact-container {
-			--contactIconAnimationTime: 0.5s;
+			--contactIconAnimationTime: 0.75s;
 			--contactIconTransition: cubic-bezier(.75, 0, .25, 1);
 
 			position: fixed;
 			display: flex;
 			flex-direction: row;
 			left: 50%;
-			transform: translateX(-50%) scale(0);
+			transform: translateX(-50%);
 			bottom: 10vh;
 			align-items: center;
 			justify-content: center;
-			opacity: 0;
-			pointer-events: none;
-			transition: all var(--contactIconAnimationTime) var(--contactIconTransition);
 			z-index: -1;
+			pointer-events: none;
 		}
 
 		.contact-icon {
 			width: 52px;
 			height: 52px;
-			padding: 0 20px 0 20px;
+			margin: 0 min(5vw, 50px) 0 min(5vw, 50px);
+			padding: 0 !important;
+			opacity: 0;
 			transition: all var(--contactIconAnimationTime) var(--contactIconTransition);
 		}
 
-		.show-contact {
+		.show-contact-icon {
 			opacity: 1;
 			pointer-events: initial;
-			transform: translateX(-50%) scale(1);
 		}
 
 		@media (min-width : 481px) and (min-height: 481px) {
 			.contact-icon {
 				width: 78px;
 				height: 78px;
-				padding: 0 30px 0 30px;
 			}
 		}
 	</style>
@@ -747,7 +745,7 @@
 		<span class="removable crt-text crt-text-blink-display-after">No-signal</span>
 	</div>
 	<div class="removable flex-container-center display-after-time-slow non-selectable">
-		<button id="join" class="crt-text uppercase">&nbspAv-2 WEB&nbsp</span>
+		<button id="join" class="crt-text uppercase">&nbspAv-2 WEB&nbsp</button>
 	</div>
 	<div
 		class="removable flex-horizontal-bar justify-center display-after-time-slow bottom non-selectable no-pointer-events">
@@ -827,12 +825,18 @@
 	</div>
 
 	<div class="contact-container non-selectable">
-		<img class="contact-icon" loading="lazy" src="../../resources/github.svg" alt="Github link icon"
-			title="Github profile" />
-		<img class="contact-icon" loading="lazy" src="../../resources/linkedin.svg" alt="Linkedin link icon"
-			title="Linkedin profile" />
-		<img class="contact-icon" loading="lazy" src="../../resources/mail.svg" alt="Send mail icon"
-			title="Send mail" />
+		<a href="https://github.com/CristianQiu" target="_blank">
+			<img class="contact-icon" loading="lazy" src="../../resources/github.svg" alt="Github link icon"
+				title="Github profile" />
+		</a>
+		<a href="https://www.linkedin.com/in/cqf/" target="_blank">
+			<img class="contact-icon" loading="lazy" src="../../resources/linkedin.svg" alt="Linkedin link icon"
+				title="Linkedin profile" />
+		</a>
+		<a href="mailto:CristianQiuFelez@gmail.com" target="_blank">
+			<img class="contact-icon" loading="lazy" src="../../resources/mail.svg" alt="Send mail icon"
+				title="Send mail" />
+		</a>
 	</div>
 
 	<script src="../../dist/App.js"></script>

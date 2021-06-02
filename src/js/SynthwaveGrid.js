@@ -8,9 +8,9 @@ export class SynthwaveGrid {
 		this._vertexRes = new Vector2(vertexResX, vertexResY);
 		this._quadSize = quadSize;
 		this._openedCorridorWidth = 2.25 * 3.5;
-		this._closedCorridorWidth = -2.25;
+		this._closedCorridorWidth = -2.25 * 1.75;
 		this._targetCorridorWidth = this._openedCorridorWidth;
-		this._corridorOpenCloseSmoothness = 2.0;
+		this._corridorOpenCloseSmoothness = 0.75;
 		this._mountainEdgeSmoothness = 2.25 * 2.0;
 		this._speed = 1.5;
 

@@ -24,6 +24,7 @@ export class DOMController {
 		this._projects = document.querySelectorAll('.project-container > .project');
 
 		this._contactContainer = document.querySelector('.contact-container');
+		this._contactIcons = document.querySelectorAll('.contact-icon');
 
 		this._addListeners();
 
@@ -97,28 +98,27 @@ export class DOMController {
 
 		let navBurgerItemIndex = -1;
 
-		if (this._currSelectedNavBurgerItem >= 0) {
+		if (this._currSelectedNavBurgerItem >= 0)
 			this._navBurgerItems[this._currSelectedNavBurgerItem].classList.toggle('selected-navburger-item');
 
-			switch (locationHash) {
-				case ('#about'):
-					this._hideProjects();
-					this._hideContact();
-					this._showAbout();
-					break;
-				case ('#projects'):
-					this._hideContact();
-					this._hideAbout();
-					this._showProjects();
-					break;
-				case ('#contact'):
-					this._hideProjects();
-					this._hideAbout();
-					this._showContact();
-					break;
-				default:
-					break;
-			}
+		switch (locationHash) {
+			case ('#about'):
+				this._hideProjects();
+				this._hideContact();
+				this._showAbout();
+				break;
+			case ('#projects'):
+				this._hideContact();
+				this._hideAbout();
+				this._showProjects();
+				break;
+			case ('#contact'):
+				this._hideProjects();
+				this._hideAbout();
+				this._showContact();
+				break;
+			default:
+				break;
 		}
 
 		navBurgerItemIndex = this._navBurgerItemsHashIndexPairs[locationHash];
@@ -159,35 +159,33 @@ export class DOMController {
 	_showProjects() {
 		this._projectContainer.classList.remove('hide-project-container');
 
-		for (let i = 0; i < this._projects.length; ++i) {
+		for (let i = 0; i < this._projects.length; ++i)
 			this._projects[i].classList.remove('hide-project');
-		}
 
 		this._onShowProjectsCallback();
-
 		document.body.classList.add('overflow-y-scroll');
 	}
 
 	_hideProjects() {
 		this._projectContainer.classList.add('hide-project-container');
 
-		for (let i = 0; i < this._projects.length; ++i) {
+		for (let i = 0; i < this._projects.length; ++i)
 			this._projects[i].classList.add('hide-project');
-		}
 
 		this._onHideProjectsCallback();
-
 		document.body.classList.remove('overflow-y-scroll');
 	}
 
 	_showContact() {
-		this._contactContainer.classList.add('show-contact');
+		for (let i = 0; i < this._contactIcons.length; ++i)
+			this._contactIcons[i].classList.add('show-contact-icon');
 
 		this._onShowContactCallback();
 	}
 
 	_hideContact() {
-		this._contactContainer.classList.remove('show-contact');
+		for (let i = 0; i < this._contactIcons.length; ++i)
+			this._contactIcons[i].classList.remove('show-contact-icon');
 
 		this._onHideContactCallback();
 	}
