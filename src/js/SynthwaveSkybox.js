@@ -54,21 +54,22 @@ export class SynthwaveSkybox {
 	}
 
 	update(dt) {
-		this._currentBasePhi = MathUtils.damp(this._currentBasePhi, this._targetBasePhi, this._sunsetSunriseSmoothness, dt);
+		this._currBasePhi = MathUtils.damp(this._currBasePhi, this._targetBasePhi, this._sunsetSunriseTransitionSpeed, dt);
 
-		let phi = MathUtils.lerp(-this._sunPhiOffsetAmp, this._sunPhiOffsetAmp, this._currMouseWindowY);
-		let theta = MathUtils.lerp(-this._sunThetaAmp, this._sunThetaAmp, this._currMouseWindowX);
+		const targetPhiOffset = MathUtils.lerp(-this._sunPhiOffsetAmp, this._sunPhiOffsetAmp, this._currMouseWindowY);
+		const targetThetaOffset = MathUtils.lerp(-this._sunThetaAmp, this._sunThetaAmp, this._currMouseWindowX);
 
-		phi = MathUtils.degToRad(phi + this._currentBasePhi);
-		theta = MathUtils.degToRad(theta);
+		this._currPhiOffset = MathUtils.damp(this._currPhiOffset, targetPhiOffset, this._sunMovementTransitionSpeed, dt);
+		this._currThetaOffset = MathUtils.damp(this._currThetaOffset, targetThetaOffset, this._sunMovementTransitionSpeed, dt);
 
-		this._sunTargetPosSpherical.setFromSphericalCoords(1.0, phi, theta);
+		const currPhiRad = MathUtils.degToRad(this._currBasePhi + this._currPhiOffset);
+		const currThetaRad = MathUtils.degToRad(this._currThetaOffset);
 
-		const t = 1.0 - Math.pow(this._sunMovementSmoothness, dt);
-		this._uniforms.sunPosition.value.lerp(this._sunTargetPosSpherical, t);
+		this._sunTargetPosSpherical.setFromSphericalCoords(1.0, currPhiRad, currThetaRad);
+		this._uniforms.sunPosition.value.copy(this._sunTargetPosSpherical);
 
-		Maths.applyColorLerpDamp(this._currHorizonColor, this._targetHorizonColor, this._skyColorSmoothness, dt);
-		Maths.applyColorLerpDamp(this._currZenithColor, this._targetZenithColor, this._skyColorSmoothness, dt);
+		Maths.applyColorLerpDamp(this._currHorizonColor, this._targetHorizonColor, this._skyColorTransitionSpeed, dt);
+		Maths.applyColorLerpDamp(this._currZenithColor, this._targetZenithColor, this._skyColorTransitionSpeed, dt);
 
 		this._uniforms.horizonColor.value.copy(this._currHorizonColor);
 		this._uniforms.zenithColor.value.copy(this._currZenithColor);
@@ -82,12 +83,14 @@ export class SynthwaveSkybox {
 		this._basePhiSunset = 87.5;
 		this._basePhiSunrise = 81.0;
 		this._targetBasePhi = this._basePhiSunset;
-		this._currentBasePhi = this._basePhiSunset;
-		this._sunsetSunriseSmoothness = 2.0;
+		this._currBasePhi = this._basePhiSunset;
+		this._sunsetSunriseTransitionSpeed = 2.0;
 		this._sunPhiOffsetAmp = 0.4;
 		this._sunThetaAmp = 1.0;
-		this._sunMovementSmoothness = 0.25;
+		this._sunMovementTransitionSpeed = 2.0;
 		this._sunTargetPosSpherical = this._uniforms.sunPosition.value.clone();
+		this._currPhiOffset = MathUtils.radToDeg(this._sunTargetPosSpherical.y);
+		this._currThetaOffset = MathUtils.radToDeg(this._sunTargetPosSpherical.x);
 
 		this._currMouseWindowX = 0.5;
 		this._currMouseWindowY = 0.5;
@@ -122,6 +125,6 @@ export class SynthwaveSkybox {
 		this._currZenithColor = this._primaryZenithColor.clone();
 		this._targetZenithColor = this._primaryZenithColor;
 
-		this._skyColorSmoothness = 1.0;
+		this._skyColorTransitionSpeed = 2.0;
 	}
 }
