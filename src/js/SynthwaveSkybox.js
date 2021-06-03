@@ -80,8 +80,8 @@ export class SynthwaveSkybox {
 	}
 
 	_initSunRotationVars() {
-		this._basePhiSunset = 87.5;
-		this._basePhiSunrise = 81.0;
+		this._basePhiSunset = 87.0;
+		this._basePhiSunrise = 82.0;
 		this._targetBasePhi = this._basePhiSunset;
 		this._currBasePhi = this._basePhiSunset;
 		this._sunsetSunriseTransitionSpeed = 2.0;

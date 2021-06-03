@@ -79,7 +79,7 @@ export class SynthwaveRenderer {
 		this._tweenSettings =
 		{
 			startScanLinesIntensity: 0.2,
-			endScanLinesIntensity: 0.05,
+			endScanLinesIntensity: 0.0,
 			startVignetteFallOff: 5.0,
 			endVignetteFallOff: 0.15,
 			startVignetteFocus: 5.0,
