@@ -89,6 +89,16 @@ class App {
 		requestAnimationFrame(this._updateCallback);
 	}
 
+	_updateRendererSize() {
+		const w = innerWidth;
+		const h = innerHeight;
+
+		this._camera.setAspect(w / h);
+		this._camera.updateProjectionMatrix();
+
+		this._renderer.setSize(w, h);
+	}
+
 	_addListeners() {
 		document.querySelector('#join').addEventListener('click', this._onClickJoin.bind(this));
 		addEventListener('pointermove', this._onPointerMove.bind(this));
@@ -125,13 +135,7 @@ class App {
 	}
 
 	_onWindowResize() {
-		const w = innerWidth;
-		const h = innerHeight;
-
-		this._camera.setAspect(w / h);
-		this._camera.updateProjectionMatrix();
-
-		this._renderer.setSize(w, h);
+		this._updateRendererSize();
 	}
 }
 

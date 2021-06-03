@@ -152,11 +152,15 @@ export class SynthwaveCamera {
 		this._aspectToConsiderZoomOut = 9.0 / 16.0;
 
 		this._minWindowWidthOrHeightToConsiderZoom = 641.0;
-		this._fovSmoothness = 5.0;
+		this._fovTransitionSpeed = 3.0;
 
 		this._minFov = 40.0;
 		this._normalFov = 52.5;
 		this._maxFov = 65.0;
+
+		this._timeWantingToChangeFov = 0.0;
+		this._lastAspectRatioWantingToChangeTo = 0.0;
+		this._changeFovIfNeededAfterTimeInSec = 0.75;
 	}
 
 	_updateParentRotation(dt) {
@@ -202,20 +206,28 @@ export class SynthwaveCamera {
 
 		let targetFov = this._normalFov;
 
-		if (considerZoom && zoomIn) {
+		if (considerZoom && zoomIn)
 			targetFov = this._minFov;
-		}
-		else if (considerZoom && zoomOut) {
+		else if (considerZoom && zoomOut)
 			targetFov = this._maxFov;
-		}
 
-		const currFov = MathUtils.damp(this._camera.fov, targetFov, this._fovSmoothness, dt);
-
-		if (this._isTransitioning)
-			this._tweenToFov.x = targetFov;
+		if (this._lastAspectRatioWantingToChangeTo === aspect)
+			this._timeWantingToChangeFov += dt;
 		else
-			this._camera.fov = currFov;
+			this._timeWantingToChangeFov = 0.0;
 
-		this._camera.updateProjectionMatrix();
+		this._lastAspectRatioWantingToChangeTo = aspect;
+		const doModifyFov = this._timeWantingToChangeFov >= this._changeFovIfNeededAfterTimeInSec;
+
+		if (doModifyFov) {
+			const currFov = MathUtils.damp(this._camera.fov, targetFov, this._fovTransitionSpeed, dt);
+
+			if (this._isTransitioning)
+				this._tweenToFov.x = targetFov;
+			else
+				this._camera.fov = currFov;
+
+			this._camera.updateProjectionMatrix();
+		}
 	}
 }

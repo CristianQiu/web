@@ -10,7 +10,7 @@ export class SynthwaveGrid {
 		this._openedCorridorWidth = 2.25 * 3.5;
 		this._closedCorridorWidth = -2.25 * 1.75;
 		this._targetCorridorWidth = this._openedCorridorWidth;
-		this._corridorOpenCloseSmoothness = 0.75;
+		this._corridorOpenCloseTransitionSpeed = 2.0;
 		this._mountainEdgeSmoothness = 2.25 * 2.0;
 		this._speed = 1.5;
 
@@ -88,7 +88,7 @@ export class SynthwaveGrid {
 		this._uniforms.resolution.value = this._vertexRes;
 		this._uniforms.quadScale.value = this._quadSize;
 
-		const corridorWidth = MathUtils.damp(this._uniforms.corridorWidth.value, this._targetCorridorWidth, this._corridorOpenCloseSmoothness, dt);
+		const corridorWidth = MathUtils.damp(this._uniforms.corridorWidth.value, this._targetCorridorWidth, this._corridorOpenCloseTransitionSpeed, dt);
 		this._uniforms.corridorWidth.value = corridorWidth;
 		this._uniforms.mountainEdgeSmoothness.value = this._mountainEdgeSmoothness;
 
