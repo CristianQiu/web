@@ -1,4 +1,4 @@
-import { Euler, PerspectiveCamera, Vector3, Quaternion, Object3D, MathUtils, Camera } from 'three';
+import { Euler, PerspectiveCamera, Vector3, Quaternion, Object3D, MathUtils } from 'three';
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import TWEEN from '@tweenjs/tween.js';
 
@@ -152,7 +152,7 @@ export class SynthwaveCamera {
 		this._aspectToConsiderZoomOut = 9.0 / 16.0;
 
 		this._minWindowWidthOrHeightToConsiderZoom = 641.0;
-		this._fovTransitionSpeed = 3.0;
+		this._fovTransitionSpeed = 4.0;
 
 		this._minFov = 40.0;
 		this._normalFov = 52.5;
