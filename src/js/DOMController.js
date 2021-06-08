@@ -28,6 +28,10 @@ export class DOMController {
 
 		this._addListeners();
 
+		this._menuOpened = false;
+		this._onOpenMenu = null;
+		this._onCloseMenu = null;
+
 		this._onShowProjectsCallback = null;
 		this._onHideProjectsCallback = null;
 
@@ -39,6 +43,14 @@ export class DOMController {
 
 	appendBodyChild(child) {
 		document.body.appendChild(child);
+	}
+
+	setOnOpenMenuCallback(callback) {
+		this._onOpenMenu = callback;
+	}
+
+	setOnCloseMenuCallback(callback) {
+		this._onCloseMenu = callback;
 	}
 
 	setOnShowProjectsCallback(callback) {
@@ -130,6 +142,8 @@ export class DOMController {
 	}
 
 	_toggleHamburgerMenu() {
+		this._menuOpened = !this._menuOpened;
+
 		this._hamburgerDivBg.classList.toggle('hamburger-unfolded');
 		this._hamburgerBefore.classList.toggle('hamburger-cross-left');
 		this._hamburgerCenter.classList.toggle('hamburger-cross-right');
@@ -137,6 +151,11 @@ export class DOMController {
 
 		for (let i = 0; i < this._navBurgerItems.length; ++i)
 			this._navBurgerItems[i].classList.toggle('unfolded-navburger-item');
+
+		if (this._menuOpened)
+			this._onOpenMenu();
+		else
+			this._onCloseMenu();
 	}
 
 	_toggleNavBurgerPointerEvents() {
@@ -207,8 +226,8 @@ export class DOMController {
 	_onClickNavBurgerItem(index) {
 		for (let item in this._navBurgerItemsHashIndexPairs) {
 			if (this._navBurgerItemsHashIndexPairs[item] === index) {
-				this._setLocationHash(item);
 				this._toggleHamburgerMenu();
+				this._setLocationHash(item);
 				this._toggleNavBurgerPointerEvents();
 			}
 		}

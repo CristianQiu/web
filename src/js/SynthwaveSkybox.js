@@ -49,8 +49,17 @@ export class SynthwaveSkybox {
 	}
 
 	moveSunAccordingToMouseWindowPos(mouseX, mouseY) {
+		if (!this._sunRotationWithMouseEnabled)
+			return;
+
 		this._currMouseWindowX = mouseX;
 		this._currMouseWindowY = mouseY;
+	}
+
+	enableSunMouseMovement(enable) {
+		this._sunRotationWithMouseEnabled = enable;
+
+		console.log(this._sunRotationWithMouseEnabled);
 	}
 
 	update(dt) {
@@ -94,6 +103,8 @@ export class SynthwaveSkybox {
 
 		this._currMouseWindowX = 0.5;
 		this._currMouseWindowY = 0.5;
+
+		this._sunRotationWithMouseEnabled = true;
 	}
 
 	_createMakeSunAppearTween() {

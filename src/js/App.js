@@ -35,12 +35,26 @@ class App {
 		// this._domController.appendBodyChild(this._stats.dom);
 		this._domController.appendBodyChild(this._renderer.getDomElement());
 
+		this._domController.setOnOpenMenuCallback(() => {
+			this._skybox.enableSunMouseMovement(false);
+			this._camera.enableCamRotationWithMouse(false);
+		});
+
+		this._domController.setOnCloseMenuCallback(() => {
+			this._skybox.enableSunMouseMovement(true);
+			this._camera.enableCamRotationWithMouse(true);
+		});
+
 		this._domController.setOnShowProjectsCallback(() => {
 			this._grid.closeCorridor();
+			this._skybox.enableSunMouseMovement(false);
+			this._camera.enableCamRotationWithMouse(false);
 			scrollTo(0.0, 0.0);
 		});
 		this._domController.setOnHideProjectsCallback(() => {
 			this._grid.openCorridor();
+			this._skybox.enableSunMouseMovement(true);
+			this._camera.enableCamRotationWithMouse(true);
 		});
 
 		this._domController.setOnShowContactCallback(() => {

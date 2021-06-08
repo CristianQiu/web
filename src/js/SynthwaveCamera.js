@@ -40,6 +40,8 @@ export class SynthwaveCamera {
 		this._mouseRotSmoothness = 0.25;
 
 		this._initFovAspectRatioSettings();
+
+		this._enableRotationWithMouse = true;
 	}
 
 	getCamera() {
@@ -88,8 +90,12 @@ export class SynthwaveCamera {
 			.start();
 	}
 
+	enableCamRotationWithMouse(enable) {
+		this._enableRotationWithMouse = enable;
+	}
+
 	rotateAccordingToMouseWindowPos(mouseX, mouseY) {
-		if (this._isTransitioning)
+		if (this._isTransitioning || !this._enableRotationWithMouse)
 			return;
 
 		const xRotOffset = !this._joined ? 90.0 : -5.0;
