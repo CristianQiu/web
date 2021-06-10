@@ -101,8 +101,11 @@ export class DOMController {
 	}
 
 	_setLocationHash(locationHash) {
-		if (locationHash === location.hash)
+		if (locationHash === location.hash) {
+			// Note: Prevent a glitch that happens when clicking the same item in the menu where we are at
+			this._showMenuFromLocationHash(locationHash);
 			return;
+		}
 
 		location.hash = locationHash;
 		if (locationHash === '#main')
@@ -113,6 +116,17 @@ export class DOMController {
 		if (this._currSelectedNavBurgerItem >= 0)
 			this._navBurgerItems[this._currSelectedNavBurgerItem].classList.toggle('selected-navburger-item');
 
+		this._showMenuFromLocationHash(locationHash);
+
+		navBurgerItemIndex = this._navBurgerItemsHashIndexPairs[locationHash];
+
+		if (navBurgerItemIndex >= 0) {
+			this._currSelectedNavBurgerItem = navBurgerItemIndex;
+			this._navBurgerItems[navBurgerItemIndex].classList.toggle('selected-navburger-item');
+		}
+	}
+
+	_showMenuFromLocationHash(locationHash) {
 		switch (locationHash) {
 			case ('#about'):
 				this._hideProjects();
@@ -131,13 +145,6 @@ export class DOMController {
 				break;
 			default:
 				break;
-		}
-
-		navBurgerItemIndex = this._navBurgerItemsHashIndexPairs[locationHash];
-
-		if (navBurgerItemIndex >= 0) {
-			this._currSelectedNavBurgerItem = navBurgerItemIndex;
-			this._navBurgerItems[navBurgerItemIndex].classList.toggle('selected-navburger-item');
 		}
 	}
 
