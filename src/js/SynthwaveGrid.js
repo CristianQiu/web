@@ -32,6 +32,14 @@ export class SynthwaveGrid {
 		return this._mesh;
 	}
 
+	openCorridor() {
+		this._targetCorridorWidth = this._openedCorridorWidth;
+	}
+
+	closeCorridor() {
+		this._targetCorridorWidth = this._closedCorridorWidth;
+	}
+
 	generate() {
 		const vertices = [];
 		const startPos = new Vector3(0.0, 0.0, 0.0);
@@ -71,14 +79,6 @@ export class SynthwaveGrid {
 
 		this._geometry.setIndex(indices);
 		this._geometry.setAttribute('position', this._positionsBuffer);
-	}
-
-	openCorridor() {
-		this._targetCorridorWidth = this._openedCorridorWidth;
-	}
-
-	closeCorridor() {
-		this._targetCorridorWidth = this._closedCorridorWidth;
 	}
 
 	animate(dt, elapsedTime, audioMeans = undefined) {

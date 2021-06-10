@@ -36,12 +36,8 @@ export class SynthwaveCamera {
 		this._isTransitioning = false;
 
 		this._initBreathingNoiseSettings();
-		this._mouseRotAmp = 2.0;
-		this._mouseRotSmoothness = 0.25;
-
+		this._initMouseRotationSettings();
 		this._initFovAspectRatioSettings();
-
-		this._enableRotationWithMouse = true;
 	}
 
 	getCamera() {
@@ -92,43 +88,32 @@ export class SynthwaveCamera {
 
 	enableCamRotationWithMouse(enable) {
 		this._enableRotationWithMouse = enable;
+
+		if (!this._enableRotationWithMouse) {
+			this._currMouseWindowX = 0.5;
+			this._currMouseWindowY = 0.5;
+		}
 	}
 
 	rotateAccordingToMouseWindowPos(mouseX, mouseY) {
-		if (this._isTransitioning || !this._enableRotationWithMouse)
-			return;
+		if (this._isTransitioning || !this._enableRotationWithMouse) {
+			mouseX = 0.5;
+			mouseY = 0.5;
+		}
 
-		const xRotOffset = !this._joined ? 90.0 : -5.0;
-
-		let yRot = MathUtils.lerp(this._mouseRotAmp, -this._mouseRotAmp, mouseX) + 180.0;
-		let xRot = MathUtils.lerp(-this._mouseRotAmp, this._mouseRotAmp, mouseY) + xRotOffset;
-
-		yRot = MathUtils.degToRad(yRot);
-		xRot = MathUtils.degToRad(xRot);
-
-		this._tempEulers.set(xRot, yRot, 0.0);
-		this._targetParentRotQuat.setFromEuler(this._tempEulers);
+		this._currMouseWindowX = mouseX;
+		this._currMouseWindowY = mouseY;
 	}
 
 	update(dt, time, windowWidth, windowHeight) {
 		this._updateParentRotation(dt);
+		this._updateMouseTargetRotation();
 		this._adjustFovDependingOnAspectRatio(dt, windowWidth, windowHeight);
 
 		if (!this._shouldBreathe)
 			return;
 
 		this._updateCameraBreathingNoise(dt, time);
-	}
-
-	_initBreathingNoiseSettings() {
-		this._simplex = new SimplexNoise();
-		this._breathingTimer = 0.0;
-
-		this._posFreq = 0.15;
-		this._posAmp = 0.15;
-
-		this._rotFreq = 0.15;
-		this._rotAmp = 0.5;
 	}
 
 	_createTweens() {
@@ -153,6 +138,25 @@ export class SynthwaveCamera {
 			});
 	}
 
+	_initBreathingNoiseSettings() {
+		this._simplex = new SimplexNoise();
+		this._breathingTimer = 0.0;
+
+		this._posFreq = 0.15;
+		this._posAmp = 0.15;
+
+		this._rotFreq = 0.15;
+		this._rotAmp = 0.5;
+	}
+
+	_initMouseRotationSettings() {
+		this._enableRotationWithMouse = true;
+		this._mouseRotAmp = 2.0;
+		this._mouseRotSmoothness = 0.25;
+		this._currMouseWindowX = 0.5;
+		this._currMouseWindowY = 0.5;
+	}
+
 	_initFovAspectRatioSettings() {
 		this._aspectToConsiderZoomIn = 16.0 / 9.0;
 		this._aspectToConsiderZoomOut = 9.0 / 16.0;
@@ -175,6 +179,19 @@ export class SynthwaveCamera {
 
 		const currQuat = this._cameraParent.quaternion;
 		currQuat.slerp(this._targetParentRotQuat, 1.0 - Math.pow(this._mouseRotSmoothness, dt));
+	}
+
+	_updateMouseTargetRotation() {
+		const xRotOffset = !this._joined ? 90.0 : -5.0;
+
+		let yRot = MathUtils.lerp(this._mouseRotAmp, -this._mouseRotAmp, this._currMouseWindowX) + 180.0;
+		let xRot = MathUtils.lerp(-this._mouseRotAmp, this._mouseRotAmp, this._currMouseWindowY) + xRotOffset;
+
+		yRot = MathUtils.degToRad(yRot);
+		xRot = MathUtils.degToRad(xRot);
+
+		this._tempEulers.set(xRot, yRot, 0.0);
+		this._targetParentRotQuat.setFromEuler(this._tempEulers);
 	}
 
 	_updateCameraBreathingNoise(dt, time) {

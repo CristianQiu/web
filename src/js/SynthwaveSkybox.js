@@ -22,9 +22,8 @@ export class SynthwaveSkybox {
 		this._mesh = new Mesh(this._geometry, material);
 		this._mesh.scale.setScalar(10000);
 
-		this._initSunRotationVars();
 		this._createMakeSunAppearTween();
-
+		this._initSunRotationVars();
 		this._initSkyColorVars();
 	}
 
@@ -59,7 +58,10 @@ export class SynthwaveSkybox {
 	enableSunMouseMovement(enable) {
 		this._sunRotationWithMouseEnabled = enable;
 
-		console.log(this._sunRotationWithMouseEnabled);
+		if (!this._sunRotationWithMouseEnabled) {
+			this._currMouseWindowX = 0.5;
+			this._currMouseWindowY = 0.5;
+		}
 	}
 
 	update(dt) {
@@ -88,6 +90,24 @@ export class SynthwaveSkybox {
 		this._uniforms.sunStripeWidths.value.setX(x);
 	}
 
+	_createMakeSunAppearTween() {
+		const from = { x: 1.33 };
+		const to = { x: 0.03 };
+		const fadeTime = 3000;
+		const easing = TWEEN.Easing.Quartic.InOut;
+		const fadeDelay = 3000;
+
+		this._setSunStripeWidthX(from.x);
+
+		this._makeSunAppearTween = new TWEEN.Tween(from)
+			.to(to, fadeTime)
+			.easing(easing)
+			.delay(fadeDelay)
+			.onUpdate(() => {
+				this._setSunStripeWidthX(from.x);
+			});
+	}
+
 	_initSunRotationVars() {
 		this._basePhiSunset = 87.0;
 		this._basePhiSunrise = 82.0;
@@ -105,24 +125,6 @@ export class SynthwaveSkybox {
 		this._currMouseWindowY = 0.5;
 
 		this._sunRotationWithMouseEnabled = true;
-	}
-
-	_createMakeSunAppearTween() {
-		const from = { x: 1.33 };
-		const to = { x: 0.03 };
-		const fadeTime = 3000;
-		const easing = TWEEN.Easing.Quartic.InOut;
-		const fadeDelay = 3000;
-
-		this._setSunStripeWidthX(from.x);
-
-		this._makeSunAppearTween = new TWEEN.Tween(from)
-			.to(to, fadeTime)
-			.easing(easing)
-			.delay(fadeDelay)
-			.onUpdate(() => {
-				this._setSunStripeWidthX(from.x);
-			});
 	}
 
 	_initSkyColorVars() {
