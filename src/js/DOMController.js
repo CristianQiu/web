@@ -100,10 +100,12 @@ export class DOMController {
 		});
 	}
 
+	isInProjectsSection() {
+		return location.hash === '#projects';
+	}
+
 	_setLocationHash(locationHash) {
 		if (locationHash === location.hash) {
-			// Note: Prevent a glitch that happens when clicking the same item in the menu where we are at
-			this._showMenuFromLocationHash(locationHash);
 			return;
 		}
 
@@ -233,8 +235,8 @@ export class DOMController {
 	_onClickNavBurgerItem(index) {
 		for (let item in this._navBurgerItemsHashIndexPairs) {
 			if (this._navBurgerItemsHashIndexPairs[item] === index) {
-				this._toggleHamburgerMenu();
 				this._setLocationHash(item);
+				this._toggleHamburgerMenu();
 				this._toggleNavBurgerPointerEvents();
 			}
 		}

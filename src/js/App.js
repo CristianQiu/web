@@ -39,8 +39,9 @@ class App {
 			this._skybox.enableSunMouseMovement(false);
 			this._camera.enableCamRotationWithMouse(false);
 		});
-
 		this._domController.setOnCloseMenuCallback(() => {
+			if (this._domController.isInProjectsSection())
+				return;
 			this._skybox.enableSunMouseMovement(true);
 			this._camera.enableCamRotationWithMouse(true);
 		});
