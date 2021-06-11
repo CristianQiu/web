@@ -32,7 +32,8 @@ class App {
 	}
 
 	init() {
-		// this._domController.appendBodyChild(this._stats.dom);
+		// DOM stuff
+		this._domController.appendBodyChild(this._stats.dom);
 		this._domController.appendBodyChild(this._renderer.getDomElement());
 
 		this._domController.setOnOpenMenuCallback(() => {
@@ -65,6 +66,7 @@ class App {
 			this._skybox.sunset();
 		});
 
+		// Three.js stuff
 		this._grid.generate();
 
 		this._scene.add(this._camera.getCameraParent());
@@ -73,7 +75,13 @@ class App {
 
 		this._renderer.fadeInCrt();
 
+		// listeners
 		this._addListeners();
+
+		addEventListener('hashchange', () => {
+			this._domController.setLocationHash(location.hash, true);
+			console.log('el hash a cambiao' + location.hash);
+		});
 	}
 
 	update() {
@@ -83,11 +91,8 @@ class App {
 		this._stats.update();
 		TWEEN.update();
 
-		const w = innerWidth;
-		const h = innerHeight;
-
 		this._skybox.update(dt);
-		this._camera.update(dt, time, w, h);
+		this._camera.update(dt, time, innerWidth, innerHeight);
 
 		const validSpectrumAnalyzer = this._audioSpectrumAnalyzer !== undefined && this._audioSpectrumAnalyzer !== null;
 
@@ -139,11 +144,8 @@ class App {
 		if (!this._audioManager.isInitialized())
 			return;
 
-		const w = innerWidth;
-		const h = innerHeight;
-
-		let x = e.clientX / w;
-		let y = e.clientY / h;
+		let x = e.clientX / innerWidth;
+		let y = e.clientY / innerHeight;
 
 		this._camera.rotateAccordingToMouseWindowPos(x, y);
 		this._skybox.moveSunAccordingToMouseWindowPos(x, y);

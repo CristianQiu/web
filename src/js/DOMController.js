@@ -1,7 +1,7 @@
 export class DOMController {
 
 	constructor() {
-		this._setLocationHash('#main');
+		this.setLocationHash('#main');
 
 		this._hamburgerDivBg = document.querySelector('#hamburger-container');
 		this._hamburgerMenuButton = document.querySelector('#hamburger-button');
@@ -70,7 +70,8 @@ export class DOMController {
 	}
 
 	joinWeb() {
-		this._setLocationHash('#about');
+		history.replaceState(null, null, '#about');
+		this.setLocationHash('#about', true);
 
 		const removables = document.querySelectorAll('.removable');
 		setTimeout(() => {
@@ -104,15 +105,12 @@ export class DOMController {
 		return location.hash === '#projects';
 	}
 
-	_setLocationHash(locationHash) {
-		if (locationHash === location.hash) {
+	setLocationHash(locationHash, force = false) {
+		if (locationHash === location.hash && !force) {
 			return;
 		}
 
 		location.hash = locationHash;
-		if (locationHash === '#main')
-			return;
-
 		let navBurgerItemIndex = -1;
 
 		if (this._currSelectedNavBurgerItem >= 0)
@@ -235,7 +233,7 @@ export class DOMController {
 	_onClickNavBurgerItem(index) {
 		for (let item in this._navBurgerItemsHashIndexPairs) {
 			if (this._navBurgerItemsHashIndexPairs[item] === index) {
-				this._setLocationHash(item);
+				this.setLocationHash(item);
 				this._toggleHamburgerMenu();
 				this._toggleNavBurgerPointerEvents();
 			}
