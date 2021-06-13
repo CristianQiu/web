@@ -1,7 +1,8 @@
 export class DOMController {
 
 	constructor() {
-		this.setLocationHash('#main');
+		// this.setLocationHash('#main');
+		history.replaceState(null, null, '#main');
 
 		this._hamburgerDivBg = document.querySelector('#hamburger-container');
 		this._hamburgerMenuButton = document.querySelector('#hamburger-button');

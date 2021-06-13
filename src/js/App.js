@@ -78,10 +78,10 @@ class App {
 		// listeners
 		this._addListeners();
 
-		addEventListener('hashchange', () => {
-			this._domController.setLocationHash(location.hash, true);
-			console.log('el hash a cambiao' + location.hash);
-		});
+		// addEventListener('hashchange', () => {
+		// 	this._domController.setLocationHash(location.hash, true);
+		// 	console.log('el hash a cambiao' + location.hash);
+		// });
 	}
 
 	update() {
