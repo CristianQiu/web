@@ -30,7 +30,7 @@
 		"three": "^0.129.0"
 	},
 	"devDependencies": {
-		"eslint": "^7.28.0",
+		"eslint": "^7.29.0",
 		"http-server": "^0.12.3",
 		"webpack": "^5.39.1",
 		"webpack-cli": "^4.7.2"
