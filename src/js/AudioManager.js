@@ -5,7 +5,7 @@ import TWEEN from '@tweenjs/tween.js';
 export class AudioManager {
 
 	constructor(mainCameraListener) {
-		this._musicFile = '../../resources/BeyondMemory.mp3';
+		this._musicFile = '../../resources/sounds/BeyondMemory.mp3';
 		this._initialized = false;
 		this._loadingMusic = false;
 

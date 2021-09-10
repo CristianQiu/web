@@ -16,7 +16,7 @@ class App {
 		const h = innerHeight;
 		const pixelRatio = Math.max(0.9, devicePixelRatio * 0.6);
 
-		this._stats = new Stats();
+		// this._stats = new Stats();
 		this._clock = new Clock();
 
 		this._scene = new Scene();
@@ -33,7 +33,7 @@ class App {
 
 	init() {
 		// DOM stuff
-		this._domController.appendBodyChild(this._stats.dom);
+		// this._domController.appendBodyChild(this._stats.dom);
 		this._domController.appendBodyChild(this._renderer.getDomElement());
 
 		this._domController.setOnOpenMenuCallback(() => {
@@ -96,7 +96,7 @@ class App {
 		const dt = this._clock.getDelta();
 		const time = this._clock.getElapsedTime();
 
-		this._stats.update();
+		// this._stats.update();
 		TWEEN.update();
 
 		this._skybox.update(dt);

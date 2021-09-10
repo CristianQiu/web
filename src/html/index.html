@@ -15,7 +15,7 @@
 		@font-face {
 			font-family: 'VCR';
 			font-display: swap;
-			src: url(../../resources/VCR_OSD_MONO_1.001.ttf);
+			src: url(../../resources/fonts/VCR_OSD_MONO_1.001.ttf);
 		}
 
 		:root {
@@ -673,7 +673,6 @@
 		}
 
 		.project {
-			background-color: rgb(228, 232, 241);
 			transition: all var(--projectAnimationTime) var(--projectTransition);
 			position: relative;
 			width: 100%;
@@ -681,11 +680,17 @@
 			pointer-events: initial;
 			cursor: pointer;
 			overflow: hidden;
-			box-shadow: 5px 5px 5px var(--almostBlack);
+			box-shadow: 4px 4px 4px var(--almostBlack);
+		}
+
+		.project-img {
+			width: 100%;
+			height: 100%;
+			object-fit: fill;
 		}
 
 		.project:hover {
-			transform: scale(1.1);
+			transform: scale(1.05);
 		}
 
 		.project:active {
@@ -769,6 +774,9 @@
 			margin: 0 min(3vw, 20px) 0 min(3vw, 20px);
 			opacity: 0;
 			transition: all var(--contactIconAnimationTime) var(--contactIconTransition);
+			clip-path: inset(6% round 4px);
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
 		}
 
 		.show-contact-icon {
@@ -832,103 +840,68 @@
 		</section>
 	</div>
 
-	<!-- <div class="project-container hide-project-container non-selectable no-pointer-events">
+	<div class="project-container hide-project-container non-selectable no-pointer-events">
 		<div class="project hide-project">
+			<img class="project-img" loading="lazy" src="../../resources/project images/TurnBasedGame.jpg" />
 			<div class="project-title-container">
 				<span class="project-title">Turn based game (WiP). Unity.</span>
 			</div>
 		</div>
 		<div class="project hide-project">
+			<img class="project-img" loading="lazy" src="../../resources/project images/PersonalWeb.jpg" />
 			<div class="project-title-container">
 				<span class="project-title">Personal web. Three.js.</span>
 			</div>
 		</div>
 		<div class="project hide-project">
+			<img class="project-img" loading="lazy" src="../../resources/project images/AudioVisualization.jpg" />
 			<div class="project-title-container">
 				<span class="project-title">Audio visualizer. Unity.</span>
 			</div>
 		</div>
 		<div class="project hide-project">
+			<img class="project-img" loading="lazy" src="../../resources/project images/MultithreadedAstar.jpg" />
 			<div class="project-title-container">
 				<span class="project-title">Multithreaded A*. Unity.</span>
 			</div>
 		</div>
 		<div class="project hide-project">
+			<img class="project-img" loading="lazy" src="../../resources/project images/Flocking.jpg" />
 			<div class="project-title-container">
 				<span class="project-title">Flocking behaviours. Unity.</span>
 			</div>
 		</div>
 		<div class="project hide-project">
+			<img class="project-img" loading="lazy" src="../../resources/project images/PerlinNoiseTool.jpg" />
 			<div class="project-title-container">
 				<span class="project-title">Perlin noise tool. Unity.</span>
 			</div>
 		</div>
 		<div class="project hide-project">
+			<img class="project-img" loading="lazy" src="../../resources/project images/SeriousGame.jpg" />
 			<div class="project-title-container">
 				<span class="project-title">Serious game. Unity.</span>
 			</div>
 		</div>
 		<div class="project hide-project">
+			<img class="project-img" loading="lazy" src="../../resources/project images/TowerDefenseGame.jpg" />
 			<div class="project-title-container">
-				<span class="project-title">Tower defense game. GameMaker 1.</span>
-			</div>
-		</div>
-	</div> -->
-
-	<div class="project-container hide-project-container non-selectable no-pointer-events">
-		<div class="project hide-project">
-			<div class="project-title-container">
-				<span class="project-title">Section in construction.</span>
-			</div>
-		</div>
-		<div class="project hide-project">
-			<div class="project-title-container">
-				<span class="project-title">Section in construction.</span>
-			</div>
-		</div>
-		<div class="project hide-project">
-			<div class="project-title-container">
-				<span class="project-title">Section in construction.</span>
-			</div>
-		</div>
-		<div class="project hide-project">
-			<div class="project-title-container">
-				<span class="project-title">Section in construction.</span>
-			</div>
-		</div>
-		<div class="project hide-project">
-			<div class="project-title-container">
-				<span class="project-title">Section in construction.</span>
-			</div>
-		</div>
-		<div class="project hide-project">
-			<div class="project-title-container">
-				<span class="project-title">Section in construction.</span>
-			</div>
-		</div>
-		<div class="project hide-project">
-			<div class="project-title-container">
-				<span class="project-title">Section in construction.</span>
-			</div>
-		</div>
-		<div class="project hide-project">
-			<div class="project-title-container">
-				<span class="project-title">Section in construction.</span>
+				<span class="project-title">Tower defense game. GameMaker.</span>
 			</div>
 		</div>
 	</div>
 
 	<div class="contact-container non-selectable">
 		<a href="https://github.com/CristianQiu" target="_blank" rel="noopener">
-			<img class="contact-icon" loading="lazy" src="../../resources/github.svg" alt="Github link icon"
-				title="Github profile" />
+			<img class="contact-icon" loading="lazy" src="../../resources/contact icons/github.svg"
+				alt="Github link icon" title="Github profile" />
 		</a>
 		<a href="https://www.linkedin.com/in/cqf/" target="_blank" rel="noopener">
-			<img class="contact-icon" loading="lazy" src="../../resources/linkedin.svg" alt="Linkedin link icon"
-				title="Linkedin profile" />
+			<img class="contact-icon" loading="lazy" src="../../resources/contact icons/linkedin.svg"
+				alt="Linkedin link icon" title="Linkedin profile" />
 		</a>
 		<a href="mailto:CristianQiuFelez@gmail.com" target="_blank" rel="noopener">
-			<img class="contact-icon" loading="lazy" src="../../resources/mail.svg" alt="Send mail icon"
+			<img class="contact-icon" loading="lazy" src="../../resources/contact icons/mail.svg" alt="Send mail icon"
 				title="Send mail" />
 		</a>
 	</div>
