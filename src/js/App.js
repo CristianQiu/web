@@ -1,5 +1,5 @@
 import { Clock, Scene } from 'three';
-import Stats from 'three/examples/jsm/libs/stats.module';
+// import Stats from 'three/examples/jsm/libs/stats.module';
 import { SynthwaveCamera } from './SynthwaveCamera';
 import { SynthwaveRenderer } from './SynthwaveRenderer';
 import { SynthwaveSkybox } from './SynthwaveSkybox';
@@ -64,6 +64,10 @@ class App {
 		});
 		this._domController.setOnHideContactCallback(() => {
 			this._skybox.sunset();
+		});
+
+		this._domController.setOnClickSoundIconCallback(() => {
+			this._audioManager.toggleMute();
 		});
 
 		// Three.js stuff

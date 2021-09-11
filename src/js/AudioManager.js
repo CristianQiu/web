@@ -14,6 +14,9 @@ export class AudioManager {
 		this._mainCameraListener = mainCameraListener;
 		this._audioSource = null;
 
+		this._isMuted = false;
+		this._defaultVolume = 0.5;
+
 		this._createFadeTween();
 	}
 
@@ -51,9 +54,15 @@ export class AudioManager {
 		this._audioSource.setVolume(vol);
 	}
 
+	toggleMute() {
+		this._isMuted = !this._isMuted;
+		const newVol = this._isMuted ? 0.0 : this._defaultVolume;
+		this.setVolume(newVol);
+	}
+
 	_createFadeTween() {
 		const fromVol = { x: 0.0 };
-		const toVol = { x: 0.5 };
+		const toVol = { x: this._defaultVolume };
 		const fadeTime = 4000;
 		const easing = TWEEN.Easing.Quintic.InOut;
 

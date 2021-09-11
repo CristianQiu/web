@@ -27,6 +27,9 @@ export class DOMController {
 		this._contactContainer = document.querySelector('.contact-container');
 		this._contactIcons = document.querySelectorAll('.contact-icon');
 
+		this._unmutedSoundIcon = document.querySelector('.unmuted-icon');
+		this._mutedSoundIcon = document.querySelector('.muted-icon');
+
 		this._addListeners();
 
 		this._menuOpened = false;
@@ -38,6 +41,8 @@ export class DOMController {
 
 		this._onShowContactCallback = null;
 		this._onHideContactCallback = null;
+
+		this._onClickSoundIconCallback = null;
 
 		this._initialJoinAnimationFinished = false;
 	}
@@ -68,6 +73,10 @@ export class DOMController {
 
 	setOnHideContactCallback(callback) {
 		this._onHideContactCallback = callback;
+	}
+
+	setOnClickSoundIconCallback(callback) {
+		this._onClickSoundIconCallback = callback;
 	}
 
 	joinWeb() {
@@ -217,10 +226,23 @@ export class DOMController {
 		this._onHideContactCallback();
 	}
 
+	_toggleMute() {
+		this._unmutedSoundIcon.classList.toggle('display-initial');
+		this._unmutedSoundIcon.classList.toggle('display-none');
+
+		this._mutedSoundIcon.classList.toggle('display-initial');
+		this._mutedSoundIcon.classList.toggle('display-none');
+
+		this._onClickSoundIconCallback();
+	}
+
 	_addListeners() {
 		this._hamburgerMenuButton.addEventListener('click', this._onClickHamburgerMenu.bind(this));
 		for (let i = 0; i < this._navBurgerItems.length; ++i)
 			this._navBurgerItems[i].addEventListener('click', this._onClickNavBurgerItem.bind(this, i));
+
+		this._mutedSoundIcon.addEventListener('click', this._onClickSoundIcon.bind(this));
+		this._unmutedSoundIcon.addEventListener('click', this._onClickSoundIcon.bind(this));
 	}
 
 	_onClickHamburgerMenu() {
@@ -239,5 +261,9 @@ export class DOMController {
 				this._toggleNavBurgerPointerEvents();
 			}
 		}
+	}
+
+	_onClickSoundIcon() {
+		this._toggleMute();
 	}
 }
