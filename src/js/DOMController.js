@@ -27,6 +27,7 @@ export class DOMController {
 		this._contactContainer = document.querySelector('.contact-container');
 		this._contactIcons = document.querySelectorAll('.contact-icon');
 
+		this._soundButton = document.querySelector('#sound-button');
 		this._unmutedSoundIcon = document.querySelector('.unmuted-icon');
 		this._mutedSoundIcon = document.querySelector('.muted-icon');
 
@@ -241,8 +242,7 @@ export class DOMController {
 		for (let i = 0; i < this._navBurgerItems.length; ++i)
 			this._navBurgerItems[i].addEventListener('click', this._onClickNavBurgerItem.bind(this, i));
 
-		this._mutedSoundIcon.addEventListener('click', this._onClickSoundIcon.bind(this));
-		this._unmutedSoundIcon.addEventListener('click', this._onClickSoundIcon.bind(this));
+		this._soundButton.addEventListener('click', this._onClickSoundIcon.bind(this));
 	}
 
 	_onClickHamburgerMenu() {
