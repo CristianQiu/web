@@ -1,7 +1,6 @@
 export class DOMController {
 
 	constructor() {
-		// this.setLocationHash('#main');
 		history.replaceState(null, null, '#main');
 
 		this._hamburgerDivBg = document.querySelector('#hamburger-container');
@@ -121,7 +120,8 @@ export class DOMController {
 			return;
 		}
 
-		location.hash = locationHash;
+		history.replaceState(null, null, locationHash);
+
 		let navBurgerItemIndex = -1;
 
 		if (this._currSelectedNavBurgerItem >= 0)

@@ -428,7 +428,7 @@
 			overflow: hidden;
 			position: absolute;
 			display: flex;
-			column-gap: 0.25rem;
+			column-gap: 0.2rem;
 			justify-content: flex-start;
 			align-items: center;
 			top: 4vh;
@@ -438,7 +438,7 @@
 			font-size: 1.025rem;
 			white-space: nowrap;
 			font-style: italic;
-			margin-left: clamp(5%, 6px, 12px);
+			margin-left: clamp(5%, 6px, 8px);
 			transition: all var(--musicCreditAnimationTime) var(--musicCreditTransition);
 		}
 
@@ -844,12 +844,12 @@
 			</ul>
 			<div class="music-credit-container">
 				<button id="sound-button" aria-label="Navigation menu">
-					<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
 						class="unmuted-icon display-initial" viewBox="0 0 16 16">
 						<path
 							d="M9 4a.5.5 0 0 0-.812-.39L5.825 5.5H3.5A.5.5 0 0 0 3 6v4a.5.5 0 0 0 .5.5h2.325l2.363 1.89A.5.5 0 0 0 9 12V4zM6.312 6.39 8 5.04v5.92L6.312 9.61A.5.5 0 0 0 6 9.5H4v-3h2a.5.5 0 0 0 .312-.11zM12.025 8a4.486 4.486 0 0 1-1.318 3.182L10 10.475A3.489 3.489 0 0 0 11.025 8 3.49 3.49 0 0 0 10 5.525l.707-.707A4.486 4.486 0 0 1 12.025 8z" />
 					</svg>
-					<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
 						class="muted-icon display-none" viewBox="0 0 16 16">
 						<path
 							d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zM6 5.04 4.312 6.39A.5.5 0 0 1 4 6.5H2v3h2a.5.5 0 0 1 .312.11L6 10.96V5.04zm7.854.606a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0 0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5 7.293l1.646-1.647a.5.5 0 0 1 .708 0z" />
@@ -892,46 +892,58 @@
 			</div>
 		</div>
 		<div class="project hide-project">
-			<img class="project-img" loading="lazy" src="../../resources/project images/AudioVisualization.jpg"
-				alt="Audio visualization" />
-			<div class="project-title-container">
-				<span class="project-title">Audio visualizer. Unity.</span>
-			</div>
+			<a href="https://github.com/CristianQiu/Unity-AudioSpectrum-Synthwave" target="_blank" rel="noopener">
+				<img class="project-img" loading="lazy" src="../../resources/project images/AudioVisualization.jpg"
+					alt="Audio visualization" />
+				<div class="project-title-container">
+					<span class="project-title">Audio visualizer. Unity.</span>
+				</div>
+			</a>
 		</div>
 		<div class="project hide-project">
-			<img class="project-img" loading="lazy" src="../../resources/project images/MultithreadedAstar.jpg"
-				alt="Multithreaded AStar Pathfinding" />
-			<div class="project-title-container">
-				<span class="project-title">Multithreaded A*. Unity.</span>
-			</div>
+			<a href="https://github.com/CristianQiu/Unity-Pathfinding-Jobs-StressTest" target="_blank" rel="noopener">
+				<img class="project-img" loading="lazy" src="../../resources/project images/MultithreadedAstar.jpg"
+					alt="Multithreaded AStar Pathfinding" />
+				<div class="project-title-container">
+					<span class="project-title">Multithreaded A*. Unity.</span>
+				</div>
+			</a>
 		</div>
 		<div class="project hide-project">
-			<img class="project-img" loading="lazy" src="../../resources/project images/Flocking.jpg"
-				alt="Flocking behaviours" />
-			<div class="project-title-container">
-				<span class="project-title">Flocking behaviours. Unity.</span>
-			</div>
+			<a href="https://github.com/CristianQiu/Unity-Flocking-CPU-GPU" target="_blank" rel="noopener">
+				<img class="project-img" loading="lazy" src="../../resources/project images/Flocking.jpg"
+					alt="Flocking behaviours" />
+				<div class="project-title-container">
+					<span class="project-title">Flocking behaviours. Unity.</span>
+				</div>
+			</a>
 		</div>
 		<div class="project hide-project">
-			<img class="project-img" loading="lazy" src="../../resources/project images/PerlinNoiseTool.jpg"
-				alt="Perlin noise tool" />
-			<div class="project-title-container">
-				<span class="project-title">Perlin noise tool. Unity.</span>
-			</div>
+			<a href="https://github.com/CristianQiu/Unity-PerlinNoise-Tool" target="_blank" rel="noopener">
+				<img class="project-img" loading="lazy" src="../../resources/project images/PerlinNoiseTool.jpg"
+					alt="Perlin noise tool" />
+				<div class="project-title-container">
+					<span class="project-title">Perlin noise tool. Unity.</span>
+				</div>
+			</a>
 		</div>
 		<div class="project hide-project">
-			<img class="project-img" loading="lazy" src="../../resources/project images/SeriousGame.jpg"
-				alt="Serious game" />
-			<div class="project-title-container">
-				<span class="project-title">Serious game. Unity.</span>
-			</div>
+			<a href="https://github.com/CristianQiu/Unity-Serious-game" target="_blank" rel="noopener">
+				<img class="project-img" loading="lazy" src="../../resources/project images/SeriousGame.jpg"
+					alt="Serious game" />
+				<div class="project-title-container">
+					<span class="project-title">Serious game. Unity.</span>
+				</div>
+			</a>
 		</div>
 		<div class="project hide-project">
-			<img class="project-img" loading="lazy" src="../../resources/project images/TowerDefenseGame.jpg"
-				alt="Tower defense game" />
-			<div class="project-title-container">
-				<span class="project-title">Tower defense game. GameMaker.</span>
-			</div>
+			<a href="https://github.com/CristianQiu/GameMaker1-TowerDefense" target="_blank" rel="noopener">
+				<img class="project-img" loading="lazy" src="../../resources/project images/TowerDefenseGame.jpg"
+					alt="Tower defense game" />
+				<div class="project-title-container">
+					<span class="project-title">Tower defense game. GameMaker.</span>
+				</div>
+			</a>
 		</div>
 	</div>
 

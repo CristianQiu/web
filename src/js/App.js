@@ -81,19 +81,6 @@ class App {
 
 		// listeners
 		this._addListeners();
-
-		addEventListener('hashchange', (event) => {
-
-			if (event.oldURL.endsWith('#main')) {
-				window.location.hash = '#main';
-				console.log('endswithmain');
-				return;
-			}
-
-			console.log('el hash a cambiao DESDE' + event.oldURL);
-			this._domController.setLocationHash(location.hash, true);
-			console.log('el hash a cambiao hasta' + event.newURL);
-		});
 	}
 
 	update() {
